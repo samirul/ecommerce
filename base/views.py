@@ -16,3 +16,8 @@ def login(request):
 
 def todayspecialoffer(request):
     return render(request, "base/products.html")
+
+
+
+def contactUs(request):
+    return render(request, "base/contact-us.html")
