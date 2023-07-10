@@ -5,7 +5,7 @@
 <!-- header -->
 <div class="agileits_header">
     <div class="w3l_offers">
-        <a href="products.html">Today's special Offers !</a>
+        <a href="{% url 'todayspecialoffers' %}">Today's special Offers !</a>
     </div>
     <div class="w3l_search">
         <form action="#" method="post">
@@ -13,8 +13,9 @@
             <input type="submit" value=" ">
         </form>
     </div>
-    <div class="product_list_header">  
+    <div class="product_list_header"> 
         <form action="#" method="post" class="last">
+            {% csrf_token %} 
             <fieldset>
                 <input type="hidden" name="cmd" value="_cart" />
                 <input type="hidden" name="display" value="1" />
@@ -61,7 +62,7 @@ $(document).ready(function() {
 <div class="logo_products">
     <div class="container">
         <div class="w3ls_logo_products_left">
-            <h1><a href="index.html"><span>Grocery</span> Store</a></h1>
+            <h1><a href="/"><span>Growser</span> Shop</a></h1>
         </div>
         <div class="w3ls_logo_products_left1">
             <ul class="special_items">

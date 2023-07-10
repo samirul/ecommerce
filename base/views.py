@@ -12,3 +12,7 @@ def register(request):
 
 def login(request):
     return render(request, "base/login.html")
+
+
+def todayspecialoffer(request):
+    return render(request, "base/products.html")
