@@ -19,7 +19,8 @@
                                         <h4>$7.99 <span>$10.00</span></h4>
                                     </div>
                                     <div class="snipcart-details top_brand_home_details">
-                                        <form action="checkout.html" method="post">
+                                        <form action="#" method="post">
+                                            {% csrf_token %}
                                             <fieldset>
                                                 <input type="hidden" name="cmd" value="_cart" />
                                                 <input type="hidden" name="add" value="1" />
@@ -55,6 +56,7 @@
                                     </div>
                                     <div class="snipcart-details top_brand_home_details">
                                         <form action="#" method="post">
+                                            {% csrf_token %}
                                             <fieldset>
                                                 <input type="hidden" name="cmd" value="_cart" />
                                                 <input type="hidden" name="add" value="1" />
@@ -151,5 +153,29 @@
         </div>
     </div>
 </div>
+
+<script src="{% static 'js/minicart.js' %}"></script>
+
+<script>
+    paypal.minicart.render();
+
+    paypal.minicart.cart.on('checkout', function (evt) {
+        var items = this.items(),
+            len = items.length,
+            total = 0,
+            i;
+
+        // Count the number of each item in the cart
+        for (i = 0; i < len; i++) {
+            total += items[i].get('quantity');
+        }
+
+        if (total < 3) {
+            alert('The minimum order quantity is 3. Please add more to your shopping cart before checking out');
+            evt.preventDefault();
+        }
+    });
+
+</script>
 
 {% endblock content %}
