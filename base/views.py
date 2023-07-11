@@ -14,10 +14,19 @@ def login(request):
     return render(request, "base/login.html")
 
 
-def todayspecialoffer(request):
+def products(request):
     return render(request, "base/products.html")
 
 
 
 def contactUs(request):
     return render(request, "base/contact-us.html")
+
+
+
+def about(request):
+    return render(request, "base/about.html")
+
+
+def service(request):
+    return render(request, "base/services.html")
