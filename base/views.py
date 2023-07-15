@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
@@ -30,3 +30,11 @@ def about(request):
 
 def service(request):
     return render(request, "base/services.html")
+
+
+def productview(request):
+    return render(request, "base/product-view.html")
+
+
+def checkouts(request):
+    return render(request, "base/checkout.html")
