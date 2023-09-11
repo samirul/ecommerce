@@ -23,7 +23,8 @@ INSTALLED_APPS = [
 
 APPS = [
     "base.apps.BaseConfig",
-    "BaseID.apps.BaseidConfig"
+    "BaseID.apps.BaseidConfig",
+    "products.apps.ProductsConfig",
 ]
 
 APPS += INSTALLED_APPS
