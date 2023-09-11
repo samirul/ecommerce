@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-
+from choices import GENDER_CHOICES, STATE_CHOICES, CITY_CHOICES, COUNTRY_CHOICES
 
 class UserManager(BaseUserManager):
     def create_user(self, email, customer_first_name, customer_last_name, customer_gender, phone, country, address, city, state, pincode, password=None, password2=None):
@@ -56,12 +56,12 @@ class User(AbstractBaseUser):
     customer_first_name = models.CharField(max_length=200)
     customer_last_name = models.CharField(max_length=200)
     customer_avatar = models.ImageField(upload_to='profiles', blank=True)
-    customer_gender = models.CharField(max_length=200, choices=(('Male','Male'),('Female','Female'),('Others','Others')))
-    country = models.CharField(max_length=200)
+    customer_gender = models.CharField(max_length=200, choices=GENDER_CHOICES)
+    country = models.CharField(max_length=200, choices=COUNTRY_CHOICES)
     phone = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    city = models.CharField(max_length=200)
-    state = models.CharField(max_length=200)
+    city = models.CharField(max_length=200, choices=CITY_CHOICES)
+    state = models.CharField(max_length=200, choices=STATE_CHOICES)
     pincode = models.IntegerField()
     is_verified = models.BooleanField(default=False)
     otp = models.CharField(max_length=6, null=True, blank=True)
