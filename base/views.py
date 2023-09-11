@@ -6,13 +6,6 @@ def home(request):
     return render(request, "base/index.html")
 
 
-def register(request):
-    return render(request, "base/register.html")
-
-
-def login(request):
-    return render(request, "base/login.html")
-
 
 def contactUs(request):
     return render(request, "base/contact-us.html")
