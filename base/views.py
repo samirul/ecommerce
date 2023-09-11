@@ -14,11 +14,6 @@ def login(request):
     return render(request, "base/login.html")
 
 
-def products(request):
-    return render(request, "base/products.html")
-
-
-
 def contactUs(request):
     return render(request, "base/contact-us.html")
 
@@ -31,10 +26,3 @@ def about(request):
 def service(request):
     return render(request, "base/services.html")
 
-
-def productview(request):
-    return render(request, "base/product-view.html")
-
-
-def checkouts(request):
-    return render(request, "base/checkout.html")
