@@ -1,15 +1,7 @@
 from django.db import models
 from BaseID.models import baseIDModel
 from account.models import User
-
-# Create your models here.
-
-CATEGORIES_CHOICES =()
-
-SUBCATEGORIES_CHOICES =()
-
-
-STATUS_CHOICES =()
+from choices import CATEGORIES_CHOICES, SUBCATEGORIES_CHOICES, STATUS_CHOICES
 
 
 class Categories(baseIDModel):
@@ -27,8 +19,8 @@ class Products(baseIDModel):
     product_description = models.CharField(max_length=255)
     product_image = models.ImageField(upload_to='product_imgs')
     brand = models.CharField(max_length=150)
-    categories = models.ManyToManyField(Categories, on_delete=models.CASCADE)
-    subcategories = models.ManyToManyField(Subcategories, on_delete=models.CASCADE)
+    categories = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    subcategories = models.ForeignKey(Subcategories, on_delete=models.CASCADE)
 
 
 class Cart(baseIDModel):
