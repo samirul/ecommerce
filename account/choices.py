@@ -30,10 +30,10 @@ STATE_CHOICES =(('Andaman and Nicobar Islands','Andaman and Nicobar Islands'),
                 ('Tripura','Tripura'),
                 ('Uttar Pradesh','Uttar Pradesh'),
                 ('Uttarakhand','Uttarakhand'),
-                ('West Bengal','West Bengal'))
+                ('West-Bengal','West-Bengal'))
 
 CITY_CHOICES =(('Aizawl','Aizawl'),
-               ('Agartala','Agartala')
+               ('Agartala','Agartala'),
                ('Amaravati','Amaravati'),
                ('Bengaluru','Bengaluru'),
                ('Bhubaneswar','Bhubaneswar'),

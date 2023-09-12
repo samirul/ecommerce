@@ -16,67 +16,7 @@
 <!-- //products-breadcrumb -->
 <!-- banner -->
 <div class="banner">
-    <div class="w3l_banner_nav_left">
-        <nav class="navbar nav_bottom">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header nav_2">
-                <button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse"
-                    data-target="#bs-megadropdown-tabs">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
-                <ul class="nav navbar-nav nav_1">
-                    <li><a href="products.html">Branded Foods</a></li>
-                    <li><a href="household.html">Households</a></li>
-                    <li class="dropdown mega-dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Veggies & Fruits<span
-                                class="caret"></span></a>
-                        <div class="dropdown-menu mega-dropdown-menu w3ls_vegetables_menu">
-                            <div class="w3ls_vegetables">
-                                <ul>
-                                    <li><a href="vegetables.html">Vegetables</a></li>
-                                    <li><a href="vegetables.html">Fruits</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li><a href="kitchen.html">Kitchen</a></li>
-                    <li><a href="short-codes.html">Short Codes</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Beverages<span
-                                class="caret"></span></a>
-                        <div class="dropdown-menu mega-dropdown-menu w3ls_vegetables_menu">
-                            <div class="w3ls_vegetables">
-                                <ul>
-                                    <li><a href="drinks.html">Soft Drinks</a></li>
-                                    <li><a href="drinks.html">Juices</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li><a href="pet.html">Pet Food</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Frozen Foods<span
-                                class="caret"></span></a>
-                        <div class="dropdown-menu mega-dropdown-menu w3ls_vegetables_menu">
-                            <div class="w3ls_vegetables">
-                                <ul>
-                                    <li><a href="frozen.html">Frozen Snacks</a></li>
-                                    <li><a href="frozen.html">Frozen Nonveg</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li><a href="bread.html">Bread & Bakery</a></li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </nav>
-    </div>
+    {% include 'base/navbar-left-menu.html' %}
     <div class="w3l_banner_nav_right">
         <!-- about -->
         <div class="privacy about">
@@ -178,7 +118,7 @@
 
 <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
 <!-- quantity -->
-<!-- <script>
+<script>
     $('.value-plus').on('click', function () {
         var divUpd = $(this).parent().find('.value'), newVal = parseInt(divUpd.text(), 10) + 1;
         divUpd.text(newVal);
@@ -190,23 +130,23 @@
     });
 </script> -->
 <!--quantity-->
-<!-- <script>$(document).ready(function (c) {
+<script>$(document).ready(function (c) {
         $('.close1').on('click', function (c) {
             $('.rem1').fadeOut('slow', function (c) {
                 $('.rem1').remove();
             });
         });
     });
-</script> -->
-<!-- <script>$(document).ready(function (c) {
+</script>
+<script>$(document).ready(function (c) {
         $('.close2').on('click', function (c) {
             $('.rem2').fadeOut('slow', function (c) {
                 $('.rem2').remove();
             });
         });
     });
-</script> -->
-<!-- <script>$(document).ready(function (c) {
+</script>
+<!-- <!-- <script>$(document).ready(function (c) {
         $('.close3').on('click', function (c) {
             $('.rem3').fadeOut('slow', function (c) {
                 $('.rem3').remove();
@@ -215,94 +155,5 @@
     });
 </script> -->
 
-<script>
-    var data = localStorage.getItem('PPMiniCart')
-    var encodedata = decodeURIComponent(data)
-    valuecart = JSON.parse(encodedata);
-    console.log(valuecart.value.items)
-        $.each(valuecart.value.items, function(key, value){
-            var info = `<tr class="rem1" data-key=${key}>
-                                <td class="invert">1</td>
-                                <td class="invert-image"><a href="single.html"><img src="images/1.png" alt=" " class="img-responsive"></a></td>
-                                <td class="invert">
-                                    <div class="quantity"> 
-                                        <div class="quantity-select">                           
-                                            <div class="entry value-minus">&nbsp;</div>
-                                            <div class="entry value"><span>${value.quantity}</span></div>
-                                            <div class="entry value-plus active">&nbsp;</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="invert" id="productname">${value.item_name}</td>
-                                <td class="invert" id="productprice">${value.amount}</td>
-                                <td class="invert">
-                                    <div class="rem">
-                                        <div class="close1"> </div>
-                                    </div>
-        
-                                </td>
-                            </tr>`
-        
-
-            $('.value-plus').on('click', function () {
-                var divUpd = $(this).parent().find('.value'), newVal = parseInt(divUpd.text(), 10) + 1;
-                divUpd.text(newVal);
-            });
-
-            $('.value-minus').on('click', function () {
-                var divUpd = $(this).parent().find('.value'), newVal = parseInt(divUpd.text(), 10) - 1;
-                if (newVal >= 1) divUpd.text(newVal);
-            });
-
-
-            $(document).ready(function (c) {
-                $('.close1').on('click', function (c) {
-
-                    var row = $(this).closest('.rem1');
-
-                    row.fadeOut('slow', function (c) {
-                        
-                    if (valuecart && valuecart.value && valuecart.value.items) {
-                       valuecart.value.items.slice(key, 1);
-                    }
-
-
-                    localStorage.setItem('PPMiniCart', JSON.stringify(valuecart));
-                        row.remove();
-                    });
-                });
-            });
-            
-            $('tbody').append(info
-                );
-
-
-        })
-
-</script>
-
-
-<script src="{% static 'js/minicart.js' %}"></script>
-	<script>
-		paypal.minicart.render();
-	
-		paypal.minicart.cart.on('checkout', function (evt) {
-			var items = this.items(),
-				len = items.length,
-				total = 0,
-				i;
-	
-			// Count the number of each item in the cart
-			for (i = 0; i < len; i++) {
-				total += items[i].get('quantity');
-			}
-	
-			if (total < 3) {
-				alert('The minimum order quantity is 3. Please add more to your shopping cart before checking out');
-				evt.preventDefault();
-			}
-		});
-	
-	</script>
 
 {% endblock content %}

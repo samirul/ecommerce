@@ -13,6 +13,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -25,9 +26,10 @@ APPS = [
     "base.apps.BaseConfig",
     "BaseID.apps.BaseidConfig",
     "products.apps.ProductsConfig",
+    "account.apps.AccountConfig",
 ]
 
-APPS += INSTALLED_APPS
+INSTALLED_APPS += APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -59,7 +61,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "ecommerce.wsgi.application"
 
-
+AUTH_USER_MODEL = 'account.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -89,6 +91,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+
 MEDIA_URL = '/images/'
 
 STATICFILES_DIRS = [
@@ -100,3 +103,43 @@ MEDIA_ROOT = BASE_DIR / 'static/images'
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+JAZZMIN_SETTINGS = {
+    # title of the window (Will default to current_admin_site.site_title if absent or None)
+    "site_title": "Growser Admin Panel",
+
+    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_header": "Growser Admin Panel",
+
+    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_brand": "Growser Panel",
+
+    # Welcome text on the login screen
+    "welcome_sign": "Growser Admin Panel",
+
+
+    # Logo to use for your site, must be present in static files, used for brand on top left
+    "site_logo": "images/38.png", 
+
+    "custom_css": "css/theme.css",
+
+    # Copyright on the footer
+    "copyright": "Growser",
+
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+    },
+    # Icons that are used when one is not manually specified
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+
+}
+
+
+JAZZMIN_UI_TWEAKS = {
+    "theme":"materia",
+    
+}
