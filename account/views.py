@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.views import View
 from .models import User
+from .validators.validate import PasswordChecker
 
 
 # Create your views here.
@@ -13,6 +14,15 @@ def login(request):
     return render(request, "base/login.html")
 
 
+class loginView(View):
+    def get(self, request):
+        return render(request, "base/login.html")
+    
+    def post(self, request):
+        pass
+
+
+
 class registerView(View):
     def get(self, request):
         return render(request, "base/register.html")
@@ -23,15 +33,16 @@ class registerView(View):
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirmpassword = request.POST.get('confirmpassword')
-
-        if password != confirmpassword:
-            print("Password and Confirm Password Doesn't match.")
+        
+        check = PasswordChecker(request=request, password=password,
+                                 confirmpassword=confirmpassword)
+        
+        if check.PasswordConfirmPasswordChecker():
             return HttpResponseRedirect(request.path_info)
 
-        if len(password) < 8:
-            print("Password should be minimum 8 length.")
-            return HttpResponseRedirect(request.path_info)
-
+        if check.PasswordValidator(min_len=8):
+            return HttpResponseRedirect(request.path_info)    
+            
         if User.objects.filter(email=email).exists():
             print("Email Already Exist.")
             return HttpResponseRedirect(request.path_info)
