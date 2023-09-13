@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.views import View
 from .models import User
 from .validators.validate import PasswordChecker
+from django.contrib import messages
 
 
 # Create your views here.
@@ -26,6 +27,7 @@ class loginView(View):
 class registerView(View):
     def get(self, request):
         return render(request, "base/register.html")
+    
     def post(self, request):
         username = request.POST.get('username')
         firstname = request.POST.get('firstname')
@@ -41,14 +43,14 @@ class registerView(View):
             return HttpResponseRedirect(request.path_info)
 
         if check.PasswordValidator(min_len=8):
-            return HttpResponseRedirect(request.path_info)    
-            
-        if User.objects.filter(email=email).exists():
-            print("Email Already Exist.")
             return HttpResponseRedirect(request.path_info)
 
         if User.objects.filter(customer_user_name=username).exists():
-            print("Username Already Exist.")
+            messages.info(request, f"{username} - Username Already Taken, Please Choose Another Username.")
+            return HttpResponseRedirect(request.path_info)    
+            
+        if User.objects.filter(email=email).exists():
+            messages.info(request, f"{email} - Email Already Taken, Please Choose Another Email.")
             return HttpResponseRedirect(request.path_info)
 
         userobjects = User.objects.create(customer_user_name=username,
@@ -57,5 +59,5 @@ class registerView(View):
                                           email=email)
         userobjects.set_password(password)
         userobjects.save()
-        print("Registration Successful.")
+        messages.success(request, "Registration Successful, Please Verify Your Email.")
         return render(request, "base/register.html")
