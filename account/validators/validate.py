@@ -2,6 +2,8 @@ import re
 from django.shortcuts import  HttpResponseRedirect
 from django.contrib import messages
 
+# Passed by Pytest by returning True or False
+
 class PasswordChecker:
     def __init__(self, request, password, confirmpassword):
         self.request = request

@@ -1,30 +1,14 @@
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.views import View
 from .models import User
 from .validators.validate import PasswordChecker
 from django.contrib import messages
 
-
-# Create your views here.
-
-# def register(request):
-#     return render(request, "base/register.html")
-
-
-def login(request):
-    return render(request, "base/login.html")
-
-
-class loginView(View):
-    def get(self, request):
-        return render(request, "base/login.html")
-    
-    def post(self, request):
-        pass
-
+from django.contrib.auth import authenticate, login, logout
 
 
 class registerView(View):
+    # Test Passed
     def get(self, request):
         return render(request, "base/register.html")
     
@@ -61,3 +45,35 @@ class registerView(View):
         userobjects.save()
         messages.success(request, "Registration Successful, Please Verify Your Email.")
         return render(request, "base/register.html")
+    
+
+class loginView(View):
+    def get(self, request):
+        return render(request, "base/login.html")
+    
+    def post(self, request):
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        if not User.objects.filter(email=email).exists():
+             messages.info(request, f"{email} - Email isn't Registered, Please Register Your Account First.")
+
+        auth_user = authenticate(username=email, password=password)
+
+        if auth_user:
+            login(request, auth_user)
+            messages.success(request, f"Login Successful, Welcome Back - {email}")
+            return redirect('/')
+        else:
+            messages.info(request,"Invalid Email or Password, Please Check Your Credentials.")
+            HttpResponseRedirect(request.path_info)
+        
+        return render(request, "base/login.html")
+    
+
+
+
+
+class ModalView(View):
+    def get(request):
+        return render(request, 'base/modal.html')
