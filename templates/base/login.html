@@ -25,9 +25,9 @@
               </div>
               <div class="form">
                 <h2>Login to your account</h2>
-                <form action="{% url 'login' %}" method="post">
+                <form method="POST">
                     {% csrf_token %}
-                  <input type="email" name="email" placeholder="Email" required=" ">
+                  <input type="email" name="email" placeholder="Email Address" required=" ">
                   <input type="password" name="password" placeholder="Password" required=" ">
                   <input type="submit" value="Login">
                 </form>

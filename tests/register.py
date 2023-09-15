@@ -35,10 +35,10 @@
 #     assert 'base/register.html' in [template.name for template in response.templates]
 
 #     messages = list(get_messages(response.wsgi_request))
-#     assert any(message.message == 'Registration Successful, Please Verify Your Email.' for message in messages)
+#     assert list(message.message == 'Registration Successful, Please Verify Your Email.' for message in messages)
 
-    # assert User.objects.filter(customer_user_name=user_data['username']).exists()
-    # assert User.objects.filter(email=user_data['email']).exists()
+#     # assert User.objects.filter(customer_user_name=user_data['username']).exists()
+#     # assert User.objects.filter(email=user_data['email']).exists()
 
 
     

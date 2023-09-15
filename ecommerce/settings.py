@@ -147,3 +147,6 @@ JAZZMIN_UI_TWEAKS = {
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+
+# MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

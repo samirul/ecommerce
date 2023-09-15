@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 
 
 class registerView(View):
-    # Test Passed
+    # Unit Test Passed
     def get(self, request):
         return render(request, "base/register.html")
     
@@ -48,6 +48,7 @@ class registerView(View):
     
 
 class loginView(View):
+    # Unit Test Passed
     def get(self, request):
         return render(request, "base/login.html")
     
@@ -63,7 +64,7 @@ class loginView(View):
         if auth_user:
             login(request, auth_user)
             messages.success(request, f"Login Successful, Welcome Back - {email}")
-            return redirect('/')
+            # return redirect('/')
         else:
             messages.info(request,"Invalid Email or Password, Please Check Your Credentials.")
             HttpResponseRedirect(request.path_info)
