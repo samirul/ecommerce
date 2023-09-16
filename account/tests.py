@@ -8,18 +8,14 @@ from django.urls import reverse
 class LoginViewTestCase(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(customer_user_name='sam4201',
-                                          customer_first_name='sam',
-                                          customer_last_name='haque',
-                                          email='samirulhaque10@gmail.com')
+        self.user = User.objects.create(user_name='sam4202',
+                                        email='samirulhaque10@gmail.com')
         self.user.set_password('78945612@Asd')
         self.user.save()
 
     def test_register(self):
         data = {
             'username': 'sam420',
-            'firstname': 'sam',
-            'lastname': 'haque',
             'email': 'samirulhaque09@gmail.com',
             'password': '78945612@Asd',
             'confirmpassword': '78945612@Asd',

@@ -11,9 +11,6 @@ class UserManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             customer_user_name=customer_user_name,
-            customer_first_name=customer_first_name,
-            customer_last_name=customer_last_name
-            
         )
 
         user.set_password(password)
@@ -27,8 +24,6 @@ class UserManager(BaseUserManager):
             email,
             password=password,
             customer_user_name=customer_user_name,
-            customer_first_name=customer_first_name,
-            customer_last_name=customer_last_name
             
         )
         
@@ -45,17 +40,7 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    customer_user_name = models.CharField(max_length=150)
-    customer_first_name = models.CharField(max_length=200)
-    customer_last_name = models.CharField(max_length=200)
-    customer_avatar = models.ImageField(upload_to='profiles', blank=True)
-    customer_gender = models.CharField(max_length=200, choices=GENDER_CHOICES)
-    country = models.CharField(max_length=200, choices=COUNTRY_CHOICES)
-    phone = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    city = models.CharField(max_length=200, choices=CITY_CHOICES)
-    state = models.CharField(max_length=200, choices=STATE_CHOICES)
-    pincode = models.IntegerField(default=0)
+    user_name = models.CharField(max_length=150)
     is_verified = models.BooleanField(default=False)
     otp = models.CharField(max_length=6, null=True, blank=True)
     activation_key = models.CharField(max_length=200, blank=True, null=True)
@@ -67,9 +52,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['customer_user_name',
-                       'customer_first_name',
-                       'customer_last_name']
+    REQUIRED_FIELDS = ['user_name']
 
     def get_all_permissions(user=None):
         if user.is_admin:
@@ -87,4 +70,21 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+    
+
+class Customer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    avatar = models.ImageField(upload_to='profiles', blank=True)
+    gender = models.CharField(max_length=200, choices=GENDER_CHOICES)
+    country = models.CharField(max_length=200, choices=COUNTRY_CHOICES)
+    phone = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=200, choices=CITY_CHOICES)
+    state = models.CharField(max_length=200, choices=STATE_CHOICES)
+    pincode = models.IntegerField(default=0)
+
+
+
     

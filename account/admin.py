@@ -1,10 +1,15 @@
 from django.contrib import admin
-from .models import User
+from .models import User, Customer
 
 @admin.register(User)
 class UserModelAdmin(admin.ModelAdmin):
     list_display = [
-      'id', 'customer_user_name', 'customer_first_name', 'customer_last_name',
-      'customer_gender','country','phone','address',
-      'is_verified','is_active','is_admin'
+      'id', 'user_name','email','is_verified','is_active','is_admin'
+    ]
+
+
+@admin.register(Customer)
+class CustomerModelAdmin(admin.ModelAdmin):
+    list_display = [
+        'id','user','first_name','last_name','phone','address','city','state'
     ]

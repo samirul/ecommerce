@@ -14,8 +14,6 @@ class registerView(View):
     
     def post(self, request):
         username = request.POST.get('username')
-        firstname = request.POST.get('firstname')
-        lastname = request.POST.get('lastname')
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirmpassword = request.POST.get('confirmpassword')
@@ -29,7 +27,7 @@ class registerView(View):
         if check.PasswordValidator(min_len=8):
             return HttpResponseRedirect(request.path_info)
 
-        if User.objects.filter(customer_user_name=username).exists():
+        if User.objects.filter(user_name=username).exists():
             messages.info(request, f"{username} - Username Already Taken, Please Choose Another Username.")
             return HttpResponseRedirect(request.path_info)    
             
@@ -37,9 +35,7 @@ class registerView(View):
             messages.info(request, f"{email} - Email Already Taken, Please Choose Another Email.")
             return HttpResponseRedirect(request.path_info)
 
-        userobjects = User.objects.create(customer_user_name=username,
-                                          customer_first_name=firstname,
-                                          customer_last_name=lastname,
+        userobjects = User.objects.create(user_name=username,
                                           email=email)
         userobjects.set_password(password)
         userobjects.save()
