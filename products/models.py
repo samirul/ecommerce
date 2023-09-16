@@ -13,7 +13,7 @@ class Categories(baseIDModel):
 
 class Subcategories(baseIDModel):
     subcategory_name = models.CharField(max_length=150)
-    categories = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    categories = models.ForeignKey(Categories, on_delete=models.CASCADE, related_name='sub_categories')
 
     def __str__(self):
         return self.subcategory_name
