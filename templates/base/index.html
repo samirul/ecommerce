@@ -10,30 +10,16 @@
         <section class="slider">
             <div class="flexslider">
                 <ul class="slides">
+                    {% for slider in sliders %}
                     <li>
-                        <div class="w3l_banner_nav_right_banner">
-                            <h3>Make your <span>food</span> with Spicy.</h3>
+                        <div class="w3l_banner_nav_right_banner{{slider.img_slide_code}}">
+                            <h3>{{slider.title_1}} <i><span>{{slider.title_2}}</span></i> {{slider.title_3}}.</h3>
                             <div class="more">
-                                <a href="{% url 'products' %}" class="button--saqui button--round-l button--text-thick" data-text="Shop now">Shop now</a>
+                                <a href="/items/{{slider.url_button_link}}" class="button--saqui button--round-l button--text-thick" data-text="Shop now">Shop now</a>
                             </div>
                         </div>
                     </li>
-                    <li>
-                        <div class="w3l_banner_nav_right_banner1">
-                            <h3>Make your <span>food</span> with Spicy.</h3>
-                            <div class="more">
-                                <a href="{% url 'products' %}" class="button--saqui button--round-l button--text-thick" data-text="Shop now">Shop now</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="w3l_banner_nav_right_banner2">
-                            <h3>upto <i>50%</i> off.</h3>
-                            <div class="more">
-                                <a href="{% url 'products' %}" class="button--saqui button--round-l button--text-thick" data-text="Shop now">Shop now</a>
-                            </div>
-                        </div>
-                    </li>
+                    {% endfor %}
                 </ul>
             </div>
         </section>
@@ -59,30 +45,16 @@
         <div class="wthree_banner_bottom_left_grid_sub">
         </div>
         <div class="wthree_banner_bottom_left_grid_sub1">
+            {% for hmb in homemiddlebanner %}
             <div class="col-md-4 wthree_banner_bottom_left">
                 <div class="wthree_banner_bottom_left_grid">
-                    <img src="{% static 'images/4.jpg' %}" alt=" " class="img-responsive" />
-                    <div class="wthree_banner_bottom_left_grid_pos">
-                        <h4>Discount Offer <span>25%</span></h4>
+                    <img src="{% static 'images/' %}{{hmb.img_name}}" alt=" " class="img-responsive" />
+                    <div class="{{hmb.div_class_tag}}">
+                        <h{{hmb.h_tag}}>{{hmb.title_1}} <span>{{hmb.title_2}}</span> {{hmb.title_3}} <i>{{hmb.i_tag_title_4}}</i></h>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 wthree_banner_bottom_left">
-                <div class="wthree_banner_bottom_left_grid">
-                    <img src="{% static 'images/5.jpg' %}" alt=" " class="img-responsive" />
-                    <div class="wthree_banner_btm_pos">
-                        <h3>introducing <span>best store</span> for <i>groceries</i></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 wthree_banner_bottom_left">
-                <div class="wthree_banner_bottom_left_grid">
-                    <img src="{% static 'images/6.jpg' %}" alt=" " class="img-responsive" />
-                    <div class="wthree_banner_btm_pos1">
-                        <h3>Save <span>Upto</span> $10</h3>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
             <div class="clearfix"> </div>
         </div>
         <div class="clearfix"> </div>

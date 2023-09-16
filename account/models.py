@@ -1,16 +1,18 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from .choices import GENDER_CHOICES, STATE_CHOICES, CITY_CHOICES, COUNTRY_CHOICES
+from BaseID.models import baseIDModel
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, customer_user_name, customer_first_name, customer_last_name, password=None, password2=None):
+    def create_user(self, email, user_name, password=None, password2=None):
 
         if not email:
             raise ValueError('User must have an email address')
-
+        
         user = self.model(
             email=self.normalize_email(email),
-            customer_user_name=customer_user_name,
+            user_name=user_name,
         )
 
         user.set_password(password)
@@ -18,12 +20,12 @@ class UserManager(BaseUserManager):
         return user
         
 
-    def create_superuser(self, email, customer_user_name, customer_first_name, customer_last_name, password=None):
+    def create_superuser(self, email, user_name, password=None):
 
         user = self.create_user(
             email,
             password=password,
-            customer_user_name=customer_user_name,
+            user_name=user_name,
             
         )
         
@@ -40,6 +42,7 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     user_name = models.CharField(max_length=150)
     is_verified = models.BooleanField(default=False)
     otp = models.CharField(max_length=6, null=True, blank=True)
@@ -72,7 +75,7 @@ class User(AbstractBaseUser):
         return self.is_admin
     
 
-class Customer(models.Model):
+class Customer(baseIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)

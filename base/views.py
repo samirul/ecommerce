@@ -1,14 +1,19 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from products.models import Categories
+from .models import HomeSlider, HomeMiddleBanner
 
 # Create your views here.
 
 class HomeView(View):
     def get(self, request):
          categories = Categories.objects.prefetch_related('sub_categories').all()
+         slider = HomeSlider.objects.all()
+         homemiddlebanner = HomeMiddleBanner.objects.all()
          context = {
             "categories" : categories,
+            "sliders" : slider,
+            "homemiddlebanner" : homemiddlebanner
             }
          return render(request, "base/index.html", context=context)
     
