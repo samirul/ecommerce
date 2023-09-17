@@ -1,12 +1,10 @@
 from django.shortcuts import render
 from django.views import View
 from .models import Categories, Subcategories
-# Create your views here.
-
 
 class ProductsView(View):
-    def get(self, request):
-        categories = Categories.objects.prefetch_related('sub_categories').all()
+    def get(self, request, slug=None):
+        categories = Categories.objects.prefetch_related('sub_categories','product_categories').all()
         context = {
             "categories" : categories,
         }
@@ -15,7 +13,7 @@ class ProductsView(View):
 
 class ProductShowView(View):
     def get(self, request):
-        categories = Categories.objects.prefetch_related('sub_categories').all()
+        categories = Categories.objects.prefetch_related('sub_categories','product_subcategories').all()
         context = {
             "categories" : categories,
         }

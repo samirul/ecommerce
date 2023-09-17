@@ -15,6 +15,7 @@
        <!-- Collect the nav links, forms, and other content for toggling -->
        <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
         <ul class="nav navbar-nav nav_1">
+            <li><a href="{% url 'products' %}">All Products</a></li>
             {% for category in categories %}
             {% if category.sub_categories.all %}
             <li class="dropdown mega-dropdown">
@@ -23,14 +24,14 @@
                     <div class="w3ls_vegetables">
                         <ul>
                             {% for subcategory in category.sub_categories.all %}
-                            <li><a href="#">{{ subcategory.subcategory_name }}</a></li>
+                            <li><a href="{% url 'productslugsubcategory' subcategory.slug %}">{{ subcategory.subcategory_name }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
             </li>
             {% else %}
-            <li><a href="#">{{ category.category_name }}</a></li>
+            <li><a href="{% url 'productslugcategory' category.slug %}">{{ category.category_name }}</a></li>
             {% endif %}
             {% endfor %}
         </ul>
