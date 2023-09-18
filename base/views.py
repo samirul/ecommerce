@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from products.models import Categories
+from products.models import Category
 from .models import HomeSlider, HomeMiddleBanner
 
 class HomeView(View):
     def get(self, request):
-         categories = Categories.objects.prefetch_related('sub_categories').all()
+         categories = Category.objects.prefetch_related('sub_categories').all()
          slider = HomeSlider.objects.all()
          homemiddlebanner = HomeMiddleBanner.objects.all()
          context = {
@@ -17,7 +17,7 @@ class HomeView(View):
 
 class ContactUsView(View):
     def get(self, request):
-        categories = Categories.objects.prefetch_related('sub_categories').all()
+        categories = Category.objects.prefetch_related('sub_categories').all()
         context = {
             "categories" : categories,
             }
@@ -25,7 +25,7 @@ class ContactUsView(View):
 
 class AboutView(View):
     def get(self, request):
-        categories = Categories.objects.prefetch_related('sub_categories').all()
+        categories = Category.objects.prefetch_related('sub_categories').all()
         context = {
             "categories" : categories,
             }
@@ -33,7 +33,7 @@ class AboutView(View):
     
 class ServiceView(View):
     def get(self, request):
-        categories = Categories.objects.prefetch_related('sub_categories').all()
+        categories = Category.objects.prefetch_related('sub_categories').all()
         context = {
             "categories" : categories,
             }

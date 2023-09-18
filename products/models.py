@@ -5,7 +5,7 @@ from .choices import STATUS_CHOICES
 from django.utils.text import slugify
 
 
-class Categories(baseIDModel):
+class Category(baseIDModel):
     category_name = models.CharField(max_length=150)
     category_description = models.CharField(max_length=150)
     slug = models.SlugField(unique=True, null=True, blank=True)
@@ -15,11 +15,11 @@ class Categories(baseIDModel):
     
     def save(self, *args, **kwargs):
         self.category_link = slugify(self.category_name)
-        super(Categories, self).save(*args, **kwargs)
+        super(Category, self).save(*args, **kwargs)
 
-class Subcategories(baseIDModel):
+class Subcategory(baseIDModel):
     subcategory_name = models.CharField(max_length=150)
-    categories = models.ForeignKey(Categories, on_delete=models.CASCADE, related_name='sub_categories')
+    categories = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='sub_categories')
     slug = models.SlugField(unique=True, null=True, blank=True)
 
     def __str__(self):
@@ -27,9 +27,17 @@ class Subcategories(baseIDModel):
     
     def save(self, *args, **kwargs):
         self.subcategory_link = slugify(self.subcategory_name)
-        super(Subcategories, self).save(*args, **kwargs)
+        super(Subcategory, self).save(*args, **kwargs)
 
-class Products(baseIDModel):
+
+class Tag(baseIDModel):
+    innerTag = models.CharField(max_length=150, null=True, blank=True)
+    homeTag = models.CharField(max_length=150, null=True, blank=True)
+
+    def __str__(self):
+        return self.innerTag
+
+class Product(baseIDModel):
     product_title = models.CharField(max_length=150)
     slug = models.SlugField(unique=True, null=True, blank=True)
     product_selling_price = models.FloatField()
@@ -37,16 +45,16 @@ class Products(baseIDModel):
     product_description = models.CharField(max_length=255)
     product_image = models.ImageField(upload_to='product_imgs')
     brand = models.CharField(max_length=150)
-    categories = models.ForeignKey(Categories, on_delete=models.CASCADE, related_name='product_categories')
-    subcategories = models.ForeignKey(Subcategories, on_delete=models.CASCADE, null=True, blank=True)
+    categories = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='product_categories')
+    subcategories = models.ForeignKey(Subcategory, on_delete=models.CASCADE, null=True, blank=True)
+    tags = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.product_title
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.product_title)
-        super(Products, self).save(*args, **kwargs)
-    
+        super(Product, self).save(*args, **kwargs)
 
 class Coupon(baseIDModel):
     coupon_code = models.CharField(max_length=10)
@@ -57,7 +65,7 @@ class Coupon(baseIDModel):
 
 class Cart(baseIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
@@ -66,7 +74,7 @@ class Cart(baseIDModel):
 
 class OrderPlaced(baseIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     ordered_date =models.DateTimeField(auto_now_add=True)
     status =models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pending')
