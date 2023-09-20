@@ -26,13 +26,14 @@
                 <img id="example" src="{{product.product_image.url}}" alt=" " class="img-responsive" width="120" height="120"/>
             </div>
             <div class="col-md-8 agileinfo_single_right">
-                <div class="rating1">
+                <div class="rating1" data-product-url="{% url 'product-view' slug=product.slug pk=product.pk %}">
+                    {% csrf_token %}
                     <span class="starRating">
                         <input id="rating5" type="radio" name="rating" value="5">
                         <label for="rating5">5</label>
                         <input id="rating4" type="radio" name="rating" value="4">
                         <label for="rating4">4</label>
-                        <input id="rating3" type="radio" name="rating" value="3" checked>
+                        <input id="rating3" type="radio" name="rating" value="3">
                         <label for="rating3">3</label>
                         <input id="rating2" type="radio" name="rating" value="2">
                         <label for="rating2">2</label>
@@ -51,18 +52,7 @@
                     <div class="snipcart-details agileinfo_single_right_details">
                         <form action="#" method="post">
                             {% csrf_token %}
-                            <fieldset>
-                                <input type="hidden" name="cmd" value="_cart" />
-                                <input type="hidden" name="add" value="1" />
-                                <input type="hidden" name="business" value=" " />
-                                <input type="hidden" name="item_name" value="pulao basmati rice" />
-                                <input type="hidden" name="amount" value="21.00" />
-                                <input type="hidden" name="discount_amount" value="1.00" />
-                                <input type="hidden" name="currency_code" value="USD" />
-                                <input type="hidden" name="return" value=" " />
-                                <input type="hidden" name="cancel_return" value=" " />
-                                <input type="submit" name="submit" value="Add to cart" class="button" />
-                            </fieldset>
+                            <input type="submit" name="submit" value="Add to cart" class="button" />
                         </form>
                     </div>
                 </div>
@@ -98,18 +88,7 @@
                                     </div>
                                     <div class="snipcart-details">
                                         <form action="#" method="post">
-                                            <fieldset>
-                                                <input type="hidden" name="cmd" value="_cart" />
-                                                <input type="hidden" name="add" value="1" />
-                                                <input type="hidden" name="business" value=" " />
-                                                <input type="hidden" name="item_name" value="knorr instant soup" />
-                                                <input type="hidden" name="amount" value="3.00" />
-                                                <input type="hidden" name="discount_amount" value="1.00" />
-                                                <input type="hidden" name="currency_code" value="USD" />
-                                                <input type="hidden" name="return" value=" " />
-                                                <input type="hidden" name="cancel_return" value=" " />
-                                                <input type="submit" name="submit" value="Add to cart" class="button" />
-                                            </fieldset>
+                                            <input type="submit" name="submit" value="Add to cart" class="button" />
                                         </form>
                                     </div>
                                 </div>
@@ -143,18 +122,7 @@
                                     </div>
                                     <div class="snipcart-details">
                                         <form action="#" method="post">
-                                            <fieldset>
-                                                <input type="hidden" name="cmd" value="_cart" />
-                                                <input type="hidden" name="add" value="1" />
-                                                <input type="hidden" name="business" value=" " />
-                                                <input type="hidden" name="item_name" value="fresh spinach" />
-                                                <input type="hidden" name="amount" value="2.00" />
-                                                <input type="hidden" name="discount_amount" value="1.00" />
-                                                <input type="hidden" name="currency_code" value="USD" />
-                                                <input type="hidden" name="return" value=" " />
-                                                <input type="hidden" name="cancel_return" value=" " />
-                                                <input type="submit" name="submit" value="Add to cart" class="button" />
-                                            </fieldset>
+                                            <input type="submit" name="submit" value="Add to cart" class="button" />
                                         </form>
                                     </div>
                                 </div>
@@ -188,18 +156,7 @@
                                     </div>
                                     <div class="snipcart-details">
                                         <form action="#" method="post">
-                                            <fieldset>
-                                                <input type="hidden" name="cmd" value="_cart" />
-                                                <input type="hidden" name="add" value="1" />
-                                                <input type="hidden" name="business" value=" " />
-                                                <input type="hidden" name="item_name" value="mixed fruit juice" />
-                                                <input type="hidden" name="amount" value="3.00" />
-                                                <input type="hidden" name="discount_amount" value="1.00" />
-                                                <input type="hidden" name="currency_code" value="USD" />
-                                                <input type="hidden" name="return" value=" " />
-                                                <input type="hidden" name="cancel_return" value=" " />
-                                                <input type="submit" name="submit" value="Add to cart" class="button" />
-                                            </fieldset>
+                                            <input type="submit" name="submit" value="Add to cart" class="button" />
                                         </form>
                                     </div>
                                 </div>
@@ -209,7 +166,7 @@
                     </div>
                 </div>
                 
-                
+
                 <div class="clearfix"> </div>
             </div>
     </div>
@@ -228,6 +185,33 @@
 
 
 <script>
+
+$("document").ready(function(){
+    $('input[name=rating]').change(function(){
+        var productUrl = $(".rating1").data("product-url");
+        var SelectedRatingStars = $(this).val();
+        let csr = $('input[name=csrfmiddlewaretoken]').val();
+
+        var data = {
+            selectedRating : SelectedRatingStars,
+            csrfmiddlewaretoken: csr,
+        };
+
+
+        $.ajax({
+            url: productUrl,
+            method: 'POST',
+            data: data,
+            dataType: JSON,
+            success: function(response){
+                console.log("success")
+            },
+        })
+
+
+    })
+
+});
 
 
 </script>

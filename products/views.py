@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from .models import Category, Subcategory, Product, Tag
 from django.db.models import Q
+import json
 
 class ProductsView(View):
     def get(self, request, slug=None):
@@ -34,7 +35,15 @@ class ProductShowView(View):
             "categories" : categories,
             "products" : products,
         }
+
         return render(request, "base/product-view.html", context=context)
+    
+    def post(self, request, slug, pk):
+        rating = request.POST['selectedRating']
+        print(rating)
+        print(slug, pk)
+        return render(request, "base/product-view.html")
+    
 
 def checkouts(request):
     return render(request, "base/checkout.html")
