@@ -28,68 +28,68 @@
             {% else %}
             <h3>{{get_subcategory}}</h3>
             {% endif %}
+        <div>
             <div class="w3ls_w3l_banner_nav_right_grid1">
                 {% for cateitem in category_items %}
-                <!-- {% for tag in tags %} -->
-                    <h6>{{cateitem.tags.innerTag}}</h6>
-                <!-- {% endfor %} -->
-                <div class="col-md-3 w3ls_w3l_banner_left">
-                    <div class="hover14 column">
-                        <div class="agile_top_brand_left_grid w3l_agile_top_brand_left_grid">
-                            <div class="agile_top_brand_left_grid_pos">
-                                <img src="{% static 'images/offer.png' %}" alt=" " class="img-responsive" />
-                            </div>
-                            <div class="agile_top_brand_left_grid1">
-                                <figure>
-                                    <div class="snipcart-item block">
-                                        <div class="snipcart-thumb">
-                                            <a href="{% url 'product-view' %}"><img src="{% static 'images/5.png' %}" alt=" " class="img-responsive" /></a>
-                                            <p>{{cateitem.product_title}}</p>
-                                            <h4>INR {{cateitem.product_discounted_price}} <span>INR {{cateitem.product_selling_price}}</span></h4>
-                                        </div>
-                                        <div class="snipcart-details">
-                                            <form action="#" method="post">
-                                                {% csrf_token %}
-                                                    <input type="submit" name="submit" value="Add to cart" class="button" />
-                                            </form>
-                                        </div>
+            <div class="col-md-3 w3ls_w3l_banner_left">
+                <div class="hover14 column">
+                    <div class="agile_top_brand_left_grid w3l_agile_top_brand_left_grid">
+                        <div class="agile_top_brand_left_grid_pos">
+                            <img src="{% static 'images/offer.png' %}" alt=" " class="img-responsive" />
+                        </div>
+                        <div class="agile_top_brand_left_grid1">
+                            <figure>
+                                <div class="snipcart-item block">
+                                    <div class="snipcart-thumb">
+                                        <a href="{% url 'product-view' cateitem.slug cateitem.id %}"><img src="{{cateitem.product_image.url}}" alt=" " class="img-responsive" /></a>
+                                        <p>{{cateitem.product_title}}</p>
+                                        <h4>INR {{cateitem.product_discounted_price}} <span>INR {{cateitem.product_selling_price}}</span></h4>
                                     </div>
-                                </figure>
-                            </div>
+                                    <div class="snipcart-details">
+                                        <form action="#" method="post">
+                                            {% csrf_token %}
+                                                <input type="submit" name="submit" value="Add to cart" class="button" />
+                                        </form>
+                                    </div>
+                                </div>
+                            </figure>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-                {% for subcateitem in sub_category_items %}
-                <div class="col-md-3 w3ls_w3l_banner_left">
-                    <div class="hover14 column">
-                        <div class="agile_top_brand_left_grid w3l_agile_top_brand_left_grid">
-                            <div class="agile_top_brand_left_grid_pos">
-                                <img src="{% static 'images/offer.png' %}" alt=" " class="img-responsive" />
-                            </div>
-                            <div class="agile_top_brand_left_grid1">
-                                <figure>
-                                    <div class="snipcart-item block">
-                                        <div class="snipcart-thumb">
-                                            <a href="{% url 'product-view' %}"><img src="{% static 'images/5.png' %}" alt=" " class="img-responsive" /></a>
-                                            <p>{{subcateitem.product_title}}</p>
-                                            <h4>$3.00 <span>$5.00</span></h4>
-                                        </div>
-                                        <div class="snipcart-details">
-                                            <form action="#" method="post">
-                                                {% csrf_token %}
-                                                    <input type="submit" name="submit" value="Add to cart" class="button" />
-                                            </form>
-                                        </div>
-                                    </div>
-                                </figure>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                <div class="clearfix"> </div>
             </div>
+            {% endfor %}
+            {% for subcateitem in sub_category_items %}
+            <div class="col-md-3 w3ls_w3l_banner_left">
+                <div class="hover14 column">
+                    <div class="agile_top_brand_left_grid w3l_agile_top_brand_left_grid">
+                        <div class="agile_top_brand_left_grid_pos">
+                            <img src="{% static 'images/offer.png' %}" alt=" " class="img-responsive" />
+                        </div>
+                        <div class="agile_top_brand_left_grid1">
+                            <figure>
+                                <div class="snipcart-item block">
+                                    <div class="snipcart-thumb">
+                                        <a href="{% url 'product-view' subcateitem.slug subcateitem.id %}"><img src="{{subcateitem.product_image.url}}" alt=" " class="img-responsive" /></a>
+                                        <p>{{subcateitem.product_title}}</p>
+                                        <h4>INR {{subcateitem.product_discounted_price}} <span>INR {{subcateitem.product_selling_price}}</span></h4>
+                                    </div>
+                                    <div class="snipcart-details">
+                                        <form action="#" method="post">
+                                            {% csrf_token %}
+                                                <input type="submit" name="submit" value="Add to cart" class="button" />
+                                        </form>
+                                    </div>
+                                </div>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="clearfix"> </div>
+        </div>
+        </div>
+
         </div>
     </div>
     <div class="clearfix"></div>

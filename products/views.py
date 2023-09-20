@@ -6,23 +6,20 @@ from django.db.models import Q
 class ProductsView(View):
     def get(self, request, slug=None):
         categories = Category.objects.prefetch_related('sub_categories','product_categories').all()
-        tags = Tag.objects.all()
         context = {
             "categories" : categories,
-            "tags" : tags,
+            
         }
         get_Category = request.GET.get('category_name')
         get_subcategory = request.GET.get('subcategory_name')
-        tags_product = request.GET.get('tag-name')
-        print(tags_product)
         context['get_category_name'] = get_Category
         context['get_subcategory'] = get_subcategory
         if get_Category is not None:
-            category_items = Product.objects.filter(Q(categories__category_name=get_Category) & Q(tags__innerTag='Foods'))
+            category_items = Product.objects.filter(categories__category_name=get_Category)
             context["category_items"]=category_items
 
         if get_subcategory is not None:
-            sub_category_items = Product.objects.filter(Q(subcategories__subcategory_name=get_Category) & Q(tags__innerTag=tags_product))
+            sub_category_items = Product.objects.filter(subcategories__subcategory_name=get_subcategory)
             context["sub_category_items"]=sub_category_items
     
         
@@ -30,10 +27,12 @@ class ProductsView(View):
 
 
 class ProductShowView(View):
-    def get(self, request):
+    def get(self, request, slug, pk):
         categories = Category.objects.prefetch_related('sub_categories','product_categories').all()
+        products = Product.objects.filter(Q(slug=slug) & Q(id=pk))
         context = {
             "categories" : categories,
+            "products" : products,
         }
         return render(request, "base/product-view.html", context=context)
 
