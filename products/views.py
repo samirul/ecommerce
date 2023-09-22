@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
+
+from basket.basket import NavBar_Basket_count
 from .models import Category, Subcategory, Product, Tag, Cart
 from django.db.models import Q, Avg
 from django.contrib.auth.decorators import login_required
@@ -9,8 +11,10 @@ from django.utils.decorators import method_decorator
 class ProductsView(View):
     def get(self, request, slug=None):
         categories = Category.objects.prefetch_related('sub_categories','product_categories').all()
+        cart_count = NavBar_Basket_count(request=request)
         context = {
             "categories" : categories,
+            "cart_count" : cart_count.calculate
             
         }
         get_Category = request.GET.get('category_name')
@@ -33,9 +37,11 @@ class ProductShowView(View):
     def get(self, request, slug, pk):
         categories = Category.objects.prefetch_related('sub_categories','product_categories').all()
         products = Product.objects.filter(Q(slug=slug) & Q(id=pk))
+        cart_count = NavBar_Basket_count(request=request)
         context = {
             "categories" : categories,
             "products" : products,
+            "cart_count" : cart_count.calculate
         }
 
         return render(request, "base/product-view.html", context=context)
@@ -65,7 +71,11 @@ class ProductAddToCart(View):
         print( f"id is: {product_id}")
         return redirect('checkout')
 
-
+@method_decorator(login_required, name='dispatch')
 class CheckoutsView(View):
     def get(self, request):
-        return render(request, "base/checkout.html")
+        cart_count = NavBar_Basket_count(request=request)
+        context ={
+            "cart_count" : cart_count.calculate,
+        }
+        return render(request, "base/checkout.html", context=context)

@@ -14,10 +14,19 @@
             <input type="submit" value=" ">
         </form>
     </div>
+
+    {% if user.is_authenticated %}
     <div class="product_list_header">
         <a href="{% url 'checkout' %}" type="button"><i class="fa basket">&#xf07a;</i>
-        <span class='badge badge-warning' id='lblCartCount'> 5 </span></a>
+        <span class='badge badge-warning' id='lblCartCount'> {{cart_count}} </span></a>
     </div>
+
+    {% else %}
+    <div class="product_list_header">
+        <a href="{% url 'checkout' %}" type="button"><i class="fa basket">&#xf07a;</i>
+        <span class='badge badge-warning' id='lblCartCount'>0</span></a>
+    </div>
+    {% endif %}
 
 
 

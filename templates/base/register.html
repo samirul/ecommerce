@@ -26,7 +26,7 @@
               
               <div class="form">
                 <h2>Create an account</h2>
-                <form method="POST">
+                <form action="{% url 'register' %}" method="POST">
                     {% csrf_token %}
                     <input type="text" name="username" placeholder="User Name" required=" ">
                     <input type="email" name="email" placeholder="Email Address" required=" ">
@@ -38,7 +38,7 @@
 
               <div class="form">
                 <h2>Login to your account</h2>
-                <form action="/login/" method="post">
+                <form action="{% url 'login' %}" method="post">
                     {% csrf_token %}
                   <input type="text" name="Username" placeholder="Username" required=" ">
                   <input type="password" name="Password" placeholder="Password" required=" ">
