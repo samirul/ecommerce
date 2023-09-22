@@ -26,19 +26,19 @@
                 <img id="example" src="{{product.product_image.url}}" alt=" " class="img-responsive" width="120" height="120"/>
             </div>
             <div class="col-md-8 agileinfo_single_right">
-                <div class="rating1" data-product-url="{% url 'product-view' slug=product.slug pk=product.pk %}">
+                <div class="rating1" data-product-url="{% url 'product-view' slug=product.slug pk=product.pk %}" data-average-rating="{{product.product_rating}}>
                     {% csrf_token %}
                     <span class="starRating">
                         <input id="rating5" type="radio" name="rating" value="5">
-                        <label for="rating5">5</label>
+                        <label for="rating5" class="star {% if product.product_rating >= 5 %}selected{% endif %}">5</label>
                         <input id="rating4" type="radio" name="rating" value="4">
-                        <label for="rating4">4</label>
+                        <label for="rating4" class="star {% if product.product_rating >= 4 %}selected{% endif %}">4</label>
                         <input id="rating3" type="radio" name="rating" value="3">
-                        <label for="rating3">3</label>
+                        <label for="rating3" class="star {% if product.product_rating >= 3 %}selected{% endif %}">3</label>
                         <input id="rating2" type="radio" name="rating" value="2">
-                        <label for="rating2">2</label>
+                        <label for="rating2" class="star {% if product.product_rating >= 2 %}selected{% endif %}">2</label>
                         <input id="rating1" type="radio" name="rating" value="1">
-                        <label for="rating1">1</label>
+                        <label for="rating1" class="star {% if product.product_rating >= 1 %}selected{% endif %}">1</label>
                     </span>
                 </div>
                 <div class="w3agile_description">
@@ -50,8 +50,9 @@
                         <h4>INR {{product.product_discounted_price}} <span>INR {{product.product_selling_price}}</span></h4>
                     </div>
                     <div class="snipcart-details agileinfo_single_right_details">
-                        <form action="#" method="post">
+                        <form action="{% url 'add-to-cart' %}">
                             {% csrf_token %}
+                            <input type="hidden" name="prod_id" value="{{product.id}}" id="prod_id">
                             <input type="submit" name="submit" value="Add to cart" class="button" />
                         </form>
                     </div>
@@ -187,6 +188,16 @@
 <script>
 
 $("document").ready(function(){
+    $('.star').on('click', function(){
+        var rating = $(this).text();
+        $('.star').removeClass('selected')
+        $(this).prevAll('.star').addBack().addClass('selected')
+        postRating(rating)
+    });
+
+});
+
+function postRating(rating){
     $('input[name=rating]').change(function(){
         var productUrl = $(".rating1").data("product-url");
         var SelectedRatingStars = $(this).val();
@@ -195,6 +206,7 @@ $("document").ready(function(){
         var data = {
             selectedRating : SelectedRatingStars,
             csrfmiddlewaretoken: csr,
+            rating: rating
         };
 
 
@@ -206,15 +218,36 @@ $("document").ready(function(){
             success: function(response){
                 console.log("success")
             },
-        })
+        });
+    });
 
 
-    })
+}
 
+$(document).ready(function() {
+    $('.rating1').each(function() {
+        var averageRating = parseFloat($(this).data('product_rating'));
+        $(this).find('.starRating label').each(function() {
+            var starValue = parseInt($(this).text());
+            if (starValue <= averageRating) {
+                $(this).addClass('selected');
+            }
+        });
+    });
 });
 
-
 </script>
+
+<style>
+.selected {
+    color: green;
+}
+
+/* Unselected stars (gray) */
+.unselected {
+    color: gray;
+}
+</style>
 
 
 

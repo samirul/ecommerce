@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
-from .models import Category, Subcategory, Product, Tag
-from django.db.models import Q
-import json
+from .models import Category, Subcategory, Product, Tag, Cart
+from django.db.models import Q, Avg
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 
 class ProductsView(View):
     def get(self, request, slug=None):
@@ -38,12 +40,32 @@ class ProductShowView(View):
 
         return render(request, "base/product-view.html", context=context)
     
-    def post(self, request, slug, pk):
-        rating = request.POST['selectedRating']
-        print(rating)
-        print(slug, pk)
-        return render(request, "base/product-view.html")
-    
+    def post(self, request, slug=None, pk=None):
+        rating = request.POST.get('selectedRating')
+        print(f"rating is : {rating}")
+        products = Product.objects.filter(Q(slug=slug) & Q(id=pk))
+        for product in products:
+            product.product_rating = rating
+            product.save()
 
-def checkouts(request):
-    return render(request, "base/checkout.html")
+        products = Product.objects.filter(Q(slug=slug) & Q(id=pk))
+        for product in products:
+            product.product_rating = Product.objects.filter(Q(slug=slug) & Q(id=pk)).aggregate(Avg('product_rating'))['product_rating__avg']
+            product.save()
+        return render(request, "base/product-view.html")
+
+@method_decorator(login_required, name='dispatch')
+class ProductAddToCart(View):
+    def get(self, request):
+        product_id = request.GET.get('prod_id')
+        product = Product.objects.get(id=product_id)
+        check_Cart_items = Cart.objects.filter(Q(user=request.user) & Q(product=product_id))
+        if not check_Cart_items.exists():
+            Cart(user=request.user, product=product).save()
+        print( f"id is: {product_id}")
+        return redirect('checkout')
+
+
+class CheckoutsView(View):
+    def get(self, request):
+        return render(request, "base/checkout.html")

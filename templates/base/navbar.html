@@ -14,16 +14,13 @@
             <input type="submit" value=" ">
         </form>
     </div>
-    <div class="product_list_header"> 
-        <form action="/" method="post" class="last">
-            {% csrf_token %} 
-            <fieldset>
-                <input type="hidden" name="cmd" value="_cart" />
-                <input type="hidden" name="display" value="1" />
-                <input type="submit" name="submit" value="View your cart" class="button" />
-            </fieldset>
-        </form>
+    <div class="product_list_header">
+        <a href="{% url 'checkout' %}" type="button"><i class="fa basket">&#xf07a;</i>
+        <span class='badge badge-warning' id='lblCartCount'> 5 </span></a>
     </div>
+
+
+
     <div class="w3l_header_right">
         <ul>
             <li class="dropdown profile_details_drop">
@@ -96,4 +93,6 @@ $(document).ready(function() {
         );
     });
     </script>
+
+
 {% endblock content %}

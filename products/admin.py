@@ -23,7 +23,13 @@ class ProductsModelAdmin(admin.ModelAdmin):
     ]
 
 @admin.register(Tag)
-class ProductsModelAdmin(admin.ModelAdmin):
+class TagsModelAdmin(admin.ModelAdmin):
     list_display =[
         "id","innerTag","homeTag"
+    ]
+
+@admin.register(Cart)
+class TagsModelAdmin(admin.ModelAdmin):
+    list_display =[
+        "id","user","product","quantity"
     ]

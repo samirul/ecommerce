@@ -42,6 +42,7 @@ class Product(baseIDModel):
     slug = models.SlugField(unique=True, null=True, blank=True)
     product_selling_price = models.FloatField()
     product_discounted_price = models.FloatField()
+    product_rating = models.IntegerField(default=0)
     product_description = models.CharField(max_length=255)
     product_image = models.ImageField(upload_to='product_imgs')
     brand = models.CharField(max_length=150)
