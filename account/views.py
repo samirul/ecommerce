@@ -1,13 +1,16 @@
+from typing import Any
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.views import View
 from .models import User
 from .validators.validate import PasswordChecker
 from django.contrib import messages
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class registerView(View):
+class registerViews(View):
     # Unit Test Passed
     def get(self, request):
         return render(request, "base/register.html")
@@ -43,24 +46,31 @@ class registerView(View):
         return render(request, "base/register.html")
     
 
-class loginView(View):
+class loginViews(View):
     # Unit Test Passed
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('/accounts/profile/')
         return render(request, "base/login.html")
     
     def post(self, request):
         email = request.POST.get('email')
         password = request.POST.get('password')
-
+        next_url = request.POST.get('next')
+        
         if not User.objects.filter(email=email).exists():
              messages.info(request, f"{email} - Email isn't Registered, Please Register Your Account First.")
 
         auth_user = authenticate(username=email, password=password)
 
-        if auth_user:
+        if auth_user is not None:
             login(request, auth_user)
             messages.success(request, f"Login Successful, Welcome Back - {email}")
-            # return redirect('/')
+
+            if next_url:
+                return redirect(next_url)
+            else:
+                return redirect('/')
         else:
             messages.info(request,"Invalid Email or Password, Please Check Your Credentials.")
             HttpResponseRedirect(request.path_info)
@@ -68,9 +78,7 @@ class loginView(View):
         return render(request, "base/login.html")
     
 
+class ProfileView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, "base/profile.html")
 
-
-
-class ModalView(View):
-    def get(request):
-        return render(request, 'base/modal.html')

@@ -4,8 +4,8 @@ from django.views import View
 from basket.basket import NavBar_Basket_count
 from .models import Category, Subcategory, Product, Tag, Cart
 from django.db.models import Q, Avg
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class ProductsView(View):
@@ -60,8 +60,8 @@ class ProductShowView(View):
             product.save()
         return render(request, "base/product-view.html")
 
-@method_decorator(login_required, name='dispatch')
-class ProductAddToCart(View):
+
+class ProductAddToCart(LoginRequiredMixin, View):
     def get(self, request):
         product_id = request.GET.get('prod_id')
         product = Product.objects.get(id=product_id)
@@ -71,11 +71,13 @@ class ProductAddToCart(View):
         print( f"id is: {product_id}")
         return redirect('checkout')
 
-@method_decorator(login_required, name='dispatch')
-class CheckoutsView(View):
+
+class CheckoutsView(LoginRequiredMixin, View):
     def get(self, request):
         cart_count = NavBar_Basket_count(request=request)
         context ={
             "cart_count" : cart_count.calculate,
         }
         return render(request, "base/checkout.html", context=context)
+    
+
