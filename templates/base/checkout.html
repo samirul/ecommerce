@@ -23,7 +23,7 @@
             <h3>Chec<span>kout</span></h3>
 
             <div class="checkout-right">
-                <h4>Your shopping cart contains: <span>3 Products</span></h4>
+                <h4>Your shopping cart contains: <span id="count-cart">{{cart_count}}</span> Products</h4>
                 <table class="timetable_sub">
                     <thead>
                         <tr>
@@ -37,8 +37,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
-
+                        {% for check in checkout %}
+                        <tr class="rem1">
+                            <td class="invert">{{forloop.counter}}</td>
+                            <td class="invert-image"><a href="{% url 'product-view' check.product.slug check.product.id %}"><img id="productimage" src="{{check.product.product_image.url}}" alt=" " class="img-responsive"></a></td>
+                            <td class="invert">
+                                 <div class="quantity"> 
+                                    <div class="quantity-select">                           
+                                        <div class="entry value-minus">&nbsp;</div>
+                                        <div class="entry value" id="productquantity"><span>{{check.quantity}}</span></div>
+                                        <div class="entry value-plus active">&nbsp;</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="invert" id="productname">{{check.product.product_title}}</td>
+                            
+                            <td class="invert" id="productprice">{{check.product.product_discounted_price}}</td>
+                            <td class="invert">
+                                <div class="rem">
+                                    <div class="close1" pid="{{check.product.id}}"></div>
+                                </div>
+    
+                            </td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -130,30 +152,32 @@
     });
 </script> -->
 <!--quantity-->
-<script>$(document).ready(function (c) {
-        $('.close1').on('click', function (c) {
-            $('.rem1').fadeOut('slow', function (c) {
-                $('.rem1').remove();
-            });
+<script>
+
+$(document).ready(function () {
+        $('.close1').on('click', function () {
+            var id = $(this).attr('pid').toString();
+            var eml = this;
+
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'remove-cart-items' %}",
+                data:{
+                    product_id: id,
+                },
+
+                success: function(ValueData){
+                    eml.parentNode.parentNode.parentNode.remove();
+                }
+
+            })
+
+            
+            
         });
     });
 </script>
-<script>$(document).ready(function (c) {
-        $('.close2').on('click', function (c) {
-            $('.rem2').fadeOut('slow', function (c) {
-                $('.rem2').remove();
-            });
-        });
-    });
-</script>
-<!-- <!-- <script>$(document).ready(function (c) {
-        $('.close3').on('click', function (c) {
-            $('.rem3').fadeOut('slow', function (c) {
-                $('.rem3').remove();
-            });
-        });
-    });
-</script> -->
+
 
 
 {% endblock content %}

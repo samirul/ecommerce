@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http.response import JsonResponse
 from django.views import View
 
 from basket.basket import NavBar_Basket_count
@@ -75,9 +76,28 @@ class ProductAddToCart(LoginRequiredMixin, View):
 class CheckoutsView(LoginRequiredMixin, View):
     def get(self, request):
         cart_count = NavBar_Basket_count(request=request)
+        checkout = Cart.objects.filter(user=request.user)
         context ={
             "cart_count" : cart_count.calculate,
+            "checkout" : checkout
         }
         return render(request, "base/checkout.html", context=context)
+    
+class RemoveCartView(LoginRequiredMixin, View):
+    def get(self, request):
+        product_id = request.GET['product_id']
+        cart_ = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
+        cart_.delete()
+
+        data = {
+            "product_image" : cart_.product.product_image.url,
+            "product_quantity" : cart_.quantity,
+            "product_name" : cart_.product.product_title,
+            "product_price" : cart_.product.product_discounted_price,
+        }
+
+        return JsonResponse(data)
+
+
     
 
