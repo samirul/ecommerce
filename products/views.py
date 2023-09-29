@@ -89,14 +89,19 @@ class RemoveCartView(LoginRequiredMixin, View):
         cart_ = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
         cart_.delete()
 
+        cart_count = NavBar_Basket_count(request=request)
+        #print(cart_count.calculate())
+
         data = {
             "product_image" : cart_.product.product_image.url,
             "product_quantity" : cart_.quantity,
             "product_name" : cart_.product.product_title,
             "product_price" : cart_.product.product_discounted_price,
+            "Cart_update" : cart_count.calculate()
         }
 
         return JsonResponse(data)
+    
 
 
     

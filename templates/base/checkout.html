@@ -23,7 +23,7 @@
             <h3>Chec<span>kout</span></h3>
 
             <div class="checkout-right">
-                <h4>Your shopping cart contains: <span id="count-cart">{{cart_count}}</span> Products</h4>
+                <h4>Your shopping cart contains: <span id="Cart-counts">{{cart_count}}</span> Products</h4>
                 <table class="timetable_sub">
                     <thead>
                         <tr>
@@ -167,17 +167,16 @@ $(document).ready(function () {
                 },
 
                 success: function(ValueData){
+                    document.getElementById('Cart-counts').innerText=ValueData.Cart_update;
+                    document.getElementById('lblCartCount').innerText=ValueData.Cart_update;
                     eml.parentNode.parentNode.parentNode.remove();
                 }
 
             })
-
-            
             
         });
     });
 </script>
-
 
 
 {% endblock content %}
