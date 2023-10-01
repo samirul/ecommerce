@@ -23,7 +23,7 @@
                     <div class="w3ls_vegetables">
                         <ul>
                             {% for subcategory in category.sub_categories.all %}
-                            <li><a href="{% url 'productslugsubcategory' subcategory.slug %}?subcategory_name={{subcategory.subcategory_name}}">{{subcategory.subcategory_name}}</a></li>
+                            <li><a href="{% url 'productslugsubcategory' subcategory.slug  %}?subcategory_name={{subcategory.subcategory_name}}">{{subcategory.subcategory_name}}</a></li>
                             {% endfor %}
                         </ul>
                     </div>

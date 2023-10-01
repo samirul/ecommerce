@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.http.response import JsonResponse
 from django.views import View
@@ -7,6 +8,7 @@ from .models import Category, Subcategory, Product, Tag, Cart
 from django.db.models import Q, Avg
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 
 class ProductsView(View):
@@ -15,7 +17,8 @@ class ProductsView(View):
         cart_count = NavBar_Basket_count(request=request)
         context = {
             "categories" : categories,
-            "cart_count" : cart_count.calculate
+            "cart_count" : cart_count.calculate(),
+            
             
         }
         get_Category = request.GET.get('category_name')
@@ -42,7 +45,7 @@ class ProductShowView(View):
         context = {
             "categories" : categories,
             "products" : products,
-            "cart_count" : cart_count.calculate
+            "cart_count" : cart_count.calculate()
         }
 
         return render(request, "base/product-view.html", context=context)
@@ -69,8 +72,10 @@ class ProductAddToCart(LoginRequiredMixin, View):
         check_Cart_items = Cart.objects.filter(Q(user=request.user) & Q(product=product_id))
         if not check_Cart_items.exists():
             Cart(user=request.user, product=product).save()
-        print( f"id is: {product_id}")
-        return redirect('checkout')
+            messages.success(request, f"{product.product_title} Added in cart.")
+        else:
+            messages.info(request, f"{product.product_title} Already in cart.")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class CheckoutsView(LoginRequiredMixin, View):
@@ -78,7 +83,7 @@ class CheckoutsView(LoginRequiredMixin, View):
         cart_count = NavBar_Basket_count(request=request)
         checkout = Cart.objects.filter(user=request.user)
         context ={
-            "cart_count" : cart_count.calculate,
+            "cart_count" : cart_count.calculate(),
             "checkout" : checkout
         }
         return render(request, "base/checkout.html", context=context)
@@ -90,7 +95,7 @@ class RemoveCartView(LoginRequiredMixin, View):
         cart_.delete()
 
         cart_count = NavBar_Basket_count(request=request)
-        #print(cart_count.calculate())
+
 
         data = {
             "product_image" : cart_.product.product_image.url,

@@ -21,6 +21,7 @@
         </div>
         <div class="w3l_banner_nav_right_banner3_btm">
             <div class="clearfix"> </div>
+            {% include 'base/alert.html' %}
         </div>
         <div class="w3ls_w3l_banner_nav_right_grid">
             {% if get_category_name %}
@@ -41,14 +42,15 @@
                             <figure>
                                 <div class="snipcart-item block">
                                     <div class="snipcart-thumb">
-                                        <a href="{% url 'product-view' cateitem.slug cateitem.id %}"><img src="{{cateitem.product_image.url}}" alt=" " class="img-responsive" /></a>
+                                        <a href="{% url 'product-view' cateitem.slug cateitem.id %}?id={{cateitem.id}}"><img src="{{cateitem.product_image.url}}" alt=" " class="img-responsive" /></a>
                                         <p>{{cateitem.product_title}}</p>
                                         <h4>INR {{cateitem.product_discounted_price}} <span>INR {{cateitem.product_selling_price}}</span></h4>
                                     </div>
                                     <div class="snipcart-details">
-                                        <form action="#" method="post">
+                                        <form action="{% url 'add-to-cart' %}">
                                             {% csrf_token %}
-                                                <input type="submit" name="submit" value="Add to cart" class="button" />
+                                            <input type="hidden" name="prod_id" value="{{cateitem.id}}" id="prod_id">
+                                            <input type="submit" name="submit" value="Add to cart" class="button" />
                                         </form>
                                     </div>
                                 </div>
@@ -69,14 +71,15 @@
                             <figure>
                                 <div class="snipcart-item block">
                                     <div class="snipcart-thumb">
-                                        <a href="{% url 'product-view' subcateitem.slug subcateitem.id %}"><img src="{{subcateitem.product_image.url}}" alt=" " class="img-responsive" /></a>
+                                        <a href="{% url 'product-view' subcateitem.slug subcateitem.id %}?id={{subcateitem.id}}"><img src="{{subcateitem.product_image.url}}" alt=" " class="img-responsive" /></a>
                                         <p>{{subcateitem.product_title}}</p>
                                         <h4>INR {{subcateitem.product_discounted_price}} <span>INR {{subcateitem.product_selling_price}}</span></h4>
                                     </div>
                                     <div class="snipcart-details">
-                                        <form action="#" method="post">
+                                        <form action="{% url 'add-to-cart' %}">
                                             {% csrf_token %}
-                                                <input type="submit" name="submit" value="Add to cart" class="button" />
+                                            <input type="hidden" name="prod_id" value="{{subcateitem.id}}" id="prod_id">
+                                            <input type="submit" name="submit" value="Add to cart" class="button" />
                                         </form>
                                     </div>
                                 </div>
