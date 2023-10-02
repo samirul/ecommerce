@@ -14,7 +14,7 @@ class HomeView(View):
             "categories" : categories,
             "sliders" : slider,
             "homemiddlebanner" : homemiddlebanner,
-            "cart_count" : cart_count.calculate
+            "cart_count" : cart_count.calculate()
             }
          return render(request, "base/index.html", context=context)
 
@@ -24,7 +24,7 @@ class ContactUsView(View):
         cart_count = NavBar_Basket_count(request=request)
         context = {
             "categories" : categories,
-            "cart_count" : cart_count.calculate
+            "cart_count" : cart_count.calculate()
             }
         return render(request, "base/contact-us.html", context=context)
 
@@ -34,7 +34,7 @@ class AboutView(View):
         cart_count = NavBar_Basket_count(request=request)
         context = {
             "categories" : categories,
-            "cart_count" : cart_count.calculate
+            "cart_count" : cart_count.calculate()
             }
         return render(request, "base/about.html", context=context)
     
@@ -44,7 +44,7 @@ class ServiceView(View):
         cart_count = NavBar_Basket_count(request=request)
         context = {
             "categories" : categories,
-            "cart_count" : cart_count.calculate
+            "cart_count" : cart_count.calculate()
             }
         return render(request, "base/services.html", context=context)
 

@@ -8,5 +8,5 @@ class NavBar_Basket_count:
     def calculate(self):
         user = self.request.user
         if user.is_authenticated:
-            total_cart_counts = len(Cart.objects.filter(user=user))
-        return total_cart_counts
+            return len(Cart.objects.filter(user=user))
+            
