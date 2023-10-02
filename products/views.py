@@ -80,11 +80,13 @@ class ProductAddToCart(LoginRequiredMixin, View):
 
 class CheckoutsView(LoginRequiredMixin, View):
     def get(self, request):
+        categories = Category.objects.prefetch_related('sub_categories').all()
         cart_count = NavBar_Basket_count(request=request)
         checkout = Cart.objects.filter(user=request.user)
         context ={
             "cart_count" : cart_count.calculate(),
-            "checkout" : checkout
+            "checkout" : checkout,
+            "categories" : categories,
         }
         return render(request, "base/checkout.html", context=context)
     
