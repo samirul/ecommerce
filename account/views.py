@@ -90,4 +90,16 @@ class ProfileView(LoginRequiredMixin, View):
             "categories" : categories,
         }
         return render(request, "base/profile.html", context=context)
+    
+
+
+class AddProfileView(LoginRequiredMixin, View):
+    def get(self, request):
+        categories = Category.objects.prefetch_related('sub_categories').all()
+        cart_count = NavBar_Basket_count(request=request)
+        context = {
+            "cart_count" : cart_count.calculate(),
+            "categories" : categories,
+        }
+        return render(request, "base/addprofile.html", context=context)
 

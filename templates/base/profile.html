@@ -24,57 +24,20 @@
         </div>
         <div class="w3ls_w3l_banner_nav_right_grid">
             <h3>Profile</h3>
-        <div>
-            <div class="container">
-                <h4>Add a new Details</h4>
-                    <form action="payment.html" method="post" class="creditly-card-form agileinfo_form">
-                        <section class="creditly-wrapper wthree, w3_agileits_wrapper">
-                            <div class="information-wrapper">
-                                <div class="first-row form-group">
-                                    <div class="controls">
-                                        <label class="control-label">Full name: </label>
-                                        <input class="billing-address-name form-control" type="text" name="name"
-                                            placeholder="Full name">
-                                    </div>
-                                    <div class="w3_agileits_card_number_grids">
-                                        <div class="w3_agileits_card_number_grid_left">
-                                            <div class="controls">
-                                                <label class="control-label">Mobile number:</label>
-                                                <input class="form-control" type="text" placeholder="Mobile number">
-                                            </div>
-                                        </div>
-                                        <div class="w3_agileits_card_number_grid_right">
-                                            <div class="controls">
-                                                <label class="control-label">Landmark: </label>
-                                                <input class="form-control" type="text" placeholder="Landmark">
-                                            </div>
-                                        </div>
-                                        <div class="clear"> </div>
-                                    </div>
-                                    <div class="controls">
-                                        <label class="control-label">Town/City: </label>
-                                        <input class="form-control" type="text" placeholder="Town/City">
-                                    </div>
-                                    <div class="controls">
-                                        <label class="control-label">Address type: </label>
-                                        <select class="form-control option-w3ls">
-                                            <option>Office</option>
-                                            <option>Home</option>
-                                            <option>Commercial</option>
-
-                                        </select>
-                                    </div>
-                                </div>
-                                <button class="submit check_out">Delivery to this Address</button>
-                            </div>
-                        </section>
-                    </form>
+            <div class="text-center profile-img">
+                <img src="{% static 'images/18.jpg' %}" alt="..." class="img-circle" width="140" height="140">
             </div>
-            
-        </div>
+            <div class="text-center profile-username">
+                <span>Username: {{request.user.user_name}}</span>
+            </div>
+            <div class="text-center profile-email">
+                <span>Email: {{request.user}}</span>
+            </div>
 
         </div>
+
     </div>
+</div>
     <div class="clearfix"></div>
 </div>
 
@@ -85,46 +48,51 @@
         background: rgb(255, 255, 255)
     }
 
-    .form-control:focus {
-        box-shadow: none;
-        border-color: #ffffff
+    .txt{
+        padding-top: 5em;
     }
 
-    .profile-button {
-        background: rgb(99, 39, 120);
-        box-shadow: none;
-        border: none
+    .form-group label {
+        margin-bottom: 5px; 
+        display: block;
     }
 
-    .profile-button:hover {
-        background: #682773
+    .form-group input {
+        margin-bottom: 10px;
     }
 
-    .profile-button:focus {
-        background: #682773;
-        box-shadow: none
+    .form-container{
+        max-width: 600px;
+        margin:auto;
     }
 
-    .profile-button:active {
-        background: #682773;
-        box-shadow: none
+    .profile-img{
+        margin-top: 3em;
     }
 
-    .back:hover {
-        color: #682773;
-        cursor: pointer
+    .profile-img .img-circle{
+        border-radius: 140px 140px 140px 140px;
+        -moz-border-radius: 140px 140px 140px 140px;
+        -webkit-border-radius: 140px 140px 140px 140px;
+        border: 5px solid #000000;
     }
 
-    .labels {
-        font-size: 11px
+    .profile-username{
+        margin-top: 1em;
+    }
+    .profile-username span{
+        font-weight:900;
     }
 
-    .add-experience:hover {
-        background: #BA68C8;
-        color: #fff;
-        cursor: pointer;
-        border: solid 1px #BA68C8
+    .profile-email{
+        margin-top: 0.5em;
     }
+
+    .profile-email span{
+        font-weight:600;
+    }
+
 
 </style>
+
 {% endblock content %}

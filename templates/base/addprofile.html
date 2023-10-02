@@ -1,0 +1,200 @@
+{% extends 'base/main.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+<div class="products-breadcrumb">
+    <div class="container">
+        <ul>
+            <li><i class="fa fa-home" aria-hidden="true"></i><a href="/">Home</a><span>|</span></li>
+            <li>Checkout</li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="banner">
+    {% include 'base/navbar-left-menu.html' %}
+    <div class="w3l_banner_nav_right">
+        <div class="w3l_banner_nav_right_banner3_btm">
+            <div class="clearfix"> </div>
+            {% include 'base/alert.html' %}
+        </div>
+        <div class="w3ls_w3l_banner_nav_right_grid">
+            <h3>Add Profile</h3>
+            <div>
+                <div class="container form-container">
+                    <h4 class="text-center txt">Add a new Details</h4>
+                    <form>
+                        <div class="form-group">
+                            <label for="label">Username:</label>
+                             <input type="Text" id="input1" class="form-control" value="{{request.user.user_name}}" disabled>
+                         </div>
+
+                         <div class="form-group">
+                            <label for="label">Email:</label>
+                             <input type="Text" id="input1" class="form-control" value="{{request.user}}" disabled>
+                         </div>
+
+                        <div class="form-group">
+                           <label for="label">First Name:</label>
+                            <input type="Text" id="input1" class="form-control" name="firstname">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="label">Last Name:</label>
+                             <input type="Text" id="input1" class="form-control" name="lastname">
+                         </div>
+
+                         <div class="form-group">
+                            <label for="label">Avatar:</label>
+                             <input type="file" id="input1" class="form-control" name="image">
+                         </div>
+
+                        <div class="form-group">
+                            <label for="sel1">Gender:</label>
+                            <select class="form-control" id="sel1" name="gender">
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sel1">Country:</label>
+                            <select class="form-control" id="sel1" name="country">
+                                <option>India</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="label">Phone Number:</label>
+                             <input type="number" id="input1" class="form-control" name="phonenumber" value="91">
+                         </div>
+
+                         <div class="form-group">
+                            <label for="label">Address:</label>
+                             <input type="text" id="input1" class="form-control" id="pwd" placeholder="" name="address">
+                         </div>
+
+                         <div class="form-group">
+                            <label for="sel1">Cities:</label>
+                            <select class="form-control" id="sel1" name="cities">
+                                <option>Aizawl</option>
+                                <option>Agartala</option>   
+                                <option>Amaravati</option>   
+                                <option>Bengaluru</option>
+                                <option>Bhubaneswar</option>
+                                <option>Bhopal</option>
+                                <option>Chandigarh</option>
+                                <option>Dispur</option>
+                                <option>Dehradun</option>
+                                <option>Gairsain</option>
+                                <option>Gandhinagar</option>
+                                <option>Gangtok</option>
+                                <option>Hyderabad</option>
+                                <option>Imphal</option>
+                                <option>Itanagar</option>
+                                <option>Jaipur</option>
+                                <option>Kohima</option>
+                                <option>Kolkata</option>
+                                <option>Lucknow</option>
+                                <option>Mumbai</option>
+                                <option>Patna</option>
+                                <option>Panaji</option>
+                                <option>Port Blair</option>
+                                <option>Raipur</option>
+                                <option>Ranchi</option>
+                                <option>Shimla</option>
+                                <option>Shillong</option>   
+                                <option>Thiruvananthapuram</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sel1">State:</label>
+                            <select class="form-control" id="sel1" name="state">
+                                    <option>Andaman and Nicobar Islands</option>
+                                    <option>Andhra Pradesh</option>
+                                    <option>Arunachal Pradesh</option>
+                                    <option>Assam</option>
+                                    <option>Bihar</option>
+                                    <option>Chhattisgarh</option>
+                                    <option>Goa</option>
+                                    <option>Gujarat</option>
+                                    <option>Haryana</option>
+                                    <option>Himachal Pradesh</option>
+                                    <option>Jharkhand</option>
+                                    <option>Karnataka</option>
+                                    <option>Kerala</option>
+                                    <option>Madhya Pradesh</option>
+                                    <option>Maharashtra</option>
+                                    <option>Manipur</option>
+                                    <option>Meghalaya</option>
+                                    <option>Mizoram</option>
+                                    <option>Nagaland</option>
+                                    <option>Odisha</option>
+                                    <option>Punjab</option>
+                                    <option>Rajasthan</option>
+                                    <option>Sikkim</option>
+                                    <option>Tamil Nadu</option>
+                                    <option>Telangana</option>
+                                    <option>Tripura</option>
+                                    <option>Uttar Pradesh</option>
+                                    <option>Uttarakhand</option>
+                                    <option>West-Bengal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="label">Pin Code:</label>
+                             <input type="number" id="input1" class="form-control" name="pincode">
+                         </div>
+                         <div class="text-center button">
+                            <input class="btn btn-danger btn-primary btn-lg" type="submit" value="Submit">
+                         </div>
+                        
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+    <div class="clearfix"></div>
+</div>
+
+
+
+<style>
+    body {
+        background: rgb(255, 255, 255)
+    }
+
+    .txt{
+        padding-top: 5em;
+    }
+
+    .form-group label {
+        margin-bottom: 5px; 
+        display: block;
+    }
+
+    .form-group input {
+        margin-bottom: 10px;
+    }
+
+    .form-container{
+        max-width: 600px;
+        margin:auto;
+    }
+
+    /* .button input{
+        padding-right: 80px;
+    } */
+
+</style>
+{% endblock content %}
