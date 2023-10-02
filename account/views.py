@@ -3,7 +3,7 @@ from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.views import View
 
 from basket.basket import NavBar_Basket_count
-from .models import User
+from .models import User, Customer
 from .validators.validate import PasswordChecker
 from django.contrib import messages
 
@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from products.models import Category
+
 
 class registerViews(View):
     # Unit Test Passed
@@ -85,9 +86,11 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         categories = Category.objects.prefetch_related('sub_categories').all()
         cart_count = NavBar_Basket_count(request=request)
+        customer = Customer.objects.filter(user=request.user)
         context = {
             "cart_count" : cart_count.calculate(),
             "categories" : categories,
+            "customer" : customer,
         }
         return render(request, "base/profile.html", context=context)
     

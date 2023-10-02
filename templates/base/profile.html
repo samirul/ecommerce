@@ -25,7 +25,7 @@
         <div class="w3ls_w3l_banner_nav_right_grid">
             <h3>Profile</h3>
             <div class="text-center profile-img">
-                <img src="{% static 'images/18.jpg' %}" alt="..." class="img-circle" width="140" height="140">
+                <img src="{{request.user.avatar.url}}" alt="..." class="img-circle" width="140" height="140">
             </div>
             <div class="text-center profile-username">
                 <span>Username: {{request.user.user_name}}</span>
@@ -33,7 +33,30 @@
             <div class="text-center profile-email">
                 <span>Email: {{request.user}}</span>
             </div>
-
+            
+            <div class="info">
+                {% for customerinfo in customer %}
+                <div class="col-md-4">
+                    <div class="text-center profile-userinfo">
+                        <span>First Name: {{customerinfo.first_name}}</span><br>
+                        <span>Last Name:  {{customerinfo.last_name}}</span><br>
+                        <span>Gender: {{customerinfo.gender}}</span><br>
+                        <span>Country: {{customerinfo.country}}</span><br>
+                        <span>Phone: {{customerinfo.phone}}</span><br>
+                        <span>Address: {{customerinfo.address}}</span><br>
+                        <span>City: {{customerinfo.city}}</span><br>
+                        <span>State: {{customerinfo.state}}</span><br>
+                        <span>Pincode: {{customerinfo.pincode}}</span><br>
+                    </div>
+                </div>
+                {% endfor %}
+                
+            </div>
+            <div class="text-center button-add-user">
+                <a href="{% url 'add-profile' %}" class="btn btn-success btn-lg" type="button">Add Information</a>
+            </div>
+            
+            
         </div>
 
     </div>
@@ -90,6 +113,26 @@
 
     .profile-email span{
         font-weight:600;
+    }
+
+    .profile-userinfo{
+        margin-top: 1em;
+    }
+
+    .info{
+        display: flex;
+        flex-direction: row;
+        justify-content:center;
+    }
+
+    .button-add-user{
+        margin-top: 1em;
+    }
+
+    .button-add-user a:hover{
+        background-color: rgb(0, 95, 63);
+        transition: 0.2s;
+        transition-delay: 0.2s;
     }
 
 
