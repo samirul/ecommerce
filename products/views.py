@@ -17,7 +17,7 @@ class ProductsView(View):
         cart_count = NavBar_Basket_count(request=request)
         context = {
             "categories" : categories,
-            "cart_count" : cart_count.calculate(),
+            "cart_count" : cart_count.calculate,
             
             
         }
@@ -45,7 +45,7 @@ class ProductShowView(View):
         context = {
             "categories" : categories,
             "products" : products,
-            "cart_count" : cart_count.calculate()
+            "cart_count" : cart_count.calculate
         }
 
         return render(request, "base/product-view.html", context=context)
@@ -83,7 +83,7 @@ class CheckoutsView(LoginRequiredMixin, View):
         cart_count = NavBar_Basket_count(request=request)
         checkout = Cart.objects.filter(user=request.user)
         context ={
-            "cart_count" : cart_count.calculate(),
+            "cart_count" : cart_count.calculate,
             "checkout" : checkout
         }
         return render(request, "base/checkout.html", context=context)
