@@ -23,12 +23,13 @@
             {% include 'base/alert.html' %}
         </div>
         <div class="w3ls_w3l_banner_nav_right_grid">
-            <h3>Add Profile</h3>
+            <h3>Edit Profile</h3>
             <div>
                 <div class="container form-container">
-                    <h4 class="text-center txt">Add a new Details</h4>
-                    <form action="{% url 'add-profile' %}" method="POST">
+                    <h4 class="text-center txt">Edit Profile Details</h4>
+                    <form action="" method="POST">
                         {% csrf_token %}
+                        <input type="hidden" name="customerid" id="customerid">
                         <div class="form-group">
                             <label for="label">Username:</label>
                              <input type="Text" id="input1" class="form-control" value="{{request.user.user_name}}" disabled>
@@ -41,17 +42,18 @@
 
                         <div class="form-group">
                            <label for="label">First Name:</label>
-                            <input type="Text" id="input1" class="form-control" name="firstname">
+                            <input type="Text" id="input1" class="form-control" name="firstname" value="{{customer.first_name}}">
                         </div>
 
                         <div class="form-group">
                             <label for="label">Last Name:</label>
-                             <input type="Text" id="input1" class="form-control" name="lastname">
+                             <input type="Text" id="input1" class="form-control" name="lastname" value="{{customer.last_name}}">
                          </div>
 
                         <div class="form-group">
                             <label for="sel1">Gender:</label>
                             <select class="form-control" id="sel1" name="gender">
+                                <option>{{customer.gender}}</option>
                                 <option>Male</option>
                                 <option>Female</option>
                                 <option>Others</option>
@@ -61,23 +63,24 @@
                         <div class="form-group">
                             <label for="sel1">Country:</label>
                             <select class="form-control" id="sel1" name="country">
+                                <option>{{customer.country}}</option>
                                 <option>India</option>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="label">Phone Number:</label>
-                             <input type="number" id="input1" class="form-control" name="phonenumber" value="91">
+                             <input type="number" id="input1" class="form-control" name="phonenumber" value="{{customer.phone}}">
                          </div>
 
                          <div class="form-group">
                             <label for="label">Address:</label>
-                             <input type="text" id="input1" class="form-control" id="pwd" placeholder="" name="address">
+                             <input type="text" id="input1" class="form-control" id="pwd" placeholder="" name="address" value="{{customer.address}}">
                          </div>
 
                          <div class="form-group">
                             <label for="sel1">Cities:</label>
-                            <select class="form-control" id="sel1" name="cities">
+                            <select class="form-control" id="sel1" name="cities" value="{{customer.city}}">
                                 <option>Aizawl</option>
                                 <option>Agartala</option>   
                                 <option>Amaravati</option>   
@@ -111,7 +114,7 @@
 
                         <div class="form-group">
                             <label for="sel1">State:</label>
-                            <select class="form-control" id="sel1" name="state">
+                            <select class="form-control" id="sel1" name="state" value="{{customer.state}}">
                                     <option>Andaman and Nicobar Islands</option>
                                     <option>Andhra Pradesh</option>
                                     <option>Arunachal Pradesh</option>
@@ -145,7 +148,7 @@
                         </div>
                         <div class="form-group">
                             <label for="label">Pin Code:</label>
-                             <input type="number" id="input1" class="form-control" name="pincode">
+                             <input type="number" id="input1" class="form-control" name="pincode" value="{{customer.pincode}}">
                          </div>
                          <div class="text-center button">
                             <input class="btn btn-danger btn-primary btn-lg" type="submit" value="Submit">
@@ -193,4 +196,5 @@
     } */
 
 </style>
+
 {% endblock content %}

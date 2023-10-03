@@ -1,18 +1,13 @@
-from typing import Any
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.views import View
-
 from basket.basket import NavBar_Basket_count
 from .models import User, Customer
 from .validators.validate import PasswordChecker
 from django.contrib import messages
-
 from django.contrib.auth import authenticate, login
-
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from products.models import Category
-
+from django.db.models import Q
 
 class registerViews(View):
     # Unit Test Passed
@@ -105,4 +100,69 @@ class AddProfileView(LoginRequiredMixin, View):
             "categories" : categories,
         }
         return render(request, "base/addprofile.html", context=context)
+    
+    def post(self, request):
+        first_name = request.POST.get('firstname')
+        last_name = request.POST.get('lastname')
+        gender = request.POST.get('gender')
+        country = request.POST.get('country')
+        phonenumber = request.POST.get('phonenumber')
+        address = request.POST.get('address')
+        cities = request.POST.get('cities')
+        state = request.POST.get('state')
+        pincode = request.POST.get('pincode')
+
+        profile = Customer.objects.create(user=request.user, first_name=first_name, last_name=last_name, gender=gender,
+                                          country=country, phone=phonenumber, address=address, city=cities, state=state, pincode=pincode)
+        profile.save()
+        messages.success(request, "Your profile Saved Successfully.")
+        return redirect('profile')
+    
+
+class EditProfileView(View):
+        def get(self, request,pk=None):
+            customer_id = request.GET.get('ids')
+            categories = Category.objects.prefetch_related('sub_categories').all()
+            cart_count = NavBar_Basket_count(request=request)
+            customer = Customer.objects.get(Q(user=request.user) & Q(id=customer_id))
+
+            context = {
+                "cart_count" : cart_count.calculate(),
+                "categories" : categories,
+                "customer" : customer,
+            }
+            return render(request, "base/editprofile.html", context=context)
+        
+        def post(self, request, pk):
+            customer_id = request.GET.get('ids')
+            first_name = request.POST.get('firstname')
+            last_name = request.POST.get('lastname')
+            gender = request.POST.get('gender')
+            country = request.POST.get('country')
+            phonenumber = request.POST.get('phonenumber')
+            address = request.POST.get('address')
+            cities = request.POST.get('cities')
+            state = request.POST.get('state')
+            pincode = request.POST.get('pincode')
+
+            customer = Customer.objects.get(Q(user=request.user) & Q(id=customer_id))
+
+            customer.first_name = first_name
+            customer.last_name = last_name
+            customer.gender = gender
+            customer.country = country
+            customer.phone = phonenumber
+            customer.address = address
+            customer.city = cities
+            customer.state = state
+            customer.pincode = pincode
+
+            customer.save()
+            messages.success(request, "Your profile Edited Successfully.")
+            return redirect('profile')
+
+
+class DeleteProfileView(View):
+    pass
+
 
