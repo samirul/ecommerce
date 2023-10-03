@@ -124,7 +124,7 @@ class EditProfileView(View):
             customer_id = request.GET.get('ids')
             categories = Category.objects.prefetch_related('sub_categories').all()
             cart_count = NavBar_Basket_count(request=request)
-            customer = Customer.objects.get(Q(user=request.user) & Q(id=customer_id))
+            customer = Customer.objects.get(Q(user=request.user) & Q(id=pk))
 
             context = {
                 "cart_count" : cart_count.calculate(),
@@ -145,7 +145,7 @@ class EditProfileView(View):
             state = request.POST.get('state')
             pincode = request.POST.get('pincode')
 
-            customer = Customer.objects.get(Q(user=request.user) & Q(id=customer_id))
+            customer = Customer.objects.get(Q(user=request.user) & Q(id=pk))
 
             customer.first_name = first_name
             customer.last_name = last_name
