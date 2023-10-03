@@ -121,7 +121,6 @@ class AddProfileView(LoginRequiredMixin, View):
 
 class EditProfileView(View):
         def get(self, request,pk=None):
-            customer_id = request.GET.get('ids')
             categories = Category.objects.prefetch_related('sub_categories').all()
             cart_count = NavBar_Basket_count(request=request)
             customer = Customer.objects.get(Q(user=request.user) & Q(id=pk))
@@ -134,7 +133,6 @@ class EditProfileView(View):
             return render(request, "base/editprofile.html", context=context)
         
         def post(self, request, pk):
-            customer_id = request.GET.get('ids')
             first_name = request.POST.get('firstname')
             last_name = request.POST.get('lastname')
             gender = request.POST.get('gender')
