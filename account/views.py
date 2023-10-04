@@ -161,6 +161,10 @@ class EditProfileView(View):
 
 
 class DeleteProfileView(View):
-    pass
+    def get(self, request, pk):
+        customer = Customer.objects.get(Q(user=request.user) & Q(id=pk))
+        customer.delete()
+        messages.success(request, "Profile information deleted successfully.")
+        return redirect('profile')
 
 
