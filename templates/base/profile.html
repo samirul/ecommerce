@@ -44,7 +44,17 @@
                 {% for customerinfo in customer %}
                 <div class="col-md-4">
                     <div class="text-center profile-userinfo">
-                        <div>
+                        <div class="text-center image-upload-container">
+                            <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <span>Upload Profile Image:</span>
+                                <input class="image-upload btn btn-success btn-sm" type="file" name="image-upload" >
+                                <input type="submit" class="btn btn-success btn-sm upload-button">
+                            </form>
+
+                        </div>
+                        
+                        <div class="button-option">
                             <a href="{% url 'edit-profile' customerinfo.id %}" class="btn btn-warning btn-sm" id="edit_" type="button">Edit</a>
                             <a href="{% url 'delete-profile' customerinfo.id %}" class="btn btn-danger btn-sm" type="button">Delete</a>
                         </div>
@@ -147,6 +157,29 @@
         background-color: rgb(0, 95, 63);
         transition: 0.2s;
         transition-delay: 0.2s;
+    }
+
+    .button-option{
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+
+    .info .image-upload-container{
+       display: flex;
+       position: relative;
+       flex-direction: column;
+       justify-content: flex-end;
+       align-items: center;
+       left: 5px;
+
+    }
+
+    .info .image-upload-container span{
+        font-size: 12px;
+    }
+
+    .info .image-upload-container .upload-button{
+        margin-top: 1em;
     }
 
 

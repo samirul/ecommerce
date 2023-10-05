@@ -146,6 +146,13 @@ class ProfileView(LoginRequiredMixin, View):
         }
         return render(request, "base/profile.html", context=context)
     
+    def post(self, request):
+        image_upload = request.FILES['image-upload']
+        user = User.objects.get(email=request.user)
+        user.avatar = image_upload
+        user.save()
+        messages.success(request, "Profile Picture added Successfully.")
+        return redirect('profile')
 
 
 class AddProfileView(LoginRequiredMixin, View):

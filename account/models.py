@@ -45,7 +45,7 @@ class User(AbstractBaseUser):
     )
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     user_name = models.CharField(max_length=150)
-    avatar = models.ImageField(upload_to='profiles', blank=True)
+    avatar = models.ImageField(upload_to='profiles', null=True,  blank=True)
     is_verified = models.BooleanField(default=False)
     email_token = models.CharField(max_length=150, null=True, blank=True)
     base_uid = models.CharField(max_length=150, null=True, blank=True)
