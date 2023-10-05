@@ -54,6 +54,7 @@
                             <label for="sel1">Gender:</label>
                             <select class="form-control" id="sel1" name="gender">
                                 <option>{{customer.gender}}</option>
+                                <option>-----------------</option>
                                 <option>Male</option>
                                 <option>Female</option>
                                 <option>Others</option>
@@ -62,8 +63,7 @@
 
                         <div class="form-group">
                             <label for="sel1">Country:</label>
-                            <select class="form-control" id="sel1" name="country">
-                                <option>{{customer.country}}</option>
+                            <select class="form-control" id="sel1" name="country" value="{{customer.country}}">
                                 <option>India</option>
                             </select>
                         </div>
@@ -80,7 +80,9 @@
 
                          <div class="form-group">
                             <label for="sel1">Cities:</label>
-                            <select class="form-control" id="sel1" name="cities" value="{{customer.city}}">
+                            <select class="form-control" id="sel1" name="cities">
+                                <option>{{customer.city}}</option>
+                                <option>-----------------</option>
                                 <option>Aizawl</option>
                                 <option>Agartala</option>   
                                 <option>Amaravati</option>   
@@ -114,7 +116,9 @@
 
                         <div class="form-group">
                             <label for="sel1">State:</label>
-                            <select class="form-control" id="sel1" name="state" value="{{customer.state}}">
+                            <select class="form-control" id="sel1" name="state">
+                                    <option>{{customer.state}}</option>
+                                    <option>-----------------</option>
                                     <option>Andaman and Nicobar Islands</option>
                                     <option>Andhra Pradesh</option>
                                     <option>Arunachal Pradesh</option>
