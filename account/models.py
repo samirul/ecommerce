@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from .choices import GENDER_CHOICES, STATE_CHOICES, CITY_CHOICES, COUNTRY_CHOICES
 from BaseID.models import baseIDModel
+from django.templatetags.static import static
 
 class UserManager(BaseUserManager):
     def create_user(self, email, user_name, password=None, password2=None):
@@ -46,8 +47,8 @@ class User(AbstractBaseUser):
     user_name = models.CharField(max_length=150)
     avatar = models.ImageField(upload_to='profiles', blank=True)
     is_verified = models.BooleanField(default=False)
-    otp = models.CharField(max_length=6, null=True, blank=True)
-    activation_key = models.CharField(max_length=200, blank=True, null=True)
+    email_token = models.CharField(max_length=150, null=True, blank=True)
+    base_uid = models.CharField(max_length=150, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

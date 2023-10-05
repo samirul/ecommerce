@@ -24,9 +24,15 @@
         </div>
         <div class="w3ls_w3l_banner_nav_right_grid">
             <h3>Profile</h3>
-            <div class="text-center profile-img">
-                <img src="{{request.user.avatar.url}}" alt="..." class="img-circle" width="140" height="140">
-            </div>
+            {% if request.user.avatar %}
+                <div class="text-center profile-img">
+                    <img src="{{request.user.avatar.url}}" alt="..." class="img-circle" width="140" height="140">
+                </div>  
+            {% else %}
+                <div class="text-center profile-img">
+                    <img src="{% static 'images/profileimage.png' %}" alt="..." class="img-circle" width="140" height="140">
+                </div> 
+            {% endif %}
             <div class="text-center profile-username">
                 <span>Username: {{request.user.user_name}}</span>
             </div>

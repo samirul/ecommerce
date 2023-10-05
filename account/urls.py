@@ -10,5 +10,7 @@ urlpatterns = [
     path("add-profile/", views.AddProfileView.as_view(), name='add-profile'),
     path("edit-profile/<str:pk>/", views.EditProfileView.as_view(), name='edit-profile'),
     path("delete-profile/<str:pk>/", views.DeleteProfileView.as_view(), name='delete-profile'),
+    path("reset-profile-password-send-email/", views.SendEmailResetPasswordView.as_view(), name='reset-profile-password-send-email'),
+    path("reset-profile-password/<uid>/<token>/", views.ResetPasswordView.as_view(), name='reset-profile-password-send-email'),
 
 ]

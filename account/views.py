@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.views import View
+from BaseID.email import EmailSend_ResetPassword
 from basket.basket import NavBar_Basket_count
 from .models import User, Customer
 from .validators.validate import PasswordChecker
@@ -8,6 +9,10 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from products.models import Category
 from django.db.models import Q
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import smart_str, force_bytes,DjangoUnicodeDecodeError
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+
 
 class registerViews(View):
     # Unit Test Passed
@@ -75,6 +80,58 @@ class loginViews(View):
             HttpResponseRedirect(request.path_info)
         
         return render(request, "base/login.html")
+    
+
+class SendEmailResetPasswordView(View):
+    def get(self, request):
+        return render(request, "base/forgotpassword.html")
+    
+    def post(self, request):
+        email = request.POST.get('email')
+        if User.objects.filter(email=email).exists():
+            user = User.objects.get(email=email)
+            uid = urlsafe_base64_encode(force_bytes(user.id))
+            token = PasswordResetTokenGenerator().make_token(user)
+
+            data={
+                'subject' : 'For Password Reset',
+            }
+            email = EmailSend_ResetPassword(data=data, email=email, uid=uid, token=token)
+            email.mail()
+
+
+            messages.success(request, 'Email sended successfully, Please check your inbox or spam folder.')
+        else:
+            messages.success(request, "Email does't Exist.")                          
+
+        return render(request,"base/forgotpassword.html")
+    
+class ResetPasswordView(View):
+    def get(self, request, uid=None, token=None):
+        return render(request, "base/resetpassword.html")
+
+    def post(self, request, uid, token):
+        password1 = request.POST.get('password')
+        password2 = request.POST.get('password2')
+
+        check = PasswordChecker(request=request, password=password1,
+                                 confirmpassword=password2)
+        if check.PasswordConfirmPasswordChecker():
+            return HttpResponseRedirect(request.path_info)
+        
+        uid = smart_str(urlsafe_base64_decode(uid))
+        user = User.objects.get(id=uid)
+
+        if not PasswordResetTokenGenerator().check_token(user, token):
+            messages.info(request, 'Token is not valid or expired.')
+        user.set_password(password1)
+        user.save()
+        messages.success(request, 'Password Reset Successfully.')
+        return redirect('login')
+
+
+
+
     
 
 class ProfileView(LoginRequiredMixin, View):
