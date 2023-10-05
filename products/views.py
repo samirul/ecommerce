@@ -5,6 +5,7 @@ from django.views import View
 
 from basket.basket import NavBar_Basket_count
 from .models import Category, Subcategory, Product, Tag, Cart
+from account.models import Customer
 from django.db.models import Q, Avg
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -83,10 +84,12 @@ class CheckoutsView(LoginRequiredMixin, View):
         categories = Category.objects.prefetch_related('sub_categories').all()
         cart_count = NavBar_Basket_count(request=request)
         checkout = Cart.objects.filter(user=request.user)
+        customer = Customer.objects.filter(user=request.user)
         context ={
             "cart_count" : cart_count.calculate(),
             "checkout" : checkout,
             "categories" : categories,
+            "customer" : customer,
         }
         return render(request, "base/checkout.html", context=context)
     

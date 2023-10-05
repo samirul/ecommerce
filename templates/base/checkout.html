@@ -76,58 +76,39 @@
                     </ul>
                 </div>
                 <div class="col-md-8 address_form_agile">
-                    <h4>Add a new Details</h4>
-                    <form action="payment.html" method="post" class="creditly-card-form agileinfo_form">
-                        <section class="creditly-wrapper wthree, w3_agileits_wrapper">
-                            <div class="information-wrapper">
-                                <div class="first-row form-group">
-                                    <div class="controls">
-                                        <label class="control-label">Full name: </label>
-                                        <input class="billing-address-name form-control" type="text" name="name"
-                                            placeholder="Full name">
-                                    </div>
-                                    <div class="w3_agileits_card_number_grids">
-                                        <div class="w3_agileits_card_number_grid_left">
-                                            <div class="controls">
-                                                <label class="control-label">Mobile number:</label>
-                                                <input class="form-control" type="text" placeholder="Mobile number">
-                                            </div>
-                                        </div>
-                                        <div class="w3_agileits_card_number_grid_right">
-                                            <div class="controls">
-                                                <label class="control-label">Landmark: </label>
-                                                <input class="form-control" type="text" placeholder="Landmark">
-                                            </div>
-                                        </div>
-                                        <div class="clear"> </div>
-                                    </div>
-                                    <div class="controls">
-                                        <label class="control-label">Town/City: </label>
-                                        <input class="form-control" type="text" placeholder="Town/City">
-                                    </div>
-                                    <div class="controls">
-                                        <label class="control-label">Address type: </label>
-                                        <select class="form-control option-w3ls">
-                                            <option>Office</option>
-                                            <option>Home</option>
-                                            <option>Commercial</option>
-
-                                        </select>
-                                    </div>
+                    <h4>Select Your Profile Information</h4>
+                    <form action="payment.html" method="POST" class="creditly-card-form agileinfo_form">
+                        {% for customerinfo in customer %}
+                        <div class="container choose-address">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4> FULL NAME:  {{customerinfo.first_name}} {{customerinfo.last_name}},</h4>
+                                    <p>LOCATION:  {{customerinfo.country}},<br> {{customerinfo.city}},<br> {{customerinfo.state}}, <br> Pincode - {{customerinfo.pincode}},
+                                        {{customerinfo.phone}}</p>
                                 </div>
-                                <button class="submit check_out">Delivery to this Address</button>
                             </div>
-                        </section>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="custid" , id="custadd{{forloop.counter}}"
+                                    value="{{customerinfo.id}}" checked>
+                                <label class="form-check-label fw-bold" for="custadd{{forloop.counter}}">
+                                    ADDRESS: {{forloop.counter}} </label>
+                                    <label>-------------------------------------</label>
+                                    
+                            </div>
+                        </div>
+                        
+                        {% endfor %}
+                        <!-- <button class="submit check_out">Delivery to this Address</button> -->
                     </form>
-                    <div class="checkout-right-basket">
+                    <!-- <div class="checkout-right-basket">
                         <a href="payment.html">Make a Payment <span class="glyphicon glyphicon-chevron-right"
                                 aria-hidden="true"></span></a>
-                    </div>
+                    </div> -->
                 </div>
-
+                
                 <div class="clearfix"> </div>
-
-            </div>
+                
+                </div>
 
         </div>
         <!-- //about -->
@@ -179,5 +160,22 @@ $(document).ready(function () {
     });
 </script>
 
+<style>
+    .address_form_agile form{
+        display: inline;
+    }
 
+    .address_form_agile form .card{
+        margin-top: 2em;
+    }
+
+    .address_form_agile form .card .card-body{
+        font-weight: 600;
+    }
+
+    .choose-address .form-check{
+        margin-top: 1em;
+    }
+
+</style>
 {% endblock content %}

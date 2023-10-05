@@ -88,7 +88,7 @@ class Customer(baseIDModel):
     city = models.CharField(max_length=200, choices=CITY_CHOICES)
     state = models.CharField(max_length=200, choices=STATE_CHOICES)
     pincode = models.IntegerField(default=0)
-
+    
 
 
     
