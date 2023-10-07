@@ -9,18 +9,20 @@
         <div class="w3l_fresh_vegetables_grids">
             <div class="col-md-3 w3l_fresh_vegetables_grid w3l_fresh_vegetables_grid_left">
                 <div class="w3l_fresh_vegetables_grid2">
+                    {% for category in categories %}
+                    {% if category.sub_categories.all %}
+
+                    {% for subcategory in category.sub_categories.all %}
                     <ul>
-                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="products.html">All Brands</a></li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="vegetables.html">Vegetables</a></li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="vegetables.html">Fruits</a></li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="drinks.html">Juices</a></li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="pet.html">Pet Food</a></li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="bread.html">Bread & Bakery</a></li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="household.html">Cleaning</a></li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="products.html">Spices</a></li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="products.html">Dry Fruits</a></li>
-                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="products.html">Dairy Products</a></li>
+                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="{% url 'productslugsubcategory' subcategory.slug  %}?subcategory_name={{subcategory.subcategory_name}}">{{subcategory.subcategory_name}}</a></li> 
                     </ul>
+                    {% endfor %}
+                    {% else %}
+                    <ul>
+                        <li><i class="fa fa-check" aria-hidden="true"></i><a href="{% url 'productslugcategory' category.slug %}?category_name={{category.category_name}}">{{category.category_name}}</a></li>
+                    </ul>
+                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
             <div class="col-md-9 w3l_fresh_vegetables_grid_right">
