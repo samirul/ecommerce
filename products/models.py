@@ -14,7 +14,7 @@ class Category(baseIDModel):
         return self.category_name
     
     def save(self, *args, **kwargs):
-        self.category_link = slugify(self.category_name)
+        self.slug = slugify(self.category_name)
         super(Category, self).save(*args, **kwargs)
 
 class Subcategory(baseIDModel):
@@ -26,7 +26,7 @@ class Subcategory(baseIDModel):
         return self.subcategory_name
     
     def save(self, *args, **kwargs):
-        self.subcategory_link = slugify(self.subcategory_name)
+        self.slug = slugify(self.subcategory_name)
         super(Subcategory, self).save(*args, **kwargs)
 
 
@@ -35,7 +35,7 @@ class Tag(baseIDModel):
     homeTag = models.CharField(max_length=150, null=True, blank=True)
 
     def __str__(self):
-        return self.innerTag
+        return f"{self.innerTag}, {self.homeTag}"
 
 class Product(baseIDModel):
     product_title = models.CharField(max_length=150)

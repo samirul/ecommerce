@@ -4,12 +4,28 @@ from django.http.response import JsonResponse
 from django.views import View
 
 from basket.basket import NavBar_Basket_count
-from .models import Category, Subcategory, Product, Tag, Cart
+from .models import Category, Product, Cart
 from account.models import Customer
 from django.db.models import Q, Avg
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+
+
+
+class AllProducts(View):
+    def get(self, request):
+        categories = Category.objects.prefetch_related('sub_categories','product_categories').all()
+        cart_count = NavBar_Basket_count(request=request)
+        products = Product.objects.all()
+        
+        context={
+            "categories" : categories,
+            "cart_count" : cart_count.calculate(),
+            "products" : products,
+
+        }
+        return render(request, "base/all-products.html", context=context)
 
 
 class ProductsView(View):
