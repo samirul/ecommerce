@@ -25,7 +25,7 @@ class AllProducts(View):
             "products" : products,
 
         }
-        return render(request, "base/all-products.html", context=context)
+        return render(request, "products/all-products.html", context=context)
 
 
 class ProductsView(View):
@@ -51,7 +51,7 @@ class ProductsView(View):
             context["sub_category_items"]=sub_category_items
     
         
-        return render(request, "base/products.html", context=context)
+        return render(request, "products/products.html", context=context)
 
 
 class ProductShowView(View):
@@ -65,7 +65,7 @@ class ProductShowView(View):
             "cart_count" : cart_count.calculate(),
         }
 
-        return render(request, "base/product-view.html", context=context)
+        return render(request, "products/product-view.html", context=context)
     
     def post(self, request, slug=None, pk=None):
         rating = request.POST.get('selectedRating')
@@ -79,7 +79,7 @@ class ProductShowView(View):
         for product in products:
             product.product_rating = Product.objects.filter(Q(slug=slug) & Q(id=pk)).aggregate(Avg('product_rating'))['product_rating__avg']
             product.save()
-        return render(request, "base/product-view.html")
+        return render(request, "products/product-view.html")
 
 
 class ProductAddToCart(LoginRequiredMixin, View):
@@ -107,7 +107,7 @@ class CheckoutsView(LoginRequiredMixin, View):
             "categories" : categories,
             "customer" : customer,
         }
-        return render(request, "base/checkout.html", context=context)
+        return render(request, "products/checkout.html", context=context)
     
 class RemoveCartView(LoginRequiredMixin, View):
     def get(self, request):

@@ -17,7 +17,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 class registerViews(View):
     # Unit Test Passed
     def get(self, request):
-        return render(request, "base/register.html")
+        return render(request, "accounts/register.html")
     
     def post(self, request):
         username = request.POST.get('username')
@@ -47,7 +47,7 @@ class registerViews(View):
         userobjects.set_password(password)
         userobjects.save()
         messages.success(request, "Registration Successful, Please Verify Your Email.")
-        return render(request, "base/register.html")
+        return render(request, "accounts/register.html")
     
 
 class loginViews(View):
@@ -55,7 +55,7 @@ class loginViews(View):
     def get(self, request):
         if request.user.is_authenticated:
             return redirect('/accounts/profile/')
-        return render(request, "base/login.html")
+        return render(request, "accounts/login.html")
     
     def post(self, request):
         email = request.POST.get('email')
@@ -79,12 +79,12 @@ class loginViews(View):
             messages.info(request,"Invalid Email or Password, Please Check Your Credentials.")
             HttpResponseRedirect(request.path_info)
         
-        return render(request, "base/login.html")
+        return render(request, "accounts/login.html")
     
 
 class SendEmailResetPasswordView(View):
     def get(self, request):
-        return render(request, "base/forgotpassword.html")
+        return render(request, "accounts/forgotpassword.html")
     
     def post(self, request):
         email = request.POST.get('email')
@@ -104,11 +104,11 @@ class SendEmailResetPasswordView(View):
         else:
             messages.success(request, "Email does't Exist.")                          
 
-        return render(request,"base/forgotpassword.html")
+        return render(request,"accounts/forgotpassword.html")
     
 class ResetPasswordView(View):
     def get(self, request, uid=None, token=None):
-        return render(request, "base/resetpassword.html")
+        return render(request, "accounts/resetpassword.html")
 
     def post(self, request, uid, token):
         password1 = request.POST.get('password')
@@ -144,7 +144,7 @@ class ProfileView(LoginRequiredMixin, View):
             "categories" : categories,
             "customer" : customer,
         }
-        return render(request, "base/profile.html", context=context)
+        return render(request, "accounts/profile.html", context=context)
     
     def post(self, request):
         image_upload = request.FILES['image-upload']
@@ -163,7 +163,7 @@ class AddProfileView(LoginRequiredMixin, View):
             "cart_count" : cart_count.calculate(),
             "categories" : categories,
         }
-        return render(request, "base/addprofile.html", context=context)
+        return render(request, "accounts/addprofile.html", context=context)
     
     def post(self, request):
         first_name = request.POST.get('firstname')
@@ -194,7 +194,7 @@ class EditProfileView(View):
                 "categories" : categories,
                 "customer" : customer,
             }
-            return render(request, "base/editprofile.html", context=context)
+            return render(request, "accounts/editprofile.html", context=context)
         
         def post(self, request, pk):
             first_name = request.POST.get('firstname')

@@ -21,7 +21,7 @@
         </div>
         {% for product in products %}
         <div class="agileinfo_single">
-            {% include 'base/alert.html' %}
+            {% include 'alert/alert.html' %}
             <h5>{{product.product_title}}</h5>
             <div class="col-md-4 agileinfo_single_left">
                 <img id="example" src="{{product.product_image.url}}" alt=" " class="img-responsive" width="120" height="120"/>
