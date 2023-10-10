@@ -29,6 +29,7 @@ APPS = [
     "BaseID.apps.BaseidConfig",
     "products.apps.ProductsConfig",
     "account.apps.AccountConfig",
+    'django_pdb'
 ]
 
 INSTALLED_APPS += APPS

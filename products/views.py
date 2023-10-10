@@ -10,22 +10,25 @@ from django.db.models import Q, Avg
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+import pdb
 
 
 
 class AllProducts(View):
     def get(self, request):
+        #pdb.set_trace()
         categories = Category.objects.prefetch_related('sub_categories','product_categories').all()
         cart_count = NavBar_Basket_count(request=request)
-        products = Product.objects.all()
-        
         context={
             "categories" : categories,
             "cart_count" : cart_count.calculate(),
-            "products" : products,
-
         }
+
+        category_name = request.GET.get('category_name')
+        context['category_name'] = category_name
+
         return render(request, "products/all-products.html", context=context)
+
 
 
 class ProductsView(View):

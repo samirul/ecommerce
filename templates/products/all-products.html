@@ -7,7 +7,7 @@
     <div class="container">
         <ul>
             <li><i class="fa fa-home" aria-hidden="true"></i><a href="index.html">Home</a><span>|</span></li>
-            <li>Branded Foods</li>
+            <li>{{category_name}}</li>
         </ul>
     </div>
 </div>
@@ -26,38 +26,43 @@
         <div class="w3ls_w3l_banner_nav_right_grid">
             <h3>All Products</h3>
         <div>
+            {% for category in categories %}
             <div class="w3ls_w3l_banner_nav_right_grid1">
-                {% for product in products %}
-            <div class="col-md-3 w3ls_w3l_banner_left products_">
-                <div class="hover14 column">
-                    <div class="agile_top_brand_left_grid w3l_agile_top_brand_left_grid">
-                        <div class="agile_top_brand_left_grid_pos">
-                            <img src="{% static 'images/offer.png' %}" alt=" " class="img-responsive" />
-                        </div>
-                        <div class="agile_top_brand_left_grid1">
-                            <figure>
-                                <div class="snipcart-item block">
-                                    <div class="snipcart-thumb">
-                                        <a href="{% url 'product-view' product.slug product.id %}?id={{product.id}}/"><img src="{{product.product_image.url}}" alt=" " class="img-responsive" /></a>
-                                        <p>{{product.product_title}}</p>
-                                        <h4>INR {{product.product_discounted_price}} <span>INR {{product.product_selling_price}}</span></h4>
+                <h6 class="category_" name="categorys_">{{category.category_name}}</h6>
+                {% for product in category.product_categories.all %}
+                <div class="col-md-3 w3ls_w3l_banner_left products_">
+                    <div class="hover14 column">
+                        <div class="agile_top_brand_left_grid w3l_agile_top_brand_left_grid">
+                            <div class="agile_top_brand_left_grid_pos">
+                                <img src="{% static 'images/offer.png' %}" alt=" " class="img-responsive" />
+                            </div>
+                            <div class="agile_top_brand_left_grid1">
+                                <figure>
+                                    <div class="snipcart-item block">
+                                        <div class="snipcart-thumb">
+                                            <a href="{% url 'product-view' product.slug product.id %}?id={{product.id}}/"><img
+                                                    src="{{product.product_image.url}}" alt=" " class="img-responsive" /></a>
+                                            <p>{{product.product_title}}</p>
+                                            <h4>INR {{product.product_discounted_price}} <span>INR
+                                                    {{product.product_selling_price}}</span></h4>
+                                        </div>
+                                        <div class="snipcart-details">
+                                            <form action="{% url 'add-to-cart' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="prod_id" value="{{product.id}}" id="prod_id">
+                                                <input type="submit" name="submit" value="Add to cart" class="button" />
+                                            </form>
+                                        </div>
                                     </div>
-                                    <div class="snipcart-details">
-                                        <form action="{% url 'add-to-cart' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="prod_id" value="{{product.id}}" id="prod_id">
-                                            <input type="submit" name="submit" value="Add to cart" class="button" />
-                                        </form>
-                                    </div>
-                                </div>
-                            </figure>
+                                </figure>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
+                <div class="clearfix"> </div>
             </div>
             {% endfor %}
-            <div class="clearfix"> </div>
-        </div>
         </div>
 
         </div>
@@ -104,6 +109,7 @@ $(".dropdown").hover(
 .products_{
     margin-top: 1.5em;
 }
-
 </style>
+
+
 {% endblock content %}

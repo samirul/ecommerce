@@ -15,7 +15,7 @@
        <!-- Collect the nav links, forms, and other content for toggling -->
        <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
         <ul class="nav navbar-nav nav_1">
-            <li><a href="{% url 'all-products'%}?category_name=all_products">All Products</a></li>
+            <li><a href="{% url 'all-products'%}?category_name=All Products">All Products</a></li>
             {% for category in categories %}
             {% if category.sub_categories.all %}
             <li class="dropdown mega-dropdown">
