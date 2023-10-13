@@ -50,7 +50,7 @@
                 <div class="wthree_banner_bottom_left_grid">
                     <img src="{% static 'images/' %}{{hmb.img_name}}" alt=" " class="img-responsive" />
                     <div class="{{hmb.div_class_tag}}">
-                        <h{{hmb.h_tag}}>{{hmb.title_1}} <span>{{hmb.title_2}}</span> {{hmb.title_3}} <i>{{hmb.i_tag_title_4}}</i></h>
+                        <h{{hmb.h_tag}}>{% if hmb.title_1 != None %}{{hmb.title_1}}{% endif %} <span>{% if hmb.title_2 != None %}{{hmb.title_2}}{% endif %}</span>{% if hmb.title_3 != None %} {{hmb.title_3}} {% endif %} <i>{% if hmb.i_tag_title_4 != None %}{{hmb.i_tag_title_4}} {% endif %}</i></h>
                     </div>
                 </div>
             </div>
