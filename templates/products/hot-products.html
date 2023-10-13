@@ -6,6 +6,7 @@
     <div class="container">
         <h3>Hot Offers</h3>
         <div class="agile_top_brands_grids">
+            {% for offers in hot_offers %}
             <div class="col-md-3 top_brand_left">
                 <div class="hover14 column">
                     <div class="agile_top_brand_left_grid">
@@ -14,9 +15,9 @@
                             <figure>
                                 <div class="snipcart-item block" >
                                     <div class="snipcart-thumb">
-                                        <a href="#"><img title=" " alt=" " src="{% static 'images/1.png' %}" /></a>		
-                                        <p>fortune sunflower oil</p>
-                                        <h4>$7.99 <span>$10.00</span></h4>
+                                        <a href="#"><img title=" " alt=" " src="{{offers.product_image.url}}" /></a>		
+                                        <p>{{offers.product_title}}</p>
+                                        <h4>INR {{offers.product_discounted_price}} <span>INR {{offers.product_selling_price}}</span></h4>
                                     </div>
                                     <div class="snipcart-details top_brand_home_details">
                                         <form action="#" method="post">
@@ -43,7 +44,7 @@
                     </div>
                 </div>
             </div>
-
+            {% endfor %}
         </div>
     </div>
 </div>

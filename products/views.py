@@ -131,7 +131,5 @@ class RemoveCartView(LoginRequiredMixin, View):
 
         return JsonResponse(data)
     
-
-
     
 

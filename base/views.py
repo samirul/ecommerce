@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from basket.basket import NavBar_Basket_count
-from products.models import Category
+from products.models import Category, Product
 from .models import HomeSlider, HomeMiddleBanner
 
 class HomeView(View):
@@ -10,11 +10,13 @@ class HomeView(View):
          slider = HomeSlider.objects.all()
          homemiddlebanner = HomeMiddleBanner.objects.all()
          cart_count = NavBar_Basket_count(request=request)
+         hot_offers = Product.objects.filter(tags__homeTag__exact="Hot Offers")
          context = {
             "categories" : categories,
             "sliders" : slider,
             "homemiddlebanner" : homemiddlebanner,
-            "cart_count" : cart_count.calculate()
+            "cart_count" : cart_count.calculate(),
+            "hot_offers" : hot_offers
             }
          return render(request, "base/index.html", context=context)
 
