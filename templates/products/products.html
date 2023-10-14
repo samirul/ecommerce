@@ -6,8 +6,12 @@
 <div class="products-breadcrumb">
     <div class="container">
         <ul>
-            <li><i class="fa fa-home" aria-hidden="true"></i><a href="index.html">Home</a><span>|</span></li>
-            <li>Branded Foods</li>
+            <li><i class="fa fa-home" aria-hidden="true"></i><a href="/">Home</a><span>|</span></li>
+            {% if get_category_name %}
+            <li>{{get_category_name}}</li>
+            {% else %}
+            <li>{{get_subcategory}}</li>
+            {% endif %}
         </ul>
     </div>
 </div>
