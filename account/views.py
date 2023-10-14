@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.views import View
 from BaseID.email import EmailSend_ResetPassword
@@ -54,8 +55,15 @@ class registerViews(View):
         return redirect('/accounts/login/')
     
 class VerifyAccountViews(View):
-    pass
-    
+    def get(self, request, token):
+        try:
+            user = User.objects.get(email_token=token)
+            user.is_active = True
+            user.save()
+            messages.success(request, f"{user.email} Email Is Successfully Verified. ")
+            return redirect('login')
+        except Exception:
+            return HttpResponse("Invalid token, Please Check Your Correctly.")
 
 class loginViews(View):
     # Unit Test Passed
@@ -89,7 +97,7 @@ class loginViews(View):
                 if next_url:
                     return redirect(next_url)
                 else:
-                    return redirect('/')
+                    return redirect('/accounts/profile/')
             else:
                 messages.info(request,"Invalid Email or Password, Please Check Your Credentials.")
                 HttpResponseRedirect(request.path_info)
