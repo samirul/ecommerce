@@ -17,7 +17,11 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 class registerViews(View):
     # Unit Test Passed
     def get(self, request):
-        return render(request, "accounts/register.html")
+        categories = Category.objects.prefetch_related('sub_categories').all()
+        context = {
+            "categories" : categories,
+        }
+        return render(request, "accounts/register.html", context=context)
     
     def post(self, request):
         username = request.POST.get('username')
@@ -47,15 +51,19 @@ class registerViews(View):
         userobjects.set_password(password)
         userobjects.save()
         messages.success(request, "Registration Successful, Please Verify Your Email.")
-        return render(request, "accounts/register.html")
+        return redirect('/accounts/login/')
     
 
 class loginViews(View):
     # Unit Test Passed
     def get(self, request):
+        categories = Category.objects.prefetch_related('sub_categories').all()
+        context = {
+            "categories" : categories,
+        }
         if request.user.is_authenticated:
             return redirect('/accounts/profile/')
-        return render(request, "accounts/login.html")
+        return render(request, "accounts/login.html", context=context)
     
     def post(self, request):
         email = request.POST.get('email')
