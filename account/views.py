@@ -60,10 +60,10 @@ class VerifyAccountViews(View):
             user = User.objects.get(email_token=token)
             user.is_active = True
             user.save()
-            messages.success(request, f"{user.email} Email Is Successfully Verified. ")
+            messages.success(request, f"{user.email} - Email Is Successfully Verified. ")
             return redirect('login')
         except Exception:
-            return HttpResponse("Invalid token, Please Check Your Correctly.")
+            return HttpResponse("Invalid token, Please Check Your Token Correctly.")
 
 class loginViews(View):
     # Unit Test Passed
@@ -129,6 +129,7 @@ class SendEmailResetPasswordView(View):
 
         return render(request,"accounts/forgotpassword.html")
     
+    
 class ResetPasswordView(View):
     def get(self, request, uid=None, token=None):
         return render(request, "accounts/resetpassword.html")
@@ -152,10 +153,6 @@ class ResetPasswordView(View):
         messages.success(request, 'Password Reset Successfully.')
         return redirect('login')
 
-
-
-
-    
 
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
