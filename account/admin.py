@@ -4,7 +4,7 @@ from .models import User, Customer
 @admin.register(User)
 class UserModelAdmin(admin.ModelAdmin):
     list_display = [
-      'id', 'user_name','email','is_verified','is_active','is_admin'
+      'id', 'user_name','email','is_active','is_admin'
     ]
 
 

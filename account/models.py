@@ -3,7 +3,9 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from .choices import GENDER_CHOICES, STATE_CHOICES, CITY_CHOICES, COUNTRY_CHOICES
 from BaseID.models import baseIDModel
-from django.templatetags.static import static
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from BaseID.email import EmailSend_ActivationLink
 
 class UserManager(BaseUserManager):
     def create_user(self, email, user_name, password=None, password2=None):
@@ -46,10 +48,9 @@ class User(AbstractBaseUser):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     user_name = models.CharField(max_length=150)
     avatar = models.ImageField(upload_to='profiles', null=True,  blank=True)
-    is_verified = models.BooleanField(default=False)
     email_token = models.CharField(max_length=150, null=True, blank=True)
     base_uid = models.CharField(max_length=150, null=True, blank=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -76,6 +77,20 @@ class User(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
     
+@receiver(post_save, sender=User)
+def send_email_verify_link(sender, instance, created, **kwargs):
+    try:
+        if created and not instance.is_active:
+            email_gen_token = str(uuid.uuid4())
+            instance.email_token = email_gen_token
+            instance.save()
+            data = {
+                'subject' : 'Email Activation Link'
+            }
+            send_link = EmailSend_ActivationLink(data=data, email=instance.email, token=email_gen_token)
+            send_link.EmailVerify()
+    except Exception as e:
+        print(e)
 
 class Customer(baseIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

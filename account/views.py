@@ -53,6 +53,9 @@ class registerViews(View):
         messages.success(request, "Registration Successful, Please Verify Your Email.")
         return redirect('/accounts/login/')
     
+class VerifyAccountViews(View):
+    pass
+    
 
 class loginViews(View):
     # Unit Test Passed
@@ -73,21 +76,25 @@ class loginViews(View):
         if not User.objects.filter(email=email).exists():
              messages.info(request, f"{email} - Email isn't Registered, Please Register Your Account First.")
 
-        auth_user = authenticate(username=email, password=password)
-
-        if auth_user is not None:
-            login(request, auth_user)
-            messages.success(request, f"Login Successful, Welcome Back - {email}")
-
-            if next_url:
-                return redirect(next_url)
-            else:
-                return redirect('/')
+        user = User.objects.get(email=email)
+        if user.is_active is False:
+            messages.info(request, f"{email} - Email isn't Verified, Please Check Your Email And Verify Your Account First.")
         else:
-            messages.info(request,"Invalid Email or Password, Please Check Your Credentials.")
-            HttpResponseRedirect(request.path_info)
+            auth_user = authenticate(username=email, password=password)
+
+            if auth_user is not None:
+                login(request, auth_user)
+                messages.success(request, f"Login Successful, Welcome Back - {email}")
+
+                if next_url:
+                    return redirect(next_url)
+                else:
+                    return redirect('/')
+            else:
+                messages.info(request,"Invalid Email or Password, Please Check Your Credentials.")
+                HttpResponseRedirect(request.path_info)
         
-        return render(request, "accounts/login.html")
+        return redirect('login')
     
 
 class SendEmailResetPasswordView(View):
