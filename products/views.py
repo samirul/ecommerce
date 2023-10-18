@@ -12,6 +12,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 import pdb
 
+from .checkout import PriceCalculate
+
 
 
 class AllProducts(View):
@@ -127,9 +129,74 @@ class RemoveCartView(LoginRequiredMixin, View):
             "product_name" : cart_.product.product_title,
             "product_price" : cart_.product.product_discounted_price,
             "Cart_update" : cart_count.calculate(),
+            "checkout": [],
+            "product_quantity_price": [],
         }
+        checkouts = Cart.objects.filter(user=request.user)
+        for check in checkouts:
+            data["checkout"].append(check.product.product_title)
+            data["product_quantity_price"].append(check.product_quantity_price)
 
         return JsonResponse(data)
     
+
+class PlusQuantityView(LoginRequiredMixin, View):
+    def get(self, request):
+        product_id = request.GET['product_id']
+        cart_ = Cart.objects.get(Q(product=product_id) & Q(user=request.user))
+        cart_.quantity += 1
+        cart_.save()
+        cart_product_items = [items for items in Cart.objects.all() if items.user == request.user]
+        shipping_amount = 28
+        price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
+        price, total_price = price_calculate.calculate()
+        
+        data ={
+            "quantity" : cart_.quantity,
+            "shipping_amount" : shipping_amount,
+            "price" : price,
+            "total_price" : total_price,
+            "checkout": [],
+            "product_quantity_price": [],
+        }
+
+        checkouts = Cart.objects.filter(user=request.user)
+        for check in checkouts:
+            data["checkout"].append(check.product.product_title)
+            data["product_quantity_price"].append(check.product_quantity_price)
+        print(data)
+        return JsonResponse(data)
     
+
+
+class MinusQuantityView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        product_id = request.GET['product_id']
+        cart_ = Cart.objects.get(Q(product=product_id) & Q(user=request.user))
+        cart_.quantity -= 1
+        cart_.save()
+        cart_product_items = [items for items in Cart.objects.all() if items.user == request.user]
+        shipping_amount = 28
+        price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
+        price, total_price = price_calculate.calculate()
+
+        
+        data ={
+            "quantity" : cart_.quantity,
+            "shipping_amount" : shipping_amount,
+            "price" : price,
+            "total_price" : total_price,
+            "checkout": [],
+            "product_quantity_price": [],
+        }
+
+        checkouts = Cart.objects.filter(user=request.user)
+        for check in checkouts:
+            data["checkout"].append(check.product.product_title)
+            data["product_quantity_price"].append(check.product_quantity_price)
+        print(data)
+        return JsonResponse(data)
+
+
 

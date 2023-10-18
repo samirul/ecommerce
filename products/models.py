@@ -57,6 +57,7 @@ class Product(baseIDModel):
         self.slug = slugify(self.product_title)
         super(Product, self).save(*args, **kwargs)
 
+
 class Coupon(baseIDModel):
     coupon_code = models.CharField(max_length=10)
     is_expired = models.BooleanField(default=False)
@@ -71,6 +72,14 @@ class Cart(baseIDModel):
 
     def __str__(self):
         return str(self.id)
+    
+    def save(self, *args, **kwargs):
+        self.quantity = max(self.quantity, 1)
+        super().save(*args, **kwargs)
+
+    @property
+    def product_quantity_price(self):
+        return self.quantity * self.product.product_discounted_price
 
 
 class OrderPlaced(baseIDModel):

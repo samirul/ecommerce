@@ -2585,7 +2585,7 @@ margin: 3em 0 0 0em;
 .checkout-left-basket ul li span {
     float: right;
 }
-.checkout-left-basket ul li:nth-child(5) {
+.checkout-left-basket  .bold-checkout {
     font-size: 1em;
     color: #212121;
     font-weight: 600;
