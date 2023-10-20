@@ -12,8 +12,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 import pdb
 
-from .checkout import PriceCalculate
-
+from .checkout import PriceCalculate, ShippingPriceCalculator
+from django.db.models import Sum
 
 
 class AllProducts(View):
@@ -106,11 +106,14 @@ class CheckoutsView(LoginRequiredMixin, View):
         cart_count = NavBar_Basket_count(request=request)
         checkout = Cart.objects.filter(user=request.user)
         customer = Customer.objects.filter(user=request.user)
+        shipping_amount_calculator = ShippingPriceCalculator(request=request, shipping_amount=50)
+        shipping_amount = shipping_amount_calculator.shipping_calculate()
         context ={
             "cart_count" : cart_count.calculate(),
             "checkout" : checkout,
             "categories" : categories,
             "customer" : customer,
+            "shipping_amount" : shipping_amount
         }
         return render(request, "products/checkout.html", context=context)
     
@@ -119,16 +122,12 @@ class RemoveCartView(LoginRequiredMixin, View):
         product_id = request.GET['product_id']
         cart_ = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
         cart_.delete()
-
         cart_count = NavBar_Basket_count(request=request)
-
-
+        shipping_amount_calculator = ShippingPriceCalculator(request=request, shipping_amount=50)
+        shipping_amount = shipping_amount_calculator.shipping_calculate()
         data = {
-            "product_image" : cart_.product.product_image.url,
-            "product_quantity" : cart_.quantity,
-            "product_name" : cart_.product.product_title,
-            "product_price" : cart_.product.product_discounted_price,
             "Cart_update" : cart_count.calculate(),
+            "shipping_amount" : shipping_amount,
             "checkout": [],
             "product_quantity_price": [],
         }
@@ -136,7 +135,6 @@ class RemoveCartView(LoginRequiredMixin, View):
         for check in checkouts:
             data["checkout"].append(check.product.product_title)
             data["product_quantity_price"].append(check.product_quantity_price)
-
         return JsonResponse(data)
     
 
@@ -147,9 +145,11 @@ class PlusQuantityView(LoginRequiredMixin, View):
         cart_.quantity += 1
         cart_.save()
         cart_product_items = [items for items in Cart.objects.all() if items.user == request.user]
-        shipping_amount = 28
+        shipping_amount_calculator = ShippingPriceCalculator(request=request, shipping_amount=50)
+        shipping_amount = shipping_amount_calculator.shipping_calculate()
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
         price, total_price = price_calculate.calculate()
+
         
         data ={
             "quantity" : cart_.quantity,
@@ -164,9 +164,7 @@ class PlusQuantityView(LoginRequiredMixin, View):
         for check in checkouts:
             data["checkout"].append(check.product.product_title)
             data["product_quantity_price"].append(check.product_quantity_price)
-        print(data)
         return JsonResponse(data)
-    
 
 
 class MinusQuantityView(LoginRequiredMixin, View):
@@ -177,7 +175,8 @@ class MinusQuantityView(LoginRequiredMixin, View):
         cart_.quantity -= 1
         cart_.save()
         cart_product_items = [items for items in Cart.objects.all() if items.user == request.user]
-        shipping_amount = 28
+        shipping_amount_calculator = ShippingPriceCalculator(request=request, shipping_amount=50)
+        shipping_amount = shipping_amount_calculator.shipping_calculate()
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
         price, total_price = price_calculate.calculate()
 
@@ -195,7 +194,6 @@ class MinusQuantityView(LoginRequiredMixin, View):
         for check in checkouts:
             data["checkout"].append(check.product.product_title)
             data["product_quantity_price"].append(check.product_quantity_price)
-        print(data)
         return JsonResponse(data)
 
 

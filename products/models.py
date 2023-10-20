@@ -80,6 +80,7 @@ class Cart(baseIDModel):
     @property
     def product_quantity_price(self):
         return self.quantity * self.product.product_discounted_price
+    
 
 
 class OrderPlaced(baseIDModel):

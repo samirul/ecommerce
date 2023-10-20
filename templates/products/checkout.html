@@ -76,7 +76,7 @@
                         {% endfor %}
                     </ul>
                     <ul id="total-container">
-                        <li class="bold-checkout">Total Service Charges <i>-</i> <span>$15.00</span></li>
+                        <li class="bold-checkout">Delivery Charges <i>-</i><span id="shipping-amount">INR {{shipping_amount}}</span></li>
                         <li class="bold-checkout">Total <i>-</i> <span>$84.00</span></li>
                     </ul>
                     
@@ -158,6 +158,7 @@ $(document).ready(function () {
                         var listItem = '<li id="product-list">' + checkoutList[i] + ' <i>-</i> <span id="product-list-price">INR ' + quantityPriceList[i] + '.0</span></li>';
                         $('#product-list-container').append(listItem);
                     }
+                    document.getElementById('shipping-amount').innerText="INR " + ValueData.shipping_amount
                     
                 }
 
@@ -190,6 +191,8 @@ $(document).ready(function () {
                         var listItem = '<li id="product-list">' + checkoutList[i] + ' <i>-</i> <span id="product-list-price">INR ' + quantityPriceList[i] + '.0</span></li>';
                         $('#product-list-container').append(listItem);
                     }
+
+                    document.getElementById('shipping-amount').innerText="INR " + ValueData.shipping_amount
                     
                 }
             })
@@ -217,7 +220,7 @@ $(document).ready(function () {
                         var listItem = '<li id="product-list">' + checkoutList[i] + ' <i>-</i> <span id="product-list-price">INR ' + quantityPriceList[i] + '.0</span></li>';
                         $('#product-list-container').append(listItem);
                     }
-                    
+                    document.getElementById('shipping-amount').innerText="INR " + ValueData.shipping_amount
                 }
             })
 
