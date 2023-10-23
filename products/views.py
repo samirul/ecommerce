@@ -13,7 +13,7 @@ from django.contrib import messages
 import pdb
 
 from .checkout import PriceCalculate, ShippingPriceCalculator
-from django.db.models import Sum
+
 
 
 class AllProducts(View):
@@ -106,14 +106,19 @@ class CheckoutsView(LoginRequiredMixin, View):
         cart_count = NavBar_Basket_count(request=request)
         checkout = Cart.objects.filter(user=request.user)
         customer = Customer.objects.filter(user=request.user)
-        shipping_amount_calculator = ShippingPriceCalculator(request=request, shipping_amount=50)
+        cart_product_items = [items for items in Cart.objects.all() if items.user == request.user]
+        shipping_amount_calculator = ShippingPriceCalculator(request=request, cart_product_items=cart_product_items, shipping_amount=50)
         shipping_amount = shipping_amount_calculator.shipping_calculate()
+        price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
+        _, total_price = price_calculate.calculate()
+
         context ={
             "cart_count" : cart_count.calculate(),
             "checkout" : checkout,
             "categories" : categories,
             "customer" : customer,
-            "shipping_amount" : shipping_amount
+            "shipping_amount" : shipping_amount,
+            "total_price": total_price
         }
         return render(request, "products/checkout.html", context=context)
     
@@ -123,13 +128,17 @@ class RemoveCartView(LoginRequiredMixin, View):
         cart_ = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
         cart_.delete()
         cart_count = NavBar_Basket_count(request=request)
-        shipping_amount_calculator = ShippingPriceCalculator(request=request, shipping_amount=50)
+        cart_product_items = [items for items in Cart.objects.all() if items.user == request.user]
+        shipping_amount_calculator = ShippingPriceCalculator(request=request, cart_product_items=cart_product_items, shipping_amount=50)
         shipping_amount = shipping_amount_calculator.shipping_calculate()
+        price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
+        _, total_price = price_calculate.calculate()
         data = {
             "Cart_update" : cart_count.calculate(),
             "shipping_amount" : shipping_amount,
             "checkout": [],
             "product_quantity_price": [],
+            "total_price" : total_price,
         }
         checkouts = Cart.objects.filter(user=request.user)
         for check in checkouts:
@@ -145,7 +154,7 @@ class PlusQuantityView(LoginRequiredMixin, View):
         cart_.quantity += 1
         cart_.save()
         cart_product_items = [items for items in Cart.objects.all() if items.user == request.user]
-        shipping_amount_calculator = ShippingPriceCalculator(request=request, shipping_amount=50)
+        shipping_amount_calculator = ShippingPriceCalculator(request=request, cart_product_items=cart_product_items, shipping_amount=50)
         shipping_amount = shipping_amount_calculator.shipping_calculate()
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
         price, total_price = price_calculate.calculate()
@@ -175,7 +184,7 @@ class MinusQuantityView(LoginRequiredMixin, View):
         cart_.quantity -= 1
         cart_.save()
         cart_product_items = [items for items in Cart.objects.all() if items.user == request.user]
-        shipping_amount_calculator = ShippingPriceCalculator(request=request, shipping_amount=50)
+        shipping_amount_calculator = ShippingPriceCalculator(request=request, cart_product_items=cart_product_items, shipping_amount=50)
         shipping_amount = shipping_amount_calculator.shipping_calculate()
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
         price, total_price = price_calculate.calculate()

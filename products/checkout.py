@@ -19,14 +19,17 @@ class PriceCalculate:
         
 
 class ShippingPriceCalculator:
-    def __init__(self, request, shipping_amount):
+    def __init__(self, request, cart_product_items, shipping_amount):
         self.request = request
         self.shipping_amount = shipping_amount
         self.none_amount = 0
+        self.cart_product_items = cart_product_items
 
     def shipping_calculate(self):
         total_quantity = Cart.objects.filter(user=self.request.user).aggregate(Sum('quantity'))['quantity__sum']
         try:
+            price_calculate = PriceCalculate(cart_product_items=self.cart_product_items, shipping_amount=self.shipping_amount)
+            _, total_price = price_calculate.calculate()
             if total_quantity >= 2:
                 self.shipping_amount = 45
             if total_quantity >= 4:
@@ -35,7 +38,7 @@ class ShippingPriceCalculator:
                 self.shipping_amount = 25
             if total_quantity >= 8:
                 self.shipping_amount = 15
-            if total_quantity >= 10:
+            if total_price >= 3000:
                 self.shipping_amount = 0
             return self.shipping_amount
         except Exception:

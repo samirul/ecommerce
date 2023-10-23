@@ -75,6 +75,7 @@ class Cart(baseIDModel):
     
     def save(self, *args, **kwargs):
         self.quantity = max(self.quantity, 1)
+        self.quantity = min(self.quantity, 12)
         super().save(*args, **kwargs)
 
     @property

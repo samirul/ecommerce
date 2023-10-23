@@ -77,7 +77,7 @@
                     </ul>
                     <ul id="total-container">
                         <li class="bold-checkout">Delivery Charges <i>-</i><span id="shipping-amount">INR {{shipping_amount}}</span></li>
-                        <li class="bold-checkout">Total <i>-</i> <span>$84.00</span></li>
+                        <li class="bold-checkout">Total Prices(Exclude GST) <i>-</i> <span id="total_price">INR {{total_price}}</span></li>
                     </ul>
                     
                 </div>
@@ -106,10 +106,10 @@
                         {% endfor %}
                         <!-- <button class="submit check_out">Delivery to this Address</button> -->
                     </form>
-                    <!-- <div class="checkout-right-basket">
-                        <a href="payment.html">Make a Payment <span class="glyphicon glyphicon-chevron-right"
+                    <div class="checkout-right-basket">
+                        <a href="#">Make a Payment <span class="glyphicon glyphicon-chevron-right"
                                 aria-hidden="true"></span></a>
-                    </div> -->
+                    </div>
                 </div>
                 
                 <div class="clearfix"> </div>
@@ -159,6 +159,7 @@ $(document).ready(function () {
                         $('#product-list-container').append(listItem);
                     }
                     document.getElementById('shipping-amount').innerText="INR " + ValueData.shipping_amount
+                    document.getElementById('total_price').innerText="INR " + ValueData.total_price + ".0"
                     
                 }
 
@@ -193,6 +194,7 @@ $(document).ready(function () {
                     }
 
                     document.getElementById('shipping-amount').innerText="INR " + ValueData.shipping_amount
+                    document.getElementById('total_price').innerText="INR " + ValueData.total_price + ".0"
                     
                 }
             })
@@ -221,6 +223,7 @@ $(document).ready(function () {
                         $('#product-list-container').append(listItem);
                     }
                     document.getElementById('shipping-amount').innerText="INR " + ValueData.shipping_amount
+                    document.getElementById('total_price').innerText="INR " + ValueData.total_price + ".0"
                 }
             })
 
