@@ -1,4 +1,4 @@
-from .models import Cart
+from products.models import Cart
 from django.db.models import Sum
 
 class PriceCalculate:

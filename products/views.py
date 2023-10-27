@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http.response import JsonResponse
 from django.views import View
 
@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 import pdb
 
-from .checkout import PriceCalculate, ShippingPriceCalculator
+from basket.checkout import PriceCalculate, ShippingPriceCalculator
 
 
 
@@ -96,7 +96,13 @@ class ProductAddToCart(LoginRequiredMixin, View):
             Cart(user=request.user, product=product).save()
             messages.success(request, f"{product.product_title} Added in cart.")
         else:
-            messages.info(request, f"{product.product_title} Already in cart.")
+            for qty in check_Cart_items:
+                if qty.quantity == 12:
+                    messages.info(request, f"{product.product_title} Max Quantity reached, You Can't Order More Than - {qty.quantity} at a Time or Not Avaliable.")
+                else:    
+                    qty.quantity += 1
+                    qty.save()
+                    messages.success(request, f"{product.product_title} Added to cart, Quantity {qty.quantity}")
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -158,7 +164,7 @@ class PlusQuantityView(LoginRequiredMixin, View):
         shipping_amount = shipping_amount_calculator.shipping_calculate()
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
         price, total_price = price_calculate.calculate()
-
+        cart_count = NavBar_Basket_count(request=request)
         
         data ={
             "quantity" : cart_.quantity,
@@ -167,6 +173,7 @@ class PlusQuantityView(LoginRequiredMixin, View):
             "total_price" : total_price,
             "checkout": [],
             "product_quantity_price": [],
+            "cart_count" : cart_count.calculate(),
         }
 
         checkouts = Cart.objects.filter(user=request.user)
@@ -188,7 +195,7 @@ class MinusQuantityView(LoginRequiredMixin, View):
         shipping_amount = shipping_amount_calculator.shipping_calculate()
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
         price, total_price = price_calculate.calculate()
-
+        cart_count = NavBar_Basket_count(request=request)
         
         data ={
             "quantity" : cart_.quantity,
@@ -197,6 +204,7 @@ class MinusQuantityView(LoginRequiredMixin, View):
             "total_price" : total_price,
             "checkout": [],
             "product_quantity_price": [],
+            "cart_count" : cart_count.calculate(),
         }
 
         checkouts = Cart.objects.filter(user=request.user)
