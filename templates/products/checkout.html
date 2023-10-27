@@ -76,8 +76,9 @@
                         {% endfor %}
                     </ul>
                     <ul id="total-container">
+                        <li class="bold-checkout">Total Amount <i>-</i><span id="price">INR {{price}}</span></li>
                         <li class="bold-checkout">Delivery Charges <i>-</i><span id="shipping-amount">INR {{shipping_amount}}</span></li>
-                        <li class="bold-checkout">Total Prices(Exclude GST) <i>-</i> <span id="total_price">INR {{total_price}}</span></li>
+                        <li class="bold-checkout">Total Prices(Excluding GST) <i>-</i> <span id="total_price">INR {{total_price}}</span></li>
                     </ul>
                     
                 </div>
@@ -160,6 +161,7 @@ $(document).ready(function () {
                     }
                     document.getElementById('shipping-amount').innerText="INR " + ValueData.shipping_amount
                     document.getElementById('total_price').innerText="INR " + ValueData.total_price + ".0"
+                    document.getElementById('price').innerText="INR " + ValueData.price + ".0"
                     
                 }
 
@@ -197,6 +199,7 @@ $(document).ready(function () {
                     document.getElementById('total_price').innerText="INR " + ValueData.total_price + ".0"
                     document.getElementById('Cart-counts').innerText=ValueData.cart_count
                     document.getElementById('lblCartCount').innerText=ValueData.cart_count
+                    document.getElementById('price').innerText="INR " + ValueData.price + ".0"
                     
                     
                 }
@@ -229,6 +232,7 @@ $(document).ready(function () {
                     document.getElementById('total_price').innerText="INR " + ValueData.total_price + ".0"
                     document.getElementById('Cart-counts').innerText=ValueData.cart_count
                     document.getElementById('lblCartCount').innerText=ValueData.cart_count
+                    document.getElementById('price').innerText="INR " + ValueData.price + ".0"
                 }
             })
 

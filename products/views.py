@@ -116,7 +116,7 @@ class CheckoutsView(LoginRequiredMixin, View):
         shipping_amount_calculator = ShippingPriceCalculator(request=request, cart_product_items=cart_product_items, shipping_amount=50)
         shipping_amount = shipping_amount_calculator.shipping_calculate()
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
-        _, total_price = price_calculate.calculate()
+        price, total_price = price_calculate.calculate()
 
         context ={
             "cart_count" : cart_count.calculate(),
@@ -124,7 +124,9 @@ class CheckoutsView(LoginRequiredMixin, View):
             "categories" : categories,
             "customer" : customer,
             "shipping_amount" : shipping_amount,
-            "total_price": total_price
+            "total_price": total_price,
+            "price" : price,
+
         }
         return render(request, "products/checkout.html", context=context)
     
@@ -138,13 +140,14 @@ class RemoveCartView(LoginRequiredMixin, View):
         shipping_amount_calculator = ShippingPriceCalculator(request=request, cart_product_items=cart_product_items, shipping_amount=50)
         shipping_amount = shipping_amount_calculator.shipping_calculate()
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
-        _, total_price = price_calculate.calculate()
+        price, total_price = price_calculate.calculate()
         data = {
             "Cart_update" : cart_count.calculate(),
             "shipping_amount" : shipping_amount,
             "checkout": [],
             "product_quantity_price": [],
             "total_price" : total_price,
+            "price" : price,
         }
         checkouts = Cart.objects.filter(user=request.user)
         for check in checkouts:
