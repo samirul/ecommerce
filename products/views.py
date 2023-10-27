@@ -215,6 +215,11 @@ class MinusQuantityView(LoginRequiredMixin, View):
             data["checkout"].append(check.product.product_title)
             data["product_quantity_price"].append(check.product_quantity_price)
         return JsonResponse(data)
+    
+
+class PurchasePageView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, "products/purchase.html")
 
 
 

@@ -111,7 +111,7 @@
                     </div>
                     <!-- </form> -->
                     <div class="checkout-right-basket">
-                        <a href="#">Make a Payment <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+                        <a href="{% url 'purchase-order' %}">Make a Payment <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
                     </div>
                 </div>
                 
@@ -126,10 +126,6 @@
 </div>
 <!-- //banner -->
 
-
-
-<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
-<!-- quantity -->
 
 
 <script>
@@ -254,7 +250,7 @@ $(document).ready(function () {
     }
 
     .address_form_agile .card{
-        margin-top: 2em;
+        margin-top: 1em;
     }
 
     .address_form_agile .card .card-body{
@@ -264,6 +260,8 @@ $(document).ready(function () {
     .choose-address .form-check{
         margin-top: 1em;
     }
+
+
 
 </style>
 {% endblock content %}

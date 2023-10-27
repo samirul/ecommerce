@@ -1,0 +1,47 @@
+{% extends 'base/main.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="products-breadcrumb">
+    <div class="container">
+        <ul>
+            <li><i class="fa fa-home" aria-hidden="true"></i><a href="/">Home</a><span>|</span></li>
+            <li>Checkout</li>
+        </ul>
+    </div>
+</div>
+
+<div class="banner">
+    {% include 'base/navbar-left-menu.html' %}
+    <div class="w3l_banner_nav_right">
+        <!-- about -->
+        <div class="privacy about">
+            <h3>Pur<span>chase</span></h3>
+
+            <!-- <div class="checkout-right">
+                <h4>Your shopping cart contains: <span id="Cart-counts">{{cart_count}}</span> Products</h4>
+
+            </div> -->
+            <div class="checkout-left">
+                <div class="col-md-4 checkout-left-basket">
+                    <h4>All Checkout Items</h4>
+                    
+
+                </div>
+                <div class="col-md-8 address_form_agile">
+                    <h4>Your Profile Information</h4>
+                </div>
+
+                <div class="clearfix"> </div>
+
+            </div>
+
+        </div>
+        <!-- //about -->
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+{% endblock content %}
