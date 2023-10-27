@@ -71,7 +71,7 @@
                     <ul id="product-list-container">
                         {% for check in checkout %}
                         <div class="basket-list">
-                            <li id="product-list">{{check.product.product_title}}<i>-</i><span id="product-list-price">INR {{check.product_quantity_price}}</span></li>
+                            <li id="product-list">{{check.product.product_title}} <i>-</i><span id="product-list-price">INR {{check.product_quantity_price}}</span></li>
                         </div>
                         {% endfor %}
                     </ul>
