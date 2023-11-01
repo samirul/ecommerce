@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.views import View
 from basket.basket import NavBar_Basket_count
 from products.models import Category, Product
-from .models import HomeSlider, HomeMiddleBanner
+from .models import HomeSlider, HomeMiddleBanner, ContactUS
+from django.contrib import messages
+
 
 class HomeView(View):
     def get(self, request):
@@ -29,7 +31,21 @@ class ContactUsView(View):
             "cart_count" : cart_count.calculate()
             }
         return render(request, "base/contact-us.html", context=context)
-
+    def post(self, request): 
+        try:
+            name = request.POST.get("Name")
+            telephone = request.POST.get("Telephone")
+            email = request.POST.get("Email")
+            subject = request.POST.get("Subject")
+            message = request.POST.get("Message")
+            contact = ContactUS.objects.create(name=name, telephone=telephone, email=email, subject=subject, message=message)
+            contact.save()
+            messages.success(request, "Your Request Has Been Received, Please Allow Us To Get Back To You Within 2 Days.")
+            return redirect('contact-us')
+        except Exception:
+            messages.info(request, "Something Is Wrong Please Try Again.")
+            return redirect('contact-us')
+    
 class AboutView(View):
     def get(self, request):
         categories = Category.objects.prefetch_related('sub_categories').all()

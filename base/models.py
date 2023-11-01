@@ -22,5 +22,20 @@ class HomeMiddleBanner(baseIDModel):
     i_tag_title_4 = models.CharField(max_length=150, null=True, blank=True)
 
 
+class ContactUS(baseIDModel):
+    name = models.CharField(max_length=150)
+    telephone = models.IntegerField()
+    email = models.EmailField(max_length=200)
+    subject = models.CharField(max_length=255)
+    message = models.TextField(max_length=2000)
+
+    def __str__(self):
+        return self.name + self.email
+    
+
+class ContactInfo(baseIDModel):
+    pass
+
+
 
 
