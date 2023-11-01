@@ -12,6 +12,9 @@ class HomeSlider(baseIDModel):
     def __str__(self):
         return self.title_1 + self.title_2 + self.title_3
     
+    class Meta:
+        verbose_name_plural = "home slider"
+    
 class HomeMiddleBanner(baseIDModel):
     img_name = models.CharField(max_length=70)
     h_tag = models.IntegerField(default=0, choices=H_TAG_CHOICES)
@@ -20,6 +23,10 @@ class HomeMiddleBanner(baseIDModel):
     title_2 = models.CharField(max_length=150, null=True, blank=True)
     title_3 = models.CharField(max_length=150, null=True, blank=True)
     i_tag_title_4 = models.CharField(max_length=150, null=True, blank=True)
+
+
+    class Meta:
+        verbose_name_plural = "home middle banner"
 
 
 class ContactUS(baseIDModel):
@@ -32,10 +39,20 @@ class ContactUS(baseIDModel):
     def __str__(self):
         return self.name + self.email
     
+    class Meta:
+        verbose_name_plural = "contact us"
+    
 
 class ContactInfo(baseIDModel):
-    pass
+    address = models.CharField(max_length=255)
+    email = models.EmailField(max_length=200)
+    call_to_us = models.IntegerField()
 
+    def __str__(self):
+        return self.address + self.email + str(self.call_to_us)
+    
+    class Meta:
+        verbose_name_plural = "contact info"
 
 
 

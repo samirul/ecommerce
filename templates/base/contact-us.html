@@ -19,18 +19,20 @@
 			<div class="agileinfo_mail_grids">
 				{% include 'alert/alert.html' %}
 				<div class="col-md-4 agileinfo_mail_grid_left">
+					{% for contact in contact_info %}
 					<ul>
 						<li><i class="fa fa-home" aria-hidden="true"></i></li>
-						<li>address<span>868 1st Avenue NYC.</span></li>
+						<li>address<span>{{contact.address}}.</span></li>
 					</ul>
 					<ul>
 						<li><i class="fa fa-envelope" aria-hidden="true"></i></li>
-						<li>email<span><a href="mailto:info@example.com">info@example.com</a></span></li>
+						<li>email<span><a href="mailto:{{contact.email}}">{{contact.email}}</a></span></li>
 					</ul>
 					<ul>
 						<li><i class="fa fa-phone" aria-hidden="true"></i></li>
-						<li>call to us<span>(+123) 233 2362 826</span></li>
+						<li>call to us<span>(+91) {{contact.call_to_us}}</span></li>
 					</ul>
+					{% endfor %}
 				</div>
 				<div class="col-md-8 agileinfo_mail_grid_right">
 					<form action="#" method="post">
