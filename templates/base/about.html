@@ -22,27 +22,22 @@
 <!-- about -->
 		<div class="privacy about">
 			<h3>About Us</h3>
-			<p class="animi">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis 
-				praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias 
-				excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui 
-				officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem 
-				rerum facilis est et expedita distinctio.</p>
+			{% for about in about_infos %}
+			<p class="animi">{{about.information}}</p>
 			<div class="agile_about_grids">
 				<div class="col-md-6 agile_about_grid_right">
-					<img src="{% static 'images/31.jpg' %}" alt=" " class="img-responsive" />
+					<img src="{{about.about_img.url}}" alt=" " class="img-responsive" />
 				</div>
 				<div class="col-md-6 agile_about_grid_left">
 					<ol>
-						<li>laborum et dolorum fuga</li>
-						<li>corrupti quos dolores et quas</li>
-						<li>est et expedita distinctio</li>
-						<li>deleniti atque corrupti quos</li>
-						<li>excepturi sint occaecati cupiditate</li>
-						<li>accusamus et iusto odio</li>
+						{% for list_infos in about.about_us.all %}
+						<li>{{list_infos.list_info}}</li>
+						{% endfor %}
 					</ol>
 				</div>
 				<div class="clearfix"> </div>
 			</div>
+			{% endfor %}
 		</div>
 <!-- //about -->
 		</div>

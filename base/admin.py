@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import HomeSlider, HomeMiddleBanner, ContactUS, ContactInfo
+from .models import HomeSlider, HomeMiddleBanner, ContactUS, ContactInfo, AboutInfo, AboutUs
 
 @admin.register(HomeSlider)
 class HomeSliderAdminModel(admin.ModelAdmin):
@@ -31,3 +31,27 @@ class ContactInfoAdminModel(admin.ModelAdmin):
         "id", "address","email","call_to_us",
         "created_by","updated_by",
     ]
+
+
+
+
+
+class AboutUsAdminModel(admin.StackedInline):
+    model = AboutUs
+
+
+
+class AboutInfoAdminModel(admin.ModelAdmin):
+    list_display = [
+        "id", "information","about_img",
+        "created_by","updated_by",
+    ]
+
+    inlines = [AboutUsAdminModel]
+
+
+
+
+
+admin.site.register(AboutUs)
+admin.site.register(AboutInfo, AboutInfoAdminModel)

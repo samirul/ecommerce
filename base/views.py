@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from basket.basket import NavBar_Basket_count
 from products.models import Category, Product
-from .models import HomeSlider, HomeMiddleBanner, ContactUS, ContactInfo
+from .models import *
 from django.contrib import messages
 
 
@@ -52,9 +52,11 @@ class AboutView(View):
     def get(self, request):
         categories = Category.objects.prefetch_related('sub_categories').all()
         cart_count = NavBar_Basket_count(request=request)
+        about_infos =AboutInfo.objects.all()
         context = {
             "categories" : categories,
-            "cart_count" : cart_count.calculate()
+            "cart_count" : cart_count.calculate(),
+            "about_infos" : about_infos
             }
         return render(request, "base/about.html", context=context)
     
