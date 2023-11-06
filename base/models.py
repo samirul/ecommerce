@@ -61,6 +61,8 @@ class AboutInfo(baseIDModel):
     information = models.TextField(max_length=2000)
     about_img = models.ImageField(upload_to="about")
     
+    def __str__(self):
+        return "About Info"
 
     class Meta:
         verbose_name_plural = "About Info"
@@ -72,6 +74,29 @@ class AboutUs(baseIDModel):
     about_info = models.ForeignKey(AboutInfo, on_delete=models.CASCADE, null=True, blank=True, related_name='about_us')
     list_info = models.CharField(max_length=255, null=True, blank=True)
 
+    def __str__(self):
+        return "About Us"
+
+
     class Meta:
         verbose_name_plural = "About Us"
 
+
+class Testimonial(baseIDModel):
+    testimonial_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.testimonial_name
+
+class AboutTestimonial(baseIDModel):
+    tesimonial_name = models.ForeignKey(Testimonial, on_delete=models.CASCADE, null=True, blank=True, related_name="about_testimonial")
+    testimonials_text = models.TextField(max_length=400)
+    testimonial_Writter = models.CharField(max_length=150)
+    testimonial_Writter_category = models.CharField(max_length=100, default="Customer")
+
+    def __str__(self):
+        return "About Testimonials"
+
+
+    class Meta:
+        verbose_name_plural = "About Testimonial"

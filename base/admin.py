@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import HomeSlider, HomeMiddleBanner, ContactUS, ContactInfo, AboutInfo, AboutUs
+from .models import(
+    HomeSlider, HomeMiddleBanner,
+      ContactUS, ContactInfo, AboutInfo,
+      AboutUs, AboutTestimonial, Testimonial)
 
 @admin.register(HomeSlider)
 class HomeSliderAdminModel(admin.ModelAdmin):
@@ -40,7 +43,6 @@ class AboutUsAdminModel(admin.StackedInline):
     model = AboutUs
 
 
-
 class AboutInfoAdminModel(admin.ModelAdmin):
     list_display = [
         "id", "information","about_img",
@@ -51,7 +53,24 @@ class AboutInfoAdminModel(admin.ModelAdmin):
 
 
 
+class AboutTestimonialAdmin(admin.StackedInline):
+    model = AboutTestimonial
+    extra = 2
+    max_num = 2
+    
 
 
-admin.site.register(AboutUs)
+class TestimonialAdmin(admin.ModelAdmin):
+    list_display=[
+        "id", "testimonial_name", "created_by", "updated_by"
+    ]
+
+    inlines = [AboutTestimonialAdmin]
+
+  
+
+
+
+
 admin.site.register(AboutInfo, AboutInfoAdminModel)
+admin.site.register(Testimonial, TestimonialAdmin)

@@ -52,11 +52,13 @@ class AboutView(View):
     def get(self, request):
         categories = Category.objects.prefetch_related('sub_categories').all()
         cart_count = NavBar_Basket_count(request=request)
-        about_infos =AboutInfo.objects.all()
+        about_infos = AboutInfo.objects.all()
+        testimonials = Testimonial.objects.all()
         context = {
             "categories" : categories,
             "cart_count" : cart_count.calculate(),
-            "about_infos" : about_infos
+            "about_infos" : about_infos,
+            "testimonials" : testimonials
             }
         return render(request, "base/about.html", context=context)
     
