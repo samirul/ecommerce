@@ -66,9 +66,11 @@ class ServiceView(View):
     def get(self, request):
         categories = Category.objects.prefetch_related('sub_categories').all()
         cart_count = NavBar_Basket_count(request=request)
+        services = Services.objects.all()
         context = {
             "categories" : categories,
-            "cart_count" : cart_count.calculate()
+            "cart_count" : cart_count.calculate(),
+            "services" : services
             }
         return render(request, "base/services.html", context=context)
 
