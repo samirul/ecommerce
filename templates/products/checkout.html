@@ -20,6 +20,7 @@
     <div class="w3l_banner_nav_right">
         <!-- about -->
         <div class="privacy about">
+            {% include 'alert/alert.html' %}
             <h3>Chec<span>kout</span></h3>
 
             <div class="checkout-right">
@@ -40,24 +41,28 @@
                         {% for check in checkout %}
                         <tr class="rem1">
                             <td class="invert">{{forloop.counter}}</td>
-                            <td class="invert-image"><a href="{% url 'product-view' check.product.slug check.product.id %}"><img id="productimage" src="{{check.product.product_image.url}}" alt=" " class="img-responsive"></a></td>
+                            <td class="invert-image"><a
+                                    href="{% url 'product-view' check.product.slug check.product.id %}"><img
+                                        id="productimage" src="{{check.product.product_image.url}}" alt=" "
+                                        class="img-responsive"></a></td>
                             <td class="invert">
-                                 <div class="quantity"> 
-                                    <div class="quantity-select">                           
+                                <div class="quantity">
+                                    <div class="quantity-select">
                                         <div class="entry value-minus" pid="{{check.product.id}}">&nbsp;</div>
-                                        <div class="entry value" id="productquantity"><span>{{check.quantity}}</span></div>
+                                        <div class="entry value" id="productquantity"><span>{{check.quantity}}</span>
+                                        </div>
                                         <div class="entry value-plus active" pid="{{check.product.id}}">&nbsp;</div>
                                     </div>
                                 </div>
                             </td>
                             <td class="invert" id="productname">{{check.product.product_title}}</td>
-                            
+
                             <td class="invert" id="productprice">INR {{check.product.product_discounted_price}}</td>
                             <td class="invert">
                                 <div class="rem">
                                     <div class="close1" pid="{{check.product.id}}"></div>
                                 </div>
-    
+
                             </td>
                         </tr>
                         {% endfor %}
@@ -67,20 +72,29 @@
             <div class="checkout-left">
                 <div class="col-md-4 checkout-left-basket">
                     <h4>Continue to basket</h4>
-                    
+
                     <ul id="product-list-container">
                         {% for check in checkout %}
                         <div class="basket-list">
-                            <li id="product-list">{{check.product.product_title}} <i>-</i><span id="product-list-price">INR {{check.product_quantity_price}}</span></li>
+                            <li id="product-list">{{check.product.product_title}} <i>-</i><span
+                                    id="product-list-price">INR {{check.product_quantity_price}}</span></li>
                         </div>
                         {% endfor %}
                     </ul>
                     <ul id="total-container">
-                        <li class="bold-checkout">Total Amount <i>-</i><span id="price">INR {{price}}</span></li>
-                        <li class="bold-checkout">Delivery Charges <i>-</i><span id="shipping-amount">INR {{shipping_amount}}</span></li>
-                        <li class="bold-checkout">Total Prices(Excluding GST) <i>-</i> <span id="total_price">INR {{total_price}}</span></li>
+                        <li class="bold-checkout">Amount <i>-</i><span id="price">INR {{price}}</span></li>
+                        <li class="bold-checkout">Delivery Charges <i>-</i><span id="shipping-amount">INR
+                                {{shipping_amount}}</span></li>
+                        <li class="bold-checkout">Total Amount <i>-</i> <span id="total_amount">INR
+                                {{total_amount}}</span></li>
+                        <li class="bold-checkout">GST <i>-</i> <span id="gst">INR
+                                {{gst}}</span></li>
+                        <li class="bold-checkout">Discount Applied <i>-</i> <span id="discounted_price">INR
+                              {% if discounted_price %} -{{discounted_price}} {% else %} 0{% endif %}</span></li>
+                        <li class="bold-checkout">Total Prices(Including GST) <i>-</i> <span id="total_price">INR
+                                {{total_price}}</span></li>
                     </ul>
-                    
+
                 </div>
                 <div class="col-md-8 address_form_agile">
                     <h4>Your Profile Information</h4>
@@ -91,33 +105,50 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4> FULL NAME: {{customerinfo.first_name}} {{customerinfo.last_name}},</h4>
-                                    <p>LOCATION: {{customerinfo.country}},<br> {{customerinfo.city}},<br> {{customerinfo.address}},<br>
+                                    <p>LOCATION: {{customerinfo.country}},<br> {{customerinfo.city}},<br>
+                                        {{customerinfo.address}},<br>
                                         {{customerinfo.state}}, <br> Pincode - {{customerinfo.pincode}},
                                         {{customerinfo.phone}}</p>
                                 </div>
                             </div>
-                            <!-- <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="custid" , id="custadd{{forloop.counter}}"
-                                                    value="{{customerinfo.id}}" checked>
-                                                <label class="form-check-label fw-bold" for="custadd{{forloop.counter}}">
-                                                    ADDRESS: {{forloop.counter}} </label>
-                                                    <label>-------------------------------------</label>
-                                                    
-                                            </div> -->
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="custid" ,
+                                    id="custadd{{forloop.counter}}" value="{{customerinfo.id}}" checked>
+                                <label class="form-check-label fw-bold" for="custadd{{forloop.counter}}">
+                                    ADDRESS: {{forloop.counter}} </label>
+                                <label>-------------------------------------</label>
+
+                            </div>
                         </div>
-                
                         {% endfor %}
                         <!-- <button class="submit check_out">Delivery to this Address</button> -->
                     </div>
                     <!-- </form> -->
+
                     <div class="checkout-right-basket">
-                        <a href="{% url 'purchase-order' %}">Make a Payment <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+                        <div class="txt-coupon">
+                            <span>Have a coupon code?</span>
+                        </div>
+                        <div class="coupon">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="text" name="coupon-code" placeholder="Coupon code">
+                                <input type="submit">
+                            </form>
+                            <!-- {% if cart.coupon %}
+                                <a href="{% url 'remove_coupon' cart.uid %}" class="btn btn-success">{{cart.coupon.coupon_code}}</a>
+                            {% endif %} -->
+                        </div>
+                        <a href="#">Cash On Delivery <span class="glyphicon glyphicon-chevron-right"
+                                aria-hidden="true"></span></a>
+                        <a href="#">Pay Online <span class="glyphicon glyphicon-chevron-right"
+                                aria-hidden="true"></span></a>
                     </div>
                 </div>
-                
+
                 <div class="clearfix"> </div>
-                
-                </div>
+
+            </div>
 
         </div>
         <!-- //about -->
@@ -130,9 +161,9 @@
 
 <script>
 
-//  Remove Product Items
+    //  Remove Product Items
 
-$(document).ready(function () {
+    $(document).ready(function () {
         $('.close1').on('click', function () {
             var id = $(this).attr('pid').toString();
             var eml = this;
@@ -140,13 +171,13 @@ $(document).ready(function () {
             $.ajax({
                 type: 'GET',
                 url: "{% url 'remove-cart-items' %}",
-                data:{
+                data: {
                     product_id: id,
                 },
 
-                success: function(ValueData){
-                    document.getElementById('Cart-counts').innerText=ValueData.Cart_update;
-                    document.getElementById('lblCartCount').innerText=ValueData.Cart_update;
+                success: function (ValueData) {
+                    document.getElementById('Cart-counts').innerText = ValueData.Cart_update;
+                    document.getElementById('lblCartCount').innerText = ValueData.Cart_update;
                     eml.parentNode.parentNode.parentNode.remove();
                     $('#product-list-container').empty();
                     eml.innerText = ValueData.quantity;
@@ -154,23 +185,25 @@ $(document).ready(function () {
                     var quantityPriceList = ValueData.product_quantity_price;
 
                     for (var i = 0; i < checkoutList.length; i++) {
-                        var listItem = '<li id="product-list">' + checkoutList[i] + ' <i>-</i> <span id="product-list-price">INR ' + quantityPriceList[i] + '.0</span></li>';
+                        var listItem = '<li id="product-list">' + checkoutList[i] + ' <i>-</i> <span id="product-list-price">INR ' + quantityPriceList[i] + '</span></li>';
                         $('#product-list-container').append(listItem);
                     }
-                    document.getElementById('shipping-amount').innerText="INR " + ValueData.shipping_amount
-                    document.getElementById('total_price').innerText="INR " + ValueData.total_price + ".0"
-                    document.getElementById('price').innerText="INR " + ValueData.price + ".0"
-                    
+                    document.getElementById('shipping-amount').innerText = "INR " + ValueData.shipping_amount
+                    document.getElementById('total_amount').innerText = "INR " + ValueData.total_amount
+                    document.getElementById('total_price').innerText = "INR " + ValueData.total_price
+                    document.getElementById('price').innerText = "INR " + ValueData.price
+                    document.getElementById('gst').innerText = "INR " + ValueData.gst
+
                 }
 
-            })    
+            })
         });
     });
 
 
-// Plus Product Items
+    // Plus Product Items
 
-$(document).ready(function () {
+    $(document).ready(function () {
 
         $('.value-minus').on('click', function () {
             var id = $(this).attr('pid').toString();
@@ -183,23 +216,25 @@ $(document).ready(function () {
                     product_id: id
                 },
                 success: function (ValueData) {
-                     $('#product-list-container').empty();
+                    $('#product-list-container').empty();
                     eml.innerText = ValueData.quantity;
                     var checkoutList = ValueData.checkout;
                     var quantityPriceList = ValueData.product_quantity_price;
 
                     for (var i = 0; i < checkoutList.length; i++) {
-                        var listItem = '<li id="product-list">' + checkoutList[i] + ' <i>-</i> <span id="product-list-price">INR ' + quantityPriceList[i] + '.0</span></li>';
+                        var listItem = '<li id="product-list">' + checkoutList[i] + ' <i>-</i> <span id="product-list-price">INR ' + quantityPriceList[i] + '</span></li>';
                         $('#product-list-container').append(listItem);
                     }
 
-                    document.getElementById('shipping-amount').innerText="INR " + ValueData.shipping_amount
-                    document.getElementById('total_price').innerText="INR " + ValueData.total_price + ".0"
-                    document.getElementById('Cart-counts').innerText=ValueData.cart_count
-                    document.getElementById('lblCartCount').innerText=ValueData.cart_count
-                    document.getElementById('price').innerText="INR " + ValueData.price + ".0"
-                    
-                    
+                    document.getElementById('shipping-amount').innerText = "INR " + ValueData.shipping_amount
+                    document.getElementById('total_amount').innerText = "INR " + ValueData.total_amount
+                    document.getElementById('total_price').innerText = "INR " + ValueData.total_price
+                    document.getElementById('Cart-counts').innerText = ValueData.cart_count
+                    document.getElementById('lblCartCount').innerText = ValueData.cart_count
+                    document.getElementById('price').innerText = "INR " + ValueData.price
+                    document.getElementById('gst').innerText = "INR " + ValueData.gst
+
+
                 }
             })
 
@@ -223,18 +258,20 @@ $(document).ready(function () {
                     var quantityPriceList = ValueData.product_quantity_price;
 
                     for (var i = 0; i < checkoutList.length; i++) {
-                        var listItem = '<li id="product-list">' + checkoutList[i] + ' <i>-</i> <span id="product-list-price">INR ' + quantityPriceList[i] + '.0</span></li>';
+                        var listItem = '<li id="product-list">' + checkoutList[i] + ' <i>-</i> <span id="product-list-price">INR ' + quantityPriceList[i] + '</span></li>';
                         $('#product-list-container').append(listItem);
                     }
-                    document.getElementById('shipping-amount').innerText="INR " + ValueData.shipping_amount
-                    document.getElementById('total_price').innerText="INR " + ValueData.total_price + ".0"
-                    document.getElementById('Cart-counts').innerText=ValueData.cart_count
-                    document.getElementById('lblCartCount').innerText=ValueData.cart_count
-                    document.getElementById('price').innerText="INR " + ValueData.price + ".0"
+                    document.getElementById('shipping-amount').innerText = "INR " + ValueData.shipping_amount
+                    document.getElementById('total_amount').innerText = "INR " + ValueData.total_amount
+                    document.getElementById('total_price').innerText = "INR " + ValueData.total_price
+                    document.getElementById('Cart-counts').innerText = ValueData.cart_count
+                    document.getElementById('lblCartCount').innerText = ValueData.cart_count
+                    document.getElementById('price').innerText = "INR " + ValueData.price
+                    document.getElementById('gst').innerText = "INR " + ValueData.gst
                 }
             })
 
-            
+
         })
     })
 
@@ -244,24 +281,69 @@ $(document).ready(function () {
 
 
 <style>
-    .address_form_agile{
+    .address_form_agile {
         display: inline;
         margin-top: 1.2em;
     }
 
-    .address_form_agile .card{
+    .address_form_agile .card {
         margin-top: 1em;
     }
 
-    .address_form_agile .card .card-body{
+    .address_form_agile .card .card-body {
         font-weight: 600;
     }
 
-    .choose-address .form-check{
+    .choose-address .form-check {
         margin-top: 1em;
     }
 
+    .checkout-right-basket .coupon {
+        margin-bottom: 60px;
+    }
 
+    /* .checkout-right-basket .coupon input{
+        padding: 10px 30px;
+        border-radius: 5px;
+        
+    } */
+
+    .checkout-right-basket .coupon input[type=text] {
+        padding: 5px;
+        border: 2px solid #ccc;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    .checkout-right-basket .coupon input[type=text]:focus {
+        border-color: #333;
+    }
+
+    .checkout-right-basket .coupon input[type=submit] {
+        padding: 5px 15px;
+        background: #089703;
+        border: 0 none;
+        cursor: pointer;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        color: #fff;
+        transition: .1s;
+        -webkit-transition-delay: .1s;
+    }
+
+    .checkout-right-basket .coupon input[type=submit]:hover {
+        background: #010e00;
+        transition: .1s;
+        -webkit-transition-delay: .1s;
+    }
+
+    .txt-coupon {
+        margin-bottom: 15px;
+    }
+
+    .txt-coupon span {
+        font-weight: 600;
+    }
 
 </style>
 {% endblock content %}

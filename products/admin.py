@@ -33,3 +33,11 @@ class TagsModelAdmin(admin.ModelAdmin):
     list_display =[
         "id","user","product","quantity"
     ]
+
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    list_display =[
+        "id","coupon_code", "is_expired"
+    ]
+
+admin.site.register(ProductType)

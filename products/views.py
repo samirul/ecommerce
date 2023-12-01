@@ -1,10 +1,10 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http.response import JsonResponse
 from django.views import View
 
 from basket.basket import NavBar_Basket_count
-from .models import Category, Product, Cart
+from .models import Category, Product, Cart, Coupon
 from account.models import Customer
 from django.db.models import Q, Avg
 
@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 import pdb
 
-from basket.checkout import PriceCalculate, ShippingPriceCalculator
+from basket.checkout import PriceCalculate, ShippingPriceCalculator, GSTCalculator
 
 
 
@@ -107,6 +107,7 @@ class ProductAddToCart(LoginRequiredMixin, View):
 
 
 class CheckoutsView(LoginRequiredMixin, View):
+
     def get(self, request):
         categories = Category.objects.prefetch_related('sub_categories').all()
         cart_count = NavBar_Basket_count(request=request)
@@ -117,6 +118,8 @@ class CheckoutsView(LoginRequiredMixin, View):
         shipping_amount = shipping_amount_calculator.shipping_calculate()
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
         price, total_price = price_calculate.calculate()
+        gstcalculate = GSTCalculator(request=request, total_price=total_price)
+        gst_price, total_price_after_gst = gstcalculate.calculate()
 
         context ={
             "cart_count" : cart_count.calculate(),
@@ -124,13 +127,48 @@ class CheckoutsView(LoginRequiredMixin, View):
             "categories" : categories,
             "customer" : customer,
             "shipping_amount" : shipping_amount,
-            "total_price": total_price,
+            "total_amount": total_price,
+            "gst": gst_price,
+            "total_price": total_price_after_gst,
             "price" : price,
 
         }
+
+        coupons = Cart.objects.filter(user=request.user, is_paid=False)
+        for coupon in coupons:
+            if coupon.coupon:
+                context["total_price"] = total_price_after_gst - coupon.coupon.discount_price
+                # coupon.total_price = total_price
+                # coupon.save()
+                context["discounted_price"] = coupon.coupon.discount_price
+
         return render(request, "products/checkout.html", context=context)
     
+    def post(self, request):
+        coupon_code = request.POST.get('coupon-code')
+        cart_items = Cart.objects.filter(is_paid=False, user=request.user)
+        find_coupon_code = Coupon.objects.filter(coupon_code__iexact=coupon_code)
+
+        if not find_coupon_code.exists():
+            messages.info(request, f"Coupon Code - {coupon_code} isn't valid.")
+
+        coupon_applied = False
+
+        for cart_item in cart_items:
+            if cart_item.coupon:
+                messages.info(request, f"Coupon Code - {cart_item.coupon.coupon_code} already applied.")
+                coupon_applied = True
+                break
+
+        if not coupon_applied and find_coupon_code:
+            cart_item.coupon = find_coupon_code[0]
+            cart_item.save()
+            messages.success(request, f"Coupon Code - {coupon_code} applied.")
+
+        return redirect('checkout')
+    
 class RemoveCartView(LoginRequiredMixin, View):
+
     def get(self, request):
         product_id = request.GET['product_id']
         cart_ = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
@@ -141,22 +179,37 @@ class RemoveCartView(LoginRequiredMixin, View):
         shipping_amount = shipping_amount_calculator.shipping_calculate()
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
         price, total_price = price_calculate.calculate()
+        gstcalculate = GSTCalculator(request=request, total_price=total_price)
+        gst_price, total_price_after_gst = gstcalculate.calculate()
+
         data = {
             "Cart_update" : cart_count.calculate(),
             "shipping_amount" : shipping_amount,
             "checkout": [],
             "product_quantity_price": [],
-            "total_price" : total_price,
+            "total_amount": total_price,
+            "gst": gst_price,
+            "total_price": total_price_after_gst,
             "price" : price,
         }
-        checkouts = Cart.objects.filter(user=request.user)
+
+        checkouts = Cart.objects.filter(user=request.user, is_paid=False)
         for check in checkouts:
             data["checkout"].append(check.product.product_title)
             data["product_quantity_price"].append(check.product_quantity_price)
+
+        for coupon in checkouts:
+            if coupon.coupon:
+                data["total_price"] = total_price_after_gst - coupon.coupon.discount_price
+                # coupon.total_price = total_price
+                # coupon.save()
+                data["discounted_price"] = coupon.coupon.discount_price
+
         return JsonResponse(data)
     
 
 class PlusQuantityView(LoginRequiredMixin, View):
+
     def get(self, request):
         product_id = request.GET['product_id']
         cart_ = Cart.objects.get(Q(product=product_id) & Q(user=request.user))
@@ -168,21 +221,34 @@ class PlusQuantityView(LoginRequiredMixin, View):
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
         price, total_price = price_calculate.calculate()
         cart_count = NavBar_Basket_count(request=request)
+        gstcalculate = GSTCalculator(request=request, total_price=total_price)
+        gst_price, total_price_after_gst = gstcalculate.calculate()
+        print(total_price_after_gst)
         
         data ={
             "quantity" : cart_.quantity,
             "shipping_amount" : shipping_amount,
             "price" : price,
-            "total_price" : total_price,
+            "total_amount": total_price,
+            "gst": gst_price,
+            "total_price": total_price_after_gst,
             "checkout": [],
             "product_quantity_price": [],
             "cart_count" : cart_count.calculate(),
         }
 
-        checkouts = Cart.objects.filter(user=request.user)
+        checkouts = Cart.objects.filter(user=request.user, is_paid=False)
         for check in checkouts:
             data["checkout"].append(check.product.product_title)
             data["product_quantity_price"].append(check.product_quantity_price)
+
+        for coupon in checkouts:
+            if coupon.coupon:
+                data["total_price"] = total_price_after_gst - coupon.coupon.discount_price
+                # coupon.total_price = total_price
+                # coupon.save()
+                data["discounted_price"] = coupon.coupon.discount_price
+
         return JsonResponse(data)
 
 
@@ -199,21 +265,34 @@ class MinusQuantityView(LoginRequiredMixin, View):
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
         price, total_price = price_calculate.calculate()
         cart_count = NavBar_Basket_count(request=request)
+        gstcalculate = GSTCalculator(request=request, total_price=total_price)
+        gst_price, total_price_after_gst = gstcalculate.calculate()
+        print(total_price_after_gst)
         
         data ={
             "quantity" : cart_.quantity,
             "shipping_amount" : shipping_amount,
             "price" : price,
-            "total_price" : total_price,
+            "total_amount": total_price,
+            "gst": gst_price,
+            "total_price": total_price_after_gst,
             "checkout": [],
             "product_quantity_price": [],
             "cart_count" : cart_count.calculate(),
         }
 
-        checkouts = Cart.objects.filter(user=request.user)
+        checkouts = Cart.objects.filter(user=request.user, is_paid=False)
         for check in checkouts:
             data["checkout"].append(check.product.product_title)
             data["product_quantity_price"].append(check.product_quantity_price)
+
+        for coupon in checkouts:
+            if coupon.coupon:
+                data["total_price"] = total_price_after_gst - coupon.coupon.discount_price
+                # coupon.total_price = total_price
+                # coupon.save()
+                data["discounted_price"] = coupon.coupon.discount_price
+
         return JsonResponse(data)
     
 

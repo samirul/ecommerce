@@ -36,10 +36,18 @@ class Tag(baseIDModel):
 
     def __str__(self):
         return f"{self.innerTag}, {self.homeTag}"
+    
+
+class ProductType(baseIDModel):
+    product_type_name = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.product_type_name
 
 class Product(baseIDModel):
     product_title = models.CharField(max_length=150)
     slug = models.SlugField(unique=True, null=True, blank=True)
+    product_type = models.ForeignKey(ProductType, on_delete=models.SET_NULL, null=True, blank=True)
     product_selling_price = models.FloatField()
     product_discounted_price = models.FloatField()
     product_rating = models.IntegerField(default=0)
@@ -69,7 +77,9 @@ class Cart(baseIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
+    is_paid = models.BooleanField(default=False)
+    
     def __str__(self):
         return str(self.id)
     
@@ -82,7 +92,6 @@ class Cart(baseIDModel):
     def product_quantity_price(self):
         return self.quantity * self.product.product_discounted_price
     
-
 
 class OrderPlaced(baseIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
