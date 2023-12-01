@@ -100,3 +100,48 @@ class AboutTestimonial(baseIDModel):
 
     class Meta:
         verbose_name_plural = "About Testimonial"
+
+
+class Services(baseIDModel):
+    title = models.CharField(max_length=150)
+    description = models.TextField(max_length=300)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        verbose_name_plural = "Services"
+
+class ServiceImages(baseIDModel):
+    services = models.ForeignKey(Services, on_delete=models.CASCADE, 
+    null=True, blank=True, related_name="service_images")
+    services_imgs = models.ImageField(upload_to='services')
+
+    def __str__(self):
+        return "Service Images"
+    
+    class Meta:
+        verbose_name_plural = "Service Images"
+
+
+class ServiceBigImage(baseIDModel):
+    services = models.ForeignKey(Services, on_delete=models.CASCADE, 
+    null=True, blank=True, related_name="service_big_image")
+    service_big_img = models.ImageField(upload_to='services')
+
+    def __str__(self):
+        return "Service Big Image"
+    
+    class Meta:
+        verbose_name_plural = "Service Big Image"
+
+class ServiceRowTexts(baseIDModel):
+    services = models.ForeignKey(Services, on_delete=models.CASCADE,
+    null=True, blank=True, related_name="service_row_texts")
+    service_txts_rows = models.CharField(max_length=150)
+
+    def __str__(self):
+        return "Service Row Texts"
+    
+    class Meta:
+        verbose_name_plural = "Service Row Texts"
