@@ -92,6 +92,55 @@ class Cart(baseIDModel):
     def product_quantity_price(self):
         return self.quantity * self.product.product_discounted_price # pylint: disable=E1101
     
+class GST(baseIDModel):
+    name = models.CharField(max_length=50, default="Add GST Information", editable=False)
+
+    def __str__(self):
+        return str(self.name)
+    
+    class Meta:
+        verbose_name_plural = "GST"
+
+class GSTZeroPercent(baseIDModel):
+    gst = models.ForeignKey(GST, on_delete = models.CASCADE, default='')
+    product_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.gst)
+    
+    class Meta:
+        verbose_name_plural = "GST Zero Percent"
+
+class GSTFivePercent(baseIDModel):
+    gst = models.ForeignKey(GST, on_delete = models.CASCADE, default='')
+    product_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.gst)
+    
+    class Meta:
+        verbose_name_plural = "GST Five Percent"
+
+class GSTTwelvePercent(baseIDModel):
+    gst = models.ForeignKey(GST, on_delete = models.CASCADE, default='')
+    product_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.gst)
+    
+    class Meta:
+        verbose_name_plural = "GST Twelve Percent"
+
+class GSTEighteenPercent(baseIDModel):
+    gst = models.ForeignKey(GST, on_delete = models.CASCADE, default='')
+    product_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.gst)
+    
+    class Meta:
+        verbose_name_plural = "GST Eighteen Percent"
+    
 
 class OrderPlaced(baseIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
