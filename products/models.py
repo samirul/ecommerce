@@ -11,7 +11,7 @@ class Category(baseIDModel):
     slug = models.SlugField(unique=True, null=True, blank=True)
 
     def __str__(self):
-        return self.category_name
+        return str(self.category_name)
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.category_name)
@@ -23,7 +23,7 @@ class Subcategory(baseIDModel):
     slug = models.SlugField(unique=True, null=True, blank=True)
 
     def __str__(self):
-        return self.subcategory_name
+        return str(self.subcategory_name)
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.subcategory_name)
@@ -42,7 +42,7 @@ class ProductType(baseIDModel):
     product_type_name = models.CharField(max_length=150)
 
     def __str__(self):
-        return self.product_type_name
+        return str(self.product_type_name)
 
 class Product(baseIDModel):
     product_title = models.CharField(max_length=150)
@@ -59,7 +59,7 @@ class Product(baseIDModel):
     tags = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return self.product_title
+        return str(self.product_title)
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.product_title)
@@ -90,7 +90,7 @@ class Cart(baseIDModel):
 
     @property
     def product_quantity_price(self):
-        return self.quantity * self.product.product_discounted_price
+        return self.quantity * self.product.product_discounted_price # pylint: disable=E1101
     
 
 class OrderPlaced(baseIDModel):
