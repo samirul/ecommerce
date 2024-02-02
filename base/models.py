@@ -86,7 +86,7 @@ class Testimonial(baseIDModel):
     testimonial_name = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.testimonial_name
+        return str(self.testimonial_name)
 
 class AboutTestimonial(baseIDModel):
     tesimonial_name = models.ForeignKey(Testimonial, on_delete=models.CASCADE, null=True, blank=True, related_name="about_testimonial")
@@ -107,7 +107,7 @@ class Services(baseIDModel):
     description = models.TextField(max_length=300)
 
     def __str__(self):
-        return self.title
+        return str(self.title)
     
     class Meta:
         verbose_name_plural = "Services"
