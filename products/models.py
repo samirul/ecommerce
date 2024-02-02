@@ -1,8 +1,8 @@
 from django.db import models
+from django.utils.text import slugify
 from BaseID.models import baseIDModel
 from account.models import User
 from .choices import STATUS_CHOICES
-from django.utils.text import slugify
 
 
 class Category(baseIDModel):
