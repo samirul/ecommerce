@@ -87,11 +87,9 @@
                                 {{shipping_amount}}</span></li>
                         <li class="bold-checkout">Total Amount <i>-</i> <span id="total_amount">INR
                                 {{total_amount}}</span></li>
-                        <li class="bold-checkout">GST <i>-</i> <span id="gst">INR
-                                {{gst}}</span></li>
                         <li class="bold-checkout">Discount Applied <i>-</i> <span id="discounted_price">INR
                               {% if discounted_price %} -{{discounted_price}} {% else %} 0{% endif %}</span></li>
-                        <li class="bold-checkout">Total Prices(Including GST) <i>-</i> <span id="total_price">INR
+                        <li class="bold-checkout">Total Prices <i>-</i> <span id="total_price">INR
                                 {{total_price}}</span></li>
                     </ul>
 
@@ -192,7 +190,13 @@
                     document.getElementById('total_amount').innerText = "INR " + ValueData.total_amount
                     document.getElementById('total_price').innerText = "INR " + ValueData.total_price
                     document.getElementById('price').innerText = "INR " + ValueData.price
-                    document.getElementById('gst').innerText = "INR " + ValueData.gst
+                    if(ValueData.discounted_price){
+                        document.getElementById('discounted_price').innerText = "INR " + ValueData.discounted_price
+                    }else{
+                        document.getElementById('discounted_price').innerText = "INR " + 0
+                    }
+                    
+                    
 
                 }
 
@@ -232,7 +236,8 @@
                     document.getElementById('Cart-counts').innerText = ValueData.cart_count
                     document.getElementById('lblCartCount').innerText = ValueData.cart_count
                     document.getElementById('price').innerText = "INR " + ValueData.price
-                    document.getElementById('gst').innerText = "INR " + ValueData.gst
+
+                    
 
 
                 }
@@ -267,7 +272,7 @@
                     document.getElementById('Cart-counts').innerText = ValueData.cart_count
                     document.getElementById('lblCartCount').innerText = ValueData.cart_count
                     document.getElementById('price').innerText = "INR " + ValueData.price
-                    document.getElementById('gst').innerText = "INR " + ValueData.gst
+                    
                 }
             })
 

@@ -46,43 +46,5 @@ class ShippingPriceCalculator:
         
 
 
-class GSTCalculator:
-    def __init__(self, request, total_price):
-        self.products = Cart.objects.filter(user=request.user)
-        self.gst_zero_percent = ['Vegetables', 'Fruits', 'Cereals', 'Meat', 'Fish', 'Poultry']
-        self.gst_five_percent = ['Tea', 'Coffee', 'Edible oil', 'Sugar', 'Spices']
-        self.gst_twelve_percent = ['']
-        self.gst_eighteen_percent = ['']
-        self.total_price = total_price
-        self.gst = 0
-        self.gst_price = 0
-        self.total_price_after_gst = 0
-            
-    def calculate(self):
-        try:
-            for product in self.products:
-                if product.product.product_type.product_type_name in self.gst_zero_percent:
-                    self.gst_price += self.total_price * (self.gst/100)
-                    self.total_price_after_gst += self.gst_price + self.total_price
-                
-                elif product.product.product_type.product_type_name in self.gst_five_percent:
-                    self.gst = 5
-                    self.gst_price += self.total_price * (self.gst/100)
-                    self.total_price_after_gst += self.gst_price + self.total_price
-                
-                elif product.product.product_type.product_type_name in self.gst_twelve_percent:
-                    self.gst = 12
-                    self.gst_price += self.total_price * (self.gst/100)
-                    self.total_price_after_gst += self.gst_price + self.total_price
-                
-                elif product.product.product_type.product_type_name in self.gst_eighteen_percent:
-                    self.gst = 18
-                    self.gst_price += self.total_price * (self.gst/100)
-                    self.total_price_after_gst += self.gst_price + self.total_price
 
-            return self.gst_price, self.total_price_after_gst
-        except Exception:
-            self.total_price_after_gst = self.total_price
-            return self.gst_price, self.total_price_after_gst
-            
                          
