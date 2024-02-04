@@ -38,6 +38,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% if checkout %}
                         {% for check in checkout %}
                         <tr class="rem1">
                             <td class="invert">{{forloop.counter}}</td>
@@ -66,6 +67,11 @@
                             </td>
                         </tr>
                         {% endfor %}
+                        {% else %}
+                        <tr class="cart-empty">
+                            <td colspan="6">Your cart is empty</td>
+                        </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
@@ -88,7 +94,7 @@
                         <li class="bold-checkout">Total Amount <i>-</i> <span id="total_amount">INR
                                 {{total_amount}}</span></li>
                         <li class="bold-checkout">Discount Applied <i>-</i> <span id="discounted_price">INR
-                              {% if discounted_price %} -{{discounted_price}} {% else %} 0{% endif %}</span></li>
+                                {% if discounted_price %} -{{discounted_price}} {% else %} 0{% endif %}</span></li>
                         <li class="bold-checkout">Total Prices <i>-</i> <span id="total_price">INR
                                 {{total_price}}</span></li>
                     </ul>
@@ -190,13 +196,12 @@
                     document.getElementById('total_amount').innerText = "INR " + ValueData.total_amount
                     document.getElementById('total_price').innerText = "INR " + ValueData.total_price
                     document.getElementById('price').innerText = "INR " + ValueData.price
-                    if(ValueData.discounted_price){
+
+                    if (ValueData.discounted_price) {
                         document.getElementById('discounted_price').innerText = "INR " + ValueData.discounted_price
-                    }else{
+                    } else {
                         document.getElementById('discounted_price').innerText = "INR " + 0
                     }
-                    
-                    
 
                 }
 
@@ -237,7 +242,7 @@
                     document.getElementById('lblCartCount').innerText = ValueData.cart_count
                     document.getElementById('price').innerText = "INR " + ValueData.price
 
-                    
+
 
 
                 }
@@ -272,7 +277,7 @@
                     document.getElementById('Cart-counts').innerText = ValueData.cart_count
                     document.getElementById('lblCartCount').innerText = ValueData.cart_count
                     document.getElementById('price').innerText = "INR " + ValueData.price
-                    
+
                 }
             })
 
