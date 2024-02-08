@@ -135,8 +135,6 @@ class CheckoutsView(LoginRequiredMixin, View):
         for coupon in coupons:
             if coupon.coupon:
                 context["total_price"] = total_price - coupon.coupon.discount_price
-                # coupon.total_price = total_price
-                # coupon.save()
                 context["discounted_price"] = coupon.coupon.discount_price
 
         return render(request, "products/checkout.html", context=context)
@@ -197,8 +195,6 @@ class RemoveCartView(LoginRequiredMixin, View):
         for coupon in checkouts:
             if coupon.coupon:
                 data["total_price"] = total_price - coupon.coupon.discount_price
-                # coupon.total_price = total_price
-                # coupon.save()
                 data["discounted_price"] = coupon.coupon.discount_price
 
         return JsonResponse(data)
@@ -237,8 +233,6 @@ class PlusQuantityView(LoginRequiredMixin, View):
         for coupon in checkouts:
             if coupon.coupon:
                 data["total_price"] = total_price - coupon.coupon.discount_price
-                # coupon.total_price = total_price
-                # coupon.save()
                 data["discounted_price"] = coupon.coupon.discount_price
 
         return JsonResponse(data)
@@ -278,12 +272,15 @@ class MinusQuantityView(LoginRequiredMixin, View):
         for coupon in checkouts:
             if coupon.coupon:
                 data["total_price"] = total_price - coupon.coupon.discount_price
-                # coupon.total_price = total_price
-                # coupon.save()
                 data["discounted_price"] = coupon.coupon.discount_price
 
         return JsonResponse(data)
-    
+
+class PaymentView(LoginRequiredMixin, View):
+    def post(self, request):
+        total_price = request.POST.get('total_price')
+        print(total_price)
+        return redirect('checkout')   
 
 class PurchasePageView(LoginRequiredMixin, View):
     def get(self, request):

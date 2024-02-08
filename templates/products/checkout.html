@@ -143,10 +143,16 @@
                                 <a href="{% url 'remove_coupon' cart.uid %}" class="btn btn-success">{{cart.coupon.coupon_code}}</a>
                             {% endif %} -->
                         </div>
-                        <a href="#">Cash On Delivery <span class="glyphicon glyphicon-chevron-right"
+                        <div class="pay-details">
+                            <a href="#" id="cod-button">Cash On Delivery <span class="glyphicon glyphicon-chevron-right"
+                                    aria-hidden="true"></span></a>
+                            <form id="form-payment" method="post" action="{% url 'payment' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="total_price" value="{{total_price}}" id="total_id">
+                                <a href="#" id="pay-button">Pay Online <span class="glyphicon glyphicon-chevron-right"
                                 aria-hidden="true"></span></a>
-                        <a href="#">Pay Online <span class="glyphicon glyphicon-chevron-right"
-                                aria-hidden="true"></span></a>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
@@ -164,6 +170,11 @@
 
 
 <script>
+
+    document.getElementById('pay-button').addEventListener("click", function(e){
+        var getForm = document.getElementById('form-payment');
+        getForm.submit();
+    })
 
     //  Remove Product Items
 
@@ -353,6 +364,15 @@
 
     .txt-coupon span {
         font-weight: 600;
+    }
+
+    .pay-details{
+        display: flex;
+        gap: 5px;
+    }
+
+    #form-payment{
+        display: flex;
     }
 
 </style>
