@@ -40,38 +40,6 @@ class CouponAdmin(admin.ModelAdmin):
         "id","coupon_code", "is_expired"
     ]
 
-class GSTFivePercentAdmin(admin.StackedInline):
-    model = GSTFivePercent
-    extra = 1
-    max_num = 12
-
-class GSTTwelvePercentAdmin(admin.StackedInline):
-    model = GSTTwelvePercent
-    extra = 1
-    max_num = 12
-
-class GSTEighteenPercentAdmin(admin.StackedInline):
-    model = GSTEighteenPercent
-    extra = 1
-    max_num = 12
-
-
-class GSTZeroPercentAdmin(admin.StackedInline):
-    model = GSTZeroPercent
-    extra = 1
-    max_num = 12
-    
-
-
-class GSTAdmin(admin.ModelAdmin):
-    list_display = [
-        "id", "name"
-    ]
-
-    inlines = [GSTZeroPercentAdmin, GSTFivePercentAdmin, GSTTwelvePercentAdmin, GSTEighteenPercentAdmin]
-
-
-
 admin.site.register(ProductType)
-admin.site.register(GST, GSTAdmin)
+
 

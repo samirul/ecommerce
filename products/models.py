@@ -9,6 +9,7 @@ class Category(baseIDModel):
     category_name = models.CharField(max_length=150)
     category_description = models.CharField(max_length=150)
     slug = models.SlugField(unique=True, null=True, blank=True)
+    objects = models.Manager()
 
     def __str__(self):
         return str(self.category_name)
@@ -21,6 +22,7 @@ class Subcategory(baseIDModel):
     subcategory_name = models.CharField(max_length=150)
     categories = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='sub_categories')
     slug = models.SlugField(unique=True, null=True, blank=True)
+    objects = models.Manager()
 
     def __str__(self):
         return str(self.subcategory_name)
@@ -33,6 +35,7 @@ class Subcategory(baseIDModel):
 class Tag(baseIDModel):
     innerTag = models.CharField(max_length=150, null=True, blank=True)
     homeTag = models.CharField(max_length=150, null=True, blank=True)
+    objects = models.Manager()
 
     def __str__(self):
         return f"{self.innerTag}, {self.homeTag}"
@@ -40,6 +43,7 @@ class Tag(baseIDModel):
 
 class ProductType(baseIDModel):
     product_type_name = models.CharField(max_length=150)
+    objects = models.Manager()
 
     def __str__(self):
         return str(self.product_type_name)
@@ -57,6 +61,7 @@ class Product(baseIDModel):
     categories = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='product_categories')
     subcategories = models.ForeignKey(Subcategory, on_delete=models.CASCADE, null=True, blank=True)
     tags = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True, blank=True)
+    objects = models.Manager()
 
     def __str__(self):
         return str(self.product_title)
@@ -71,6 +76,7 @@ class Coupon(baseIDModel):
     is_expired = models.BooleanField(default=False)
     discount_price = models.IntegerField(default=0)
     minimum_amount = models.IntegerField(default=0)
+    objects = models.Manager()
 
 
 class Cart(baseIDModel):
@@ -79,6 +85,7 @@ class Cart(baseIDModel):
     quantity = models.PositiveIntegerField(default=1)
     coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
     is_paid = models.BooleanField(default=False)
+    objects = models.Manager()
     
     def __str__(self):
         return str(self.id)
@@ -92,55 +99,6 @@ class Cart(baseIDModel):
     def product_quantity_price(self):
         return self.quantity * self.product.product_discounted_price # pylint: disable=E1101
     
-class GST(baseIDModel):
-    name = models.CharField(max_length=50, default="Add GST Information", editable=False)
-
-    def __str__(self):
-        return str(self.name)
-    
-    class Meta:
-        verbose_name_plural = "GST"
-
-class GSTZeroPercent(baseIDModel):
-    gst = models.ForeignKey(GST, on_delete = models.CASCADE, default='')
-    product_name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return str(self.gst)
-    
-    class Meta:
-        verbose_name_plural = "GST Zero Percent"
-
-class GSTFivePercent(baseIDModel):
-    gst = models.ForeignKey(GST, on_delete = models.CASCADE, default='')
-    product_name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return str(self.gst)
-    
-    class Meta:
-        verbose_name_plural = "GST Five Percent"
-
-class GSTTwelvePercent(baseIDModel):
-    gst = models.ForeignKey(GST, on_delete = models.CASCADE, default='')
-    product_name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return str(self.gst)
-    
-    class Meta:
-        verbose_name_plural = "GST Twelve Percent"
-
-class GSTEighteenPercent(baseIDModel):
-    gst = models.ForeignKey(GST, on_delete = models.CASCADE, default='')
-    product_name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return str(self.gst)
-    
-    class Meta:
-        verbose_name_plural = "GST Eighteen Percent"
-    
 
 class OrderPlaced(baseIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -148,6 +106,7 @@ class OrderPlaced(baseIDModel):
     quantity = models.PositiveIntegerField(default=1)
     ordered_date =models.DateTimeField(auto_now_add=True)
     status =models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pending')
+    objects = models.Manager()
 
     def __str__(self):
         return str(self.id)

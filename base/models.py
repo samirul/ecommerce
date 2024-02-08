@@ -8,6 +8,7 @@ class HomeSlider(baseIDModel):
     title_3 = models.CharField(max_length=150)
     img_slide_code = models.IntegerField(null=True, blank=True)
     url_button_link = models.CharField(max_length=60, default='products')
+    objects = models.Manager()
 
     def __str__(self):
         return f"{self.title_1} {self.title_2} {self.title_3}"
@@ -23,6 +24,7 @@ class HomeMiddleBanner(baseIDModel):
     title_2 = models.CharField(max_length=150, null=True, blank=True)
     title_3 = models.CharField(max_length=150, null=True, blank=True)
     i_tag_title_4 = models.CharField(max_length=150, null=True, blank=True)
+    objects = models.Manager()
 
 
     class Meta:
@@ -35,6 +37,7 @@ class ContactUS(baseIDModel):
     email = models.EmailField(max_length=200)
     subject = models.CharField(max_length=255)
     message = models.TextField(max_length=2000)
+    objects = models.Manager()
 
     def __str__(self):
         return f"{self.name} {self.email}"
@@ -47,6 +50,7 @@ class ContactInfo(baseIDModel):
     address = models.CharField(max_length=255)
     email = models.EmailField(max_length=200)
     call_to_us = models.IntegerField()
+    objects = models.Manager()
 
     def __str__(self):
         return f"{self.address}  {self.email}  {str(self.call_to_us)}"
@@ -60,6 +64,7 @@ class ContactInfo(baseIDModel):
 class AboutInfo(baseIDModel):
     information = models.TextField(max_length=2000)
     about_img = models.ImageField(upload_to="about")
+    objects = models.Manager()
     
     def __str__(self):
         return "About Info"
@@ -73,6 +78,7 @@ class AboutInfo(baseIDModel):
 class AboutUs(baseIDModel):
     about_info = models.ForeignKey(AboutInfo, on_delete=models.CASCADE, null=True, blank=True, related_name='about_us')
     list_info = models.CharField(max_length=255, null=True, blank=True)
+    objects = models.Manager()
 
     def __str__(self):
         return "About Us"
@@ -84,6 +90,7 @@ class AboutUs(baseIDModel):
 
 class Testimonial(baseIDModel):
     testimonial_name = models.CharField(max_length=100)
+    objects = models.Manager()
 
     def __str__(self):
         return str(self.testimonial_name)
@@ -93,6 +100,7 @@ class AboutTestimonial(baseIDModel):
     testimonials_text = models.TextField(max_length=400)
     testimonial_Writter = models.CharField(max_length=150)
     testimonial_Writter_category = models.CharField(max_length=100, default="Customer")
+    objects = models.Manager()
 
     def __str__(self):
         return "About Testimonials"
@@ -105,6 +113,7 @@ class AboutTestimonial(baseIDModel):
 class Services(baseIDModel):
     title = models.CharField(max_length=150)
     description = models.TextField(max_length=300)
+    objects = models.Manager()
 
     def __str__(self):
         return str(self.title)
@@ -116,6 +125,7 @@ class ServiceImages(baseIDModel):
     services = models.ForeignKey(Services, on_delete=models.CASCADE, 
     null=True, blank=True, related_name="service_images")
     services_imgs = models.ImageField(upload_to='services')
+    objects = models.Manager()
 
     def __str__(self):
         return "Service Images"
@@ -128,6 +138,7 @@ class ServiceBigImage(baseIDModel):
     services = models.ForeignKey(Services, on_delete=models.CASCADE, 
     null=True, blank=True, related_name="service_big_image")
     service_big_img = models.ImageField(upload_to='services')
+    objects = models.Manager()
 
     def __str__(self):
         return "Service Big Image"
@@ -139,6 +150,7 @@ class ServiceRowTexts(baseIDModel):
     services = models.ForeignKey(Services, on_delete=models.CASCADE,
     null=True, blank=True, related_name="service_row_texts")
     service_txts_rows = models.CharField(max_length=150)
+    objects = models.Manager()
 
     def __str__(self):
         return "Service Row Texts"
