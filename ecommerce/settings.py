@@ -158,3 +158,11 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 EMAIL_USE_TLS = True
+
+
+# Razorpay_integration
+RAZORPAY_API_KEY = 'rzp_test_QyeNC0G1zPwYWR'
+RAZORPAY_API_SECRET = 'aNWnX0f1NXitRQzhtCiVTPqT'
+
+# To Enable Popups in Django or else it will block the payment popup
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"

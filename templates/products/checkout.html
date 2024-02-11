@@ -149,8 +149,12 @@
                             <form id="form-payment" method="post" action="{% url 'payment' %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="total_price" value="{{total_price}}" id="total_id">
-                                <a href="#" id="pay-button">Pay Online <span class="glyphicon glyphicon-chevron-right"
-                                aria-hidden="true"></span></a>
+                                {% for customer_info in customer %}
+                                <input type="hidden" name="customer_name"
+                                    value="{{customer_info.first_name}} {{customer_info.last_name}}" id="total_id">
+                                {% endfor %}
+                                <a href="#" id="pay-details">Pay Online <span class="glyphicon glyphicon-chevron-right"
+                                        aria-hidden="true"></span></a>
                             </form>
                         </div>
                     </div>
@@ -167,11 +171,9 @@
 </div>
 <!-- //banner -->
 
-
-
 <script>
 
-    document.getElementById('pay-button').addEventListener("click", function(e){
+    document.getElementById('pay-details').addEventListener("click", function (e) {
         var getForm = document.getElementById('form-payment');
         getForm.submit();
     })
@@ -366,12 +368,12 @@
         font-weight: 600;
     }
 
-    .pay-details{
+    .pay-details {
         display: flex;
         gap: 5px;
     }
 
-    #form-payment{
+    #form-payment {
         display: flex;
     }
 

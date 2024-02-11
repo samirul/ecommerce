@@ -1,7 +1,10 @@
+import pdb
+import razorpay
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.http.response import JsonResponse
 from django.views import View
+from django.conf import settings
 
 from basket.basket import NavBar_Basket_count
 from .models import Category, Product, Cart, Coupon
@@ -10,7 +13,6 @@ from django.db.models import Q, Avg
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-import pdb
 
 from basket.checkout import PriceCalculate, ShippingPriceCalculator
 
@@ -277,10 +279,34 @@ class MinusQuantityView(LoginRequiredMixin, View):
         return JsonResponse(data)
 
 class PaymentView(LoginRequiredMixin, View):
+    
     def post(self, request):
-        total_price = request.POST.get('total_price')
-        print(total_price)
-        return redirect('checkout')   
+        total_price = float(request.POST.get('total_price'))
+        total_prices = int(total_price * 100)
+        customer_name = request.POST.get('customer_name')
+        customer_email = request.user.email
+        client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+
+        payment_data = {
+            "amount" : total_prices,
+            "currency": "INR",
+            "payment_capture" : 1
+        }
+
+        order = client.order.create(data=payment_data)
+
+        print(order)
+
+        order_id = order['id']
+
+        context = {
+            'order_id': order_id,
+            'amount': total_prices,
+            'name': customer_name,
+            'email': customer_email
+        }
+
+        return render(request, 'products/payment.html', context=context)   
 
 class PurchasePageView(LoginRequiredMixin, View):
     def get(self, request):
