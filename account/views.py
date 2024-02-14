@@ -83,10 +83,12 @@ class loginViews(View):
         
         if not User.objects.filter(email=email).exists():
              messages.info(request, f"{email} - Email isn't Registered, Please Register Your Account First.")
+             return HttpResponseRedirect(request.path_info)
 
         user = User.objects.get(email=email)
         if user.is_active is False:
             messages.info(request, f"{email} - Email isn't Verified, Please Check Your Email And Verify Your Account First.")
+            return HttpResponseRedirect(request.path_info)
         else:
             auth_user = authenticate(username=email, password=password)
 
