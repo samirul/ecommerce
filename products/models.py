@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from BaseID.models import baseIDModel
-from account.models import User
+from account.models import User, Customer
 from .choices import STATUS_CHOICES
 
 
@@ -47,6 +47,9 @@ class ProductType(baseIDModel):
 
     def __str__(self):
         return str(self.product_type_name)
+    
+    class Meta:
+        verbose_name_plural = "Product Types"
 
 class Product(baseIDModel):
     product_title = models.CharField(max_length=150)
@@ -83,8 +86,8 @@ class Cart(baseIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    price = models.FloatField(default=0)
     coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
-    is_paid = models.BooleanField(default=False)
     objects = models.Manager()
     
     def __str__(self):
@@ -102,11 +105,16 @@ class Cart(baseIDModel):
 
 class OrderPlaced(baseIDModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     ordered_date =models.DateTimeField(auto_now_add=True)
-    status =models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pending')
+    is_payment_accepted = models.BooleanField(default=False)
+    status =models.CharField(max_length=50, choices=STATUS_CHOICES, default='Accepted')
     objects = models.Manager()
 
     def __str__(self):
-        return str(self.id)
+        return str(self.product.product_title)
+    
+    class Meta:
+        verbose_name_plural = "Ordered Items"

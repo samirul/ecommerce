@@ -33,6 +33,7 @@ class UserManager(BaseUserManager):
         )
         
         user.is_admin = True
+        user.is_active = True
         user.save(using=self._db)
         return user
     
@@ -104,6 +105,9 @@ class Customer(baseIDModel):
     state = models.CharField(max_length=200, choices=STATE_CHOICES)
     pincode = models.IntegerField(default=0)
     objects = models.Manager()
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
     
 
 

@@ -40,6 +40,19 @@ class CouponAdmin(admin.ModelAdmin):
         "id","coupon_code", "is_expired"
     ]
 
+@admin.register(OrderPlaced)
+class OrderPlacedAdmin(admin.ModelAdmin):
+    list_display = [
+        "id", "user", "customer", "product", "quantity", "is_payment_accepted","ordered_date"
+    ]
+    readonly_fields = [
+        "id", "user", "customer", "product", "quantity", "is_payment_accepted"
+    ]
+    def has_add_permission(self, request, obj=None):
+        return False
+
 admin.site.register(ProductType)
+
+# admin.site.register(OrderPlaced)
 
 

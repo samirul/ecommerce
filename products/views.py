@@ -1,13 +1,13 @@
 import pdb
 import razorpay
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.http.response import JsonResponse
 from django.views import View
 from django.conf import settings
 
 from basket.basket import NavBar_Basket_count
-from .models import Category, Product, Cart, Coupon
+from .models import Category, Product, Cart, Coupon, OrderPlaced
 from account.models import Customer
 from django.db.models import Q, Avg
 
@@ -15,6 +15,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from basket.checkout import PriceCalculate, ShippingPriceCalculator
+
 
 
 
@@ -120,6 +121,7 @@ class CheckoutsView(LoginRequiredMixin, View):
         shipping_amount = shipping_amount_calculator.shipping_calculate()
         price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
         price, total_price = price_calculate.calculate()
+        
 
         context ={
             "cart_count" : cart_count.calculate(),
@@ -133,17 +135,21 @@ class CheckoutsView(LoginRequiredMixin, View):
 
         }
 
-        coupons = Cart.objects.filter(user=request.user, is_paid=False)
+        coupons = Cart.objects.filter(user=request.user)
         for coupon in coupons:
+            coupon.price = total_price
+            coupon.save()
             if coupon.coupon:
                 context["total_price"] = total_price - coupon.coupon.discount_price
                 context["discounted_price"] = coupon.coupon.discount_price
+                coupon.price = total_price - coupon.coupon.discount_price
+                coupon.save()
 
         return render(request, "products/checkout.html", context=context)
     
     def post(self, request):
         coupon_code = request.POST.get('coupon-code')
-        cart_items = Cart.objects.filter(is_paid=False, user=request.user)
+        cart_items = Cart.objects.filter(user=request.user)
         find_coupon_code = Coupon.objects.filter(coupon_code__iexact=coupon_code)
 
         if not find_coupon_code.exists():
@@ -189,8 +195,10 @@ class RemoveCartView(LoginRequiredMixin, View):
             "price" : price,
         }
 
-        checkouts = Cart.objects.filter(user=request.user, is_paid=False)
+        checkouts = Cart.objects.filter(user=request.user)
         for check in checkouts:
+            check.price = total_price
+            check.save()
             data["checkout"].append(check.product.product_title)
             data["product_quantity_price"].append(check.product_quantity_price)
 
@@ -198,6 +206,8 @@ class RemoveCartView(LoginRequiredMixin, View):
             if coupon.coupon:
                 data["total_price"] = total_price - coupon.coupon.discount_price
                 data["discounted_price"] = coupon.coupon.discount_price
+                coupon.price = total_price - coupon.coupon.discount_price
+                coupon.save()
 
         return JsonResponse(data)
     
@@ -227,8 +237,10 @@ class PlusQuantityView(LoginRequiredMixin, View):
             "cart_count" : cart_count.calculate(),
         }
 
-        checkouts = Cart.objects.filter(user=request.user, is_paid=False)
+        checkouts = Cart.objects.filter(user=request.user)
         for check in checkouts:
+            check.price = total_price
+            check.save()
             data["checkout"].append(check.product.product_title)
             data["product_quantity_price"].append(check.product_quantity_price)
 
@@ -236,6 +248,8 @@ class PlusQuantityView(LoginRequiredMixin, View):
             if coupon.coupon:
                 data["total_price"] = total_price - coupon.coupon.discount_price
                 data["discounted_price"] = coupon.coupon.discount_price
+                coupon.price = total_price - coupon.coupon.discount_price
+                coupon.save()
 
         return JsonResponse(data)
 
@@ -266,8 +280,10 @@ class MinusQuantityView(LoginRequiredMixin, View):
             "cart_count" : cart_count.calculate(),
         }
 
-        checkouts = Cart.objects.filter(user=request.user, is_paid=False)
+        checkouts = Cart.objects.filter(user=request.user)
         for check in checkouts:
+            check.price = total_price
+            check.save()
             data["checkout"].append(check.product.product_title)
             data["product_quantity_price"].append(check.product_quantity_price)
 
@@ -275,42 +291,65 @@ class MinusQuantityView(LoginRequiredMixin, View):
             if coupon.coupon:
                 data["total_price"] = total_price - coupon.coupon.discount_price
                 data["discounted_price"] = coupon.coupon.discount_price
+                coupon.price = total_price - coupon.coupon.discount_price
+                coupon.save()
 
         return JsonResponse(data)
 
+
+
 class PaymentView(LoginRequiredMixin, View):
-    
     def post(self, request):
-        total_price = float(request.POST.get('total_price'))
-        total_prices = int(total_price * 100)
+        cart = Cart.objects.filter(user=request.user).last()
+        cart_price = int(cart.price * 100)
         customer_name = request.POST.get('customer_name')
         customer_email = request.user.email
         client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
 
         payment_data = {
-            "amount" : total_prices,
+            "amount" : cart_price,
             "currency": "INR",
             "payment_capture" : 1
         }
 
         order = client.order.create(data=payment_data)
 
-        print(order)
-
         order_id = order['id']
 
         context = {
             'order_id': order_id,
-            'amount': total_prices,
+            'amount': cart_price,
             'name': customer_name,
             'email': customer_email
         }
 
         return render(request, 'products/payment.html', context=context)   
 
-class PurchasePageView(LoginRequiredMixin, View):
+class OrderedPageView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, "products/purchase.html")
+        try:
+            cart = Cart.objects.filter(user=request.user)
+            customer = Customer.objects.filter(user=request.user)
+            razorpay_payment_id = request.GET.get('razorpay_payment_id')
+            razorpay_order_id = request.GET.get('razorpay_order_id')
+            if razorpay_payment_id and razorpay_order_id is not None:
+                for items in cart:
+                    for custom in customer:
+                        OrderPlaced.objects.create(user=request.user, customer = custom, product= items.product, quantity= items.quantity, is_payment_accepted = True)
+                cart.delete()
+
+            return HttpResponse("Payment Success")
+        except Exception:
+            return HttpResponse("Something Wrong")
+
+
+class OrderedPageFailedView(LoginRequiredMixin, View):
+    def get(self, request):
+        error_metadata_payment_id = request.GET.get('error_metadata_payment_id')
+        error_metadata_order_id = request.GET.get('error_metadata_order_id')
+        if error_metadata_payment_id and error_metadata_order_id is not None:
+            return HttpResponse("Payment Failed, Please Try again")
+        
 
 
 

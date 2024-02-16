@@ -146,9 +146,9 @@
                         <div class="pay-details">
                             <a href="#" id="cod-button">Cash On Delivery <span class="glyphicon glyphicon-chevron-right"
                                     aria-hidden="true"></span></a>
-                            <form id="form-payment" method="post" action="{% url 'payment' %}">
+                            <form id="form-payment" method="POST" action="{% url 'payment' %}">
                                 {% csrf_token %}
-                                <input type="hidden" name="total_price" value="{{total_price}}" id="total_id">
+                                <input type="hidden" name="final_price" value="{{total_price}}" id="total_id">
                                 {% for customer_info in customer %}
                                 <input type="hidden" name="customer_name"
                                     value="{{customer_info.first_name}} {{customer_info.last_name}}" id="total_id">
@@ -177,6 +177,8 @@
         var getForm = document.getElementById('form-payment');
         getForm.submit();
     })
+
+
 
     //  Remove Product Items
 
