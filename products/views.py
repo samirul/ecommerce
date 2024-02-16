@@ -303,6 +303,7 @@ class PaymentView(LoginRequiredMixin, View):
         cart = Cart.objects.filter(user=request.user).last()
         cart_price = int(cart.price * 100)
         customer_name = request.POST.get('customer_name')
+        customer_phone = request.POST.get('customer_phone')
         customer_email = request.user.email
         client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
 
@@ -320,7 +321,8 @@ class PaymentView(LoginRequiredMixin, View):
             'order_id': order_id,
             'amount': cart_price,
             'name': customer_name,
-            'email': customer_email
+            'email': customer_email,
+            'phone': customer_phone
         }
 
         return render(request, 'products/payment.html', context=context)   

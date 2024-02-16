@@ -152,6 +152,8 @@
                                 {% for customer_info in customer %}
                                 <input type="hidden" name="customer_name"
                                     value="{{customer_info.first_name}} {{customer_info.last_name}}" id="total_id">
+                                <input type="hidden" name="customer_phone"
+                                    value="{{customer_info.phone}}" id="total_id">
                                 {% endfor %}
                                 <a href="#" id="pay-details">Pay Online <span class="glyphicon glyphicon-chevron-right"
                                         aria-hidden="true"></span></a>
