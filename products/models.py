@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from BaseID.models import baseIDModel
 from account.models import User, Customer
-from .choices import STATUS_CHOICES
+from .choices import PAYMENT_METHOD, STATUS_CHOICES
 
 
 class Category(baseIDModel):
@@ -110,6 +110,7 @@ class OrderPlaced(baseIDModel):
     quantity = models.PositiveIntegerField(default=1)
     ordered_date =models.DateTimeField(auto_now_add=True)
     is_payment_accepted = models.BooleanField(default=False)
+    payment_method = models.CharField(max_length=100, choices=PAYMENT_METHOD, default='')
     status =models.CharField(max_length=50, choices=STATUS_CHOICES, default='Accepted')
     objects = models.Manager()
 

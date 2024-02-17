@@ -299,11 +299,11 @@ class MinusQuantityView(LoginRequiredMixin, View):
 
 
 class PaymentView(LoginRequiredMixin, View):
-    def post(self, request):
+    def get(self, request):
         cart = Cart.objects.filter(user=request.user).last()
         cart_price = int(cart.price * 100)
-        customer_name = request.POST.get('customer_name')
-        customer_phone = request.POST.get('customer_phone')
+        customer_name = request.GET.get('customer_name')
+        customer_phone = request.GET.get('customer_phone')
         customer_email = request.user.email
         client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
 
@@ -337,12 +337,18 @@ class OrderedPageView(LoginRequiredMixin, View):
             if razorpay_payment_id and razorpay_order_id is not None:
                 for items in cart:
                     for custom in customer:
-                        OrderPlaced.objects.create(user=request.user, customer = custom, product= items.product, quantity= items.quantity, is_payment_accepted = True)
+                        OrderPlaced.objects.create(
+                        user=request.user,
+                        customer = custom,
+                        product= items.product,
+                        quantity= items.quantity,
+                        is_payment_accepted = True,
+                        payment_method='Online Payment')
                 cart.delete()
 
             return HttpResponse("Payment Success")
         except Exception:
-            return HttpResponse("Something Wrong")
+            return HttpResponse("Something is Wrong")
 
 
 class OrderedPageFailedView(LoginRequiredMixin, View):
@@ -353,5 +359,26 @@ class OrderedPageFailedView(LoginRequiredMixin, View):
             return HttpResponse("Payment Failed, Please Try again")
         
 
+
+
+class OrderedPageCODView(LoginRequiredMixin, View):
+    def get(self, request):
+        try:
+            cart = Cart.objects.filter(user=request.user)
+            customer = Customer.objects.filter(user=request.user)
+
+            for items in cart:
+                for custom in customer:
+                    OrderPlaced.objects.create(
+                    user=request.user,
+                    customer = custom,
+                    product= items.product,
+                    quantity= items.quantity,
+                    is_payment_accepted = False,
+                    payment_method='Cash on Delivery')
+            cart.delete()
+            return HttpResponse("Thank you for Ordering")
+        except Exception:
+            return HttpResponse("Something is Wrong")
 
 

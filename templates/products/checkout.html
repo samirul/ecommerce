@@ -144,11 +144,11 @@
                             {% endif %} -->
                         </div>
                         <div class="pay-details">
-                            <a href="#" id="cod-button">Cash On Delivery <span class="glyphicon glyphicon-chevron-right"
-                                    aria-hidden="true"></span></a>
-                            <form id="form-payment" method="POST" action="{% url 'payment' %}">
+                            <a href="{% url 'order-placed-cod' %}" id="cod-button">Cash On Delivery <span class="glyphicon glyphicon-chevron-right"
+                                aria-hidden="true"></span></a>
+                            
+                            <form id="form-payment" method="GET" action="{% url 'payment' %}">
                                 {% csrf_token %}
-                                <input type="hidden" name="final_price" value="{{total_price}}" id="total_id">
                                 {% for customer_info in customer %}
                                 <input type="hidden" name="customer_name"
                                     value="{{customer_info.first_name}} {{customer_info.last_name}}" id="total_id">

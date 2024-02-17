@@ -46,7 +46,7 @@ class OrderPlacedAdmin(admin.ModelAdmin):
         "id", "user", "customer", "product", "quantity", "is_payment_accepted","ordered_date"
     ]
     readonly_fields = [
-        "id", "user", "customer", "product", "quantity", "is_payment_accepted"
+        "id", "user", "customer", "product", "quantity", "is_payment_accepted", "payment_method"
     ]
     def has_add_permission(self, request, obj=None):
         return False

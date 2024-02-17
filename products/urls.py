@@ -14,5 +14,6 @@ urlpatterns = [
     path("payment/", views.PaymentView.as_view(), name='payment'),
     path("order-placed/", views.OrderedPageView.as_view(), name='order-placed'),
     path("payment-failed/", views.OrderedPageFailedView.as_view(), name='payment-failed'),
+    path("order-placed-cod/", views.OrderedPageCODView.as_view(), name='order-placed-cod'),
     
 ]
