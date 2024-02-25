@@ -12,7 +12,7 @@ SECRET_KEY = "django-insecure-&pnd=yyuaymxgy3w9u2tmxom3=umucb)a7%4i$8k8jqkw_bz5q
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost','.ngrok.io','.ngrok-free.app']
 
 INSTALLED_APPS = [
     "jazzmin",
@@ -167,3 +167,8 @@ RAZORPAY_API_SECRET = 'aNWnX0f1NXitRQzhtCiVTPqT'
 
 # To Enable Popups in Django or else it will block the payment popup
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.ngrok-free.app"
+]

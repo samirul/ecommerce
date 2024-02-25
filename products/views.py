@@ -15,6 +15,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from basket.checkout import PriceCalculate, ShippingPriceCalculator
+from basket.checkoutExtraItemsView import CheckoutsExtraTemplateItemViews
 
 
 
@@ -178,36 +179,30 @@ class RemoveCartView(LoginRequiredMixin, View):
         product_id = request.GET['product_id']
         cart_ = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
         cart_.delete()
-        cart_count = NavBar_Basket_count(request=request)
-        cart_product_items = [items for items in Cart.objects.all() if items.user == request.user]
-        shipping_amount_calculator = ShippingPriceCalculator(request=request, cart_product_items=cart_product_items, shipping_amount=50)
-        shipping_amount = shipping_amount_calculator.shipping_calculate()
-        price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
-        price, total_price = price_calculate.calculate()
+
+        checkouts_extra_template_items = CheckoutsExtraTemplateItemViews(request=request)
+
+        (shipping_amount,
+        price,
+        total_price,
+        cart_count,
+        checkout_product_titles,
+        product_quantity_price) = checkouts_extra_template_items.cartExtraDataItems()
 
         data = {
             "Cart_update" : cart_count.calculate(),
             "shipping_amount" : shipping_amount,
-            "checkout": [],
-            "product_quantity_price": [],
+            "checkout": checkout_product_titles,
+            "product_quantity_price": product_quantity_price,
             "total_amount": total_price,
             "total_price": total_price,
             "price" : price,
         }
 
-        checkouts = Cart.objects.filter(user=request.user)
-        for check in checkouts:
-            check.price = total_price
-            check.save()
-            data["checkout"].append(check.product.product_title)
-            data["product_quantity_price"].append(check.product_quantity_price)
-
-        for coupon in checkouts:
-            if coupon.coupon:
-                data["total_price"] = total_price - coupon.coupon.discount_price
-                data["discounted_price"] = coupon.coupon.discount_price
-                coupon.price = total_price - coupon.coupon.discount_price
-                coupon.save()
+        total_discount_price, discounted_price  = checkouts_extra_template_items.CouponApply()
+        if total_discount_price and discounted_price:
+            data["total_price"] = total_discount_price
+            data["discounted_price"] = discounted_price
 
         return JsonResponse(data)
     
@@ -219,37 +214,31 @@ class PlusQuantityView(LoginRequiredMixin, View):
         cart_ = Cart.objects.get(Q(product=product_id) & Q(user=request.user))
         cart_.quantity += 1
         cart_.save()
-        cart_product_items = [items for items in Cart.objects.all() if items.user == request.user]
-        shipping_amount_calculator = ShippingPriceCalculator(request=request, cart_product_items=cart_product_items, shipping_amount=50)
-        shipping_amount = shipping_amount_calculator.shipping_calculate()
-        price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
-        price, total_price = price_calculate.calculate()
-        cart_count = NavBar_Basket_count(request=request)
-        
+
+        checkouts_extra_template_items = CheckoutsExtraTemplateItemViews(request=request)
+
+        (shipping_amount,
+        price,
+        total_price,
+        cart_count,
+        checkout_product_titles,
+        product_quantity_price) = checkouts_extra_template_items.cartExtraDataItems()
+
         data ={
             "quantity" : cart_.quantity,
             "shipping_amount" : shipping_amount,
             "price" : price,
             "total_amount": total_price,
             "total_price": total_price,
-            "checkout": [],
-            "product_quantity_price": [],
+            "checkout": checkout_product_titles,
+            "product_quantity_price": product_quantity_price,
             "cart_count" : cart_count.calculate(),
         }
 
-        checkouts = Cart.objects.filter(user=request.user)
-        for check in checkouts:
-            check.price = total_price
-            check.save()
-            data["checkout"].append(check.product.product_title)
-            data["product_quantity_price"].append(check.product_quantity_price)
-
-        for coupon in checkouts:
-            if coupon.coupon:
-                data["total_price"] = total_price - coupon.coupon.discount_price
-                data["discounted_price"] = coupon.coupon.discount_price
-                coupon.price = total_price - coupon.coupon.discount_price
-                coupon.save()
+        total_discount_price, discounted_price  = checkouts_extra_template_items.CouponApply()
+        if total_discount_price and discounted_price:
+            data["total_price"] = total_discount_price
+            data["discounted_price"] = discounted_price
 
         return JsonResponse(data)
 
@@ -261,38 +250,31 @@ class MinusQuantityView(LoginRequiredMixin, View):
         cart_ = Cart.objects.get(Q(product=product_id) & Q(user=request.user))
         cart_.quantity -= 1
         cart_.save()
-        cart_product_items = [items for items in Cart.objects.all() if items.user == request.user]
-        shipping_amount_calculator = ShippingPriceCalculator(request=request, cart_product_items=cart_product_items, shipping_amount=50)
-        shipping_amount = shipping_amount_calculator.shipping_calculate()
-        price_calculate = PriceCalculate(cart_product_items=cart_product_items, shipping_amount=shipping_amount)
-        price, total_price = price_calculate.calculate()
-        print(total_price)
-        cart_count = NavBar_Basket_count(request=request)
-        
+
+        checkouts_extra_template_items = CheckoutsExtraTemplateItemViews(request=request)
+
+        (shipping_amount,
+        price,
+        total_price,
+        cart_count,
+        checkout_product_titles,
+        product_quantity_price) = checkouts_extra_template_items.cartExtraDataItems()
+
         data ={
             "quantity" : cart_.quantity,
             "shipping_amount" : shipping_amount,
             "price" : price,
             "total_amount": total_price,
             "total_price": total_price,
-            "checkout": [],
-            "product_quantity_price": [],
+            "checkout": checkout_product_titles,
+            "product_quantity_price": product_quantity_price,
             "cart_count" : cart_count.calculate(),
         }
 
-        checkouts = Cart.objects.filter(user=request.user)
-        for check in checkouts:
-            check.price = total_price
-            check.save()
-            data["checkout"].append(check.product.product_title)
-            data["product_quantity_price"].append(check.product_quantity_price)
-
-        for coupon in checkouts:
-            if coupon.coupon:
-                data["total_price"] = total_price - coupon.coupon.discount_price
-                data["discounted_price"] = coupon.coupon.discount_price
-                coupon.price = total_price - coupon.coupon.discount_price
-                coupon.save()
+        total_discount_price, discounted_price  = checkouts_extra_template_items.CouponApply()
+        if total_discount_price and discounted_price:
+            data["total_price"] = total_discount_price
+            data["discounted_price"] = discounted_price
 
         return JsonResponse(data)
 
