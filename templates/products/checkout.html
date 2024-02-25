@@ -143,10 +143,17 @@
                                 <a href="{% url 'remove_coupon' cart.uid %}" class="btn btn-success">{{cart.coupon.coupon_code}}</a>
                             {% endif %} -->
                         </div>
+                        
                         <div class="pay-details">
+                            {% if checkout and customer %}
                             <a href="{% url 'order-placed-cod' %}" id="cod-button">Cash On Delivery <span class="glyphicon glyphicon-chevron-right"
                                 aria-hidden="true"></span></a>
+                            {% else %}
+                            <a href="javascript:void(0)" id="cod-button">Cash On Delivery <span class="glyphicon glyphicon-chevron-right"
+                                aria-hidden="true"></span></a>
+                            {% endif %}
                             
+                            {% if checkout and customer %}
                             <form id="form-payment" method="GET" action="{% url 'payment' %}">
                                 {% csrf_token %}
                                 {% for customer_info in customer %}
@@ -158,6 +165,13 @@
                                 <a href="#" id="pay-details">Pay Online <span class="glyphicon glyphicon-chevron-right"
                                         aria-hidden="true"></span></a>
                             </form>
+                            {% else %}
+                            <form id="form-payment" method="GET" action="javascript:void(0)">
+                                {% csrf_token %}
+                                <a href="javascript:void(0)" id="pay-details">Pay Online <span class="glyphicon glyphicon-chevron-right"
+                                        aria-hidden="true"></span></a>
+                            </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

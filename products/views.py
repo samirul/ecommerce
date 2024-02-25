@@ -282,32 +282,37 @@ class MinusQuantityView(LoginRequiredMixin, View):
 
 class PaymentView(LoginRequiredMixin, View):
     def get(self, request):
-        cart = Cart.objects.filter(user=request.user).last()
-        cart_price = int(cart.price * 100)
-        customer_name = request.GET.get('customer_name')
-        customer_phone = request.GET.get('customer_phone')
-        customer_email = request.user.email
-        client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+        try:
+            cart = Cart.objects.filter(user=request.user).last()
+            cart_price = int(cart.price * 100)
+            customer_name = request.GET.get('customer_name')
+            customer_phone = request.GET.get('customer_phone')
+            customer_email = request.user.email
+            client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
 
-        payment_data = {
-            "amount" : cart_price,
-            "currency": "INR",
-            "payment_capture" : 1
-        }
+            payment_data = {
+                "amount" : cart_price,
+                "currency": "INR",
+                "payment_capture" : 1
+            }
 
-        order = client.order.create(data=payment_data)
+            order = client.order.create(data=payment_data)
 
-        order_id = order['id']
+            order_id = order['id']
 
-        context = {
-            'order_id': order_id,
-            'amount': cart_price,
-            'name': customer_name,
-            'email': customer_email,
-            'phone': customer_phone
-        }
+            context = {
+                'order_id': order_id,
+                'amount': cart_price,
+                'name': customer_name,
+                'email': customer_email,
+                'phone': customer_phone
+            }
+            return render(request, 'products/payment.html', context=context)
+        except Exception:
+            messages.info(request, "Something is wrong please check in the cart or add profile information.")
+            return redirect('checkout')
 
-        return render(request, 'products/payment.html', context=context)   
+           
 
 class OrderedPageView(LoginRequiredMixin, View):
     def get(self, request):
