@@ -354,18 +354,22 @@ class OrderedPageCODView(LoginRequiredMixin, View):
             cart = Cart.objects.filter(user=request.user)
             customer = Customer.objects.filter(user=request.user)
 
-            for items in cart:
-                for custom in customer:
-                    OrderPlaced.objects.create(
-                    user=request.user,
-                    customer = custom,
-                    product= items.product,
-                    quantity= items.quantity,
-                    is_payment_accepted = False,
-                    payment_method='Cash on Delivery')
-            cart.delete()
-            return HttpResponse("Thank you for Ordering")
+            if cart and customer:
+                for items in cart:
+                    for custom in customer:
+                        OrderPlaced.objects.create(
+                        user=request.user,
+                        customer = custom,
+                        product= items.product,
+                        quantity= items.quantity,
+                        is_payment_accepted = False,
+                        payment_method='Cash on Delivery')
+                cart.delete()
+                return HttpResponse("Thank you for Ordering")
+            else:
+                messages.info(request, "Something is wrong please check in the cart or add profile information.")
+                return redirect('checkout')
         except Exception:
-            return HttpResponse("Something is Wrong")
+             return HttpResponse("Something is Wrong")
 
 
