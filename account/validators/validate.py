@@ -14,6 +14,7 @@ class PasswordChecker:
         if self.password != self.confirmpassword:
             messages.info(self.request, "Password and Confirm Password Doesn't match.")
             return HttpResponseRedirect(self.request.path_info)
+        return None
 
     def PasswordValidator(self, min_len):
         if len(self.password) < min_len:
