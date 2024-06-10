@@ -172,3 +172,15 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 CSRF_TRUSTED_ORIGINS = [
     "https://*.ngrok-free.app"
 ]
+
+
+# LOGGING = {
+#     # ...
+#     'loggers': {
+#         # ...
+#         'django.db': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#     },
+# }
