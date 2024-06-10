@@ -1,6 +1,7 @@
 
 import os
 from pathlib import Path
+from decouple import config
 from data.data import DATABASES
 from dotenv import load_dotenv
 load_dotenv()
@@ -8,7 +9,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = "django-insecure-&pnd=yyuaymxgy3w9u2tmxom3=umucb)a7%4i$8k8jqkw_bz5q"
+SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 DEBUG = True
 
