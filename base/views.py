@@ -5,6 +5,7 @@ from products.models import Category, Product
 from .models import *
 from django.contrib import messages
 
+#..
 
 class HomeView(View):
     def get(self, request):
