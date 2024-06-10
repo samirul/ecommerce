@@ -49,5 +49,5 @@ jobs:
       - name: Automate test codes with pytest
         run: |
           pip install pytest
-          pytest
+          pytest -v -s
       
