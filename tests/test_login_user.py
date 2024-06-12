@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.contrib.messages import get_messages
 
-
+@pytest.mark.django_db()
 def test_login_user(client, register_user_for_login_test):
     email, password = register_user_for_login_test
 
