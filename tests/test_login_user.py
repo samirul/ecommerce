@@ -39,5 +39,5 @@ def test_login_failed_for_no_email_found_in_the_database(client):
     })
 
     messages = list(get_messages(response.wsgi_request))
-    assert any("catdog420@gmail.com - Email isn't Registered, Please Register Your Account First." in str(message) for message in messages)
+    assert any("catdog4201@gmail.com - Email isn't Registered, Please Register Your Account First." in str(message) for message in messages)
     assert response.status_code == 302
