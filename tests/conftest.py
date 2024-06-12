@@ -185,7 +185,6 @@ def register_user_for_login_test_fail_for_is_active_false(client, registration_u
     ("food","This is nice food","Pizza", 2),
     ("Space","This is nice Space","Mars", 3),
 ])
-@pytest.fixture
 def create_categories_and_subcategories(category, description, subcategory, categories_id):
     Category.objects.create(category_name=category, category_description=description)
     Subcategory.objects.create(subcategory_name=subcategory, categories=categories_id)
