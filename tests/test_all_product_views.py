@@ -7,9 +7,8 @@ from products.models import Category
 def test_view_all_products(client, create_categories_and_subcategories):
     category_name, description, subcategory_name = create_categories_and_subcategories
     response = client.get(reverse('all-products'))
+    cate_name = [category for category in response.context['categories']]
     assert len(response.context['categories']) == 1
     assert list(response.context['categories']) == list(Category.objects.all())
-    # assert response.context['category_name'] == category_name
-    print(response.context)
-
+    assert cate_name == category_name
 
