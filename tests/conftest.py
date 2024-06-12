@@ -178,6 +178,14 @@ def register_user_for_login_test_fail_for_is_active_false(client, registration_u
 #...............................................................
 # Testing Products
 #...............................................................
+@pytest.fixture
+def login_user(client, register_user_for_login_test_pass_for_is_active_true):
+    email, password = register_user_for_login_test_pass_for_is_active_true
+
+    client.post(reverse("login"),{
+        "email": email,
+        "password": password
+    })
 
 @pytest.fixture
 def create_categories_and_subcategories():
