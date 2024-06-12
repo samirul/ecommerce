@@ -31,6 +31,8 @@ def test_login_user_fail_for_is_active_false(client, register_user_for_login_tes
     assert any(f"{email} - Email isn't Verified, Please Check Your Email And Verify Your Account First." in str(message) for message in messages)
     assert response.status_code == 302
 
+
+
 @pytest.mark.django_db()
 def test_login_failed_for_no_email_found_in_the_database(client):
     response = client.post(reverse("login"),{
@@ -40,4 +42,18 @@ def test_login_failed_for_no_email_found_in_the_database(client):
 
     messages = list(get_messages(response.wsgi_request))
     assert any("catdog4201@gmail.com - Email isn't Registered, Please Register Your Account First." in str(message) for message in messages)
+    assert response.status_code == 302
+
+
+
+@pytest.mark.django_db()
+def test_login_failed_for_wrong_credentials(client, register_user_for_login_test_pass_for_is_active_true):
+    email, _ = register_user_for_login_test_pass_for_is_active_true
+    response = client.post(reverse("login"),{
+        "email": email,
+        "password": "catdog1@!4HKT4v$"
+    })
+
+    messages = list(get_messages(response.wsgi_request))
+    assert any("Invalid Email or Password, Please Check Your Credentials." in str(message) for message in messages)
     assert response.status_code == 302
