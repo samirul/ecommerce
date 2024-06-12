@@ -1,6 +1,8 @@
+from django.urls import reverse
 import pytest
 from django.test import Client
 from account.validators import validate
+from account.models import User
 
 
 @pytest.fixture
@@ -116,7 +118,7 @@ def password_check_no_special_character():
 
 
 #...............................................................
-#Testing User Registration Fixture
+# Testing User Registration Fixture
 #...............................................................
 
 @pytest.fixture
@@ -128,3 +130,30 @@ def registration_user_credentials():
     return username, email, password, confirm_password
 
 
+#...............................................................
+# Ended Testing User Registration Fixture
+#...............................................................
+
+
+#...............................................................
+# Testing User Login Fixture
+#...............................................................
+@pytest.fixture
+def register_user_for_login_test(client, registration_user_credentials):
+    username, email, password, confirm_password = registration_user_credentials
+
+    client.post(reverse('register'),{
+        "username": username,
+        "email": email,
+        "password": password,
+        "confirmpassword": confirm_password
+    })
+
+    user = User.objects.get(email=email)
+    user.is_active=True
+    user.save()
+    return email, password
+
+#...............................................................
+# Ended User Login Fixture
+#...............................................................
