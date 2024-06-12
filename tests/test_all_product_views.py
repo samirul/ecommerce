@@ -5,10 +5,10 @@ from products.models import Category
 
 @pytest.mark.django_db()
 def test_view_all_products(client, create_categories_and_subcategories):
-    category_name, description, subcategory_name = create_categories_and_subcategories
+    cate_name, description, _ = create_categories_and_subcategories
     response = client.get(reverse('all-products'))
-    cate_name = [category for category in response.context['categories']]
+    cat_name = [category for category in response.context['categories']]
     assert len(response.context['categories']) == 1
     assert list(response.context['categories']) == list(Category.objects.all())
-    assert cate_name == [category_name]
+    assert cat_name == [cate_name]
 

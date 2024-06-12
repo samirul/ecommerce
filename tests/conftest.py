@@ -184,7 +184,7 @@ def create_categories_and_subcategories():
     cate_name, description, subcate_name = "Books", "This is nice text book", "Books"
     category = Category.objects.create(category_name=cate_name, category_description=description)
     Subcategory.objects.create(subcategory_name=subcate_name, categories=category)
-    return category, description, subcate_name
+    return cate_name, description, subcate_name
 
 #...............................................................
 # Ended Products
