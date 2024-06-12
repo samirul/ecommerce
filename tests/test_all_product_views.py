@@ -10,5 +10,5 @@ def test_view_all_products(client, create_categories_and_subcategories):
     cat_name = [category for category in response.context['categories']]
     assert len(response.context['categories']) == 1
     assert list(response.context['categories']) == list(Category.objects.all())
-    assert [category_name] in cat_name
+    assert category_name in cat_name.category_name
 
