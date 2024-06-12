@@ -3,7 +3,7 @@ import pytest
 from django.test import Client
 from account.validators import validate
 from account.models import User
-from products.models import Category, Subcategory
+from products.models import Category, Subcategory, Product, ProductType
 
 
 @pytest.fixture
@@ -186,13 +186,29 @@ def login_user(client, register_user_for_login_test_pass_for_is_active_true):
         "email": email,
         "password": password
     })
+    # user = User.objects.get(email=email)
+    # user.is_admin = True
+    # user.save()
+
+
 
 @pytest.fixture
 def create_categories_and_subcategories():
     category_name, description, subcategory_name = "Books", "This is nice text book", "Books"
     category = Category.objects.create(category_name=category_name, category_description=description)
     Subcategory.objects.create(subcategory_name=subcategory_name, categories=category)
-    return category_name, description, subcategory_name
+    return category_name, description, subcategory_name, category
+
+
+@pytest.fixture
+def create_product(create_categories_and_subcategories):
+    _, _, _, category = create_categories_and_subcategories
+    pro_type = ProductType.objects.create(product_type_name="Vegetables")
+ 
+    Product.objects.create(product_title="noodless", product_type=pro_type, product_selling_price=50, product_discounted_price=20, product_rating=4, product_description="testy", product_image="1.jpg", brand="noodleeezz", categories=category)
+
+    Product.objects.create(product_title="cat", product_type=pro_type, product_selling_price=50, product_discounted_price=20, product_rating=4, product_description="testy", product_image="1.jpg", brand="noodleeezz", categories=category)
+
 
 #...............................................................
 # Ended Products
