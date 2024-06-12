@@ -179,13 +179,9 @@ def register_user_for_login_test_fail_for_is_active_false(client, registration_u
 # Testing Products
 #...............................................................
 
-
-@pytest.mark.parametrize("category, description, subcategory, categories_id",[
-    ("Books","This is nice text book","Cat Book", 1),
-    ("food","This is nice food","Pizza", 2),
-    ("Space","This is nice Space","Mars", 3),
-])
-def create_categories_and_subcategories(category, description, subcategory, categories_id):
+@pytest.fixture
+def create_categories_and_subcategories():
+    category, description, subcategory, categories_id = "Books", "This is nice text book", "Books", 1
     Category.objects.create(category_name=category, category_description=description)
     Subcategory.objects.create(subcategory_name=subcategory, categories=categories_id)
     return category, description, subcategory, categories_id
