@@ -5,6 +5,6 @@ import pytest
 def test_view_all_products(client, create_categories_and_subcategories):
     category, description, subcategory, categories_id = create_categories_and_subcategories
     response = client.get(reverse('all-products'))
-    response.context['categories'].category_name == category
+    assert response.context['categories'].category_name == category
 
 
