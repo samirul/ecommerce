@@ -179,7 +179,7 @@ def register_user_for_login_test_fail_for_is_active_false(client, registration_u
 # Testing Products
 #...............................................................
 
-@pytest.fixture
+# @pytest.fixture
 @pytest.mark.parametrize("category, description, subcategory, categories_id",[
     ("Books","This is nice text book","Cat Book", 1),
     ("food","This is nice food","Pizza", 2),
