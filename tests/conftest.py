@@ -181,10 +181,10 @@ def register_user_for_login_test_fail_for_is_active_false(client, registration_u
 
 @pytest.fixture
 def create_categories_and_subcategories():
-    category, description, subcategory, categories_id = "Books", "This is nice text book", "Books", 1
+    category, description, subcategory = "Books", "This is nice text book", "Books"
     Category.objects.create(category_name=category, category_description=description)
-    Subcategory.objects.create(subcategory_name=subcategory, categories=categories_id)
-    return category, description, subcategory, categories_id
+    Subcategory.objects.create(subcategory_name=subcategory, categories=category)
+    return category, description, subcategory
 
 #...............................................................
 # Ended Products
