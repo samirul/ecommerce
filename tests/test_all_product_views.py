@@ -9,6 +9,7 @@ def test_view_all_products(client, create_categories_and_subcategories, mocker):
     cat_name = [category.category_name for category in response.context['categories']]
     cat_description = [category.category_description for category in response.context['categories']]
     cart_count = mocker.patch('basket.basket.NavBar_Basket_count')
+    cart_count = cart_count.return_value
     cart_count.calculate.return_value == 5
 
     assert len(response.context['categories']) == 1
