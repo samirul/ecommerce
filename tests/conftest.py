@@ -183,7 +183,7 @@ def register_user_for_login_test_fail_for_is_active_false(client, registration_u
 def create_categories_and_subcategories():
     category_name, description, subcategory_name = "Books", "This is nice text book", "Books"
     category = Category.objects.create(category_name=category_name, category_description=description)
-    Subcategory.objects.create(subcategory_name=subcategory_name, categories=category.id)
+    Subcategory.objects.create(subcategory_name=subcategory_name, categories=category)
     return category, description, subcategory_name
 
 #...............................................................
