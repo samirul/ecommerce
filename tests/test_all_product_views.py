@@ -16,5 +16,5 @@ def test_view_all_products(client, create_categories_and_subcategories, mocker):
     assert category_name in cat_name
     assert description in cat_description
     # assert response.context['cart_count'] == 5
-    print(response.context['categories'])
+    print(response.context)
 
