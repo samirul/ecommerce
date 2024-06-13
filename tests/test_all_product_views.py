@@ -1,5 +1,6 @@
 from django.urls import reverse
 import pytest
+from pytest_django.asserts import assertTemplateUsed
 from products.models import Category, Product, ProductType
 
 @pytest.mark.django_db()
@@ -17,5 +18,6 @@ def test_view_all_products(client, create_categories_and_subcategories, create_p
     assert response.context['cart_count'] == None
     assert product_titles == ['noodless', 'cat']
     assert response.status_code == 200
+    assertTemplateUsed(response, "products/all-products.html")
 
 
