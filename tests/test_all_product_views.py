@@ -41,3 +41,25 @@ def test_view_products_view_by_only_category(client, create_categories_and_subca
     assert product_titles == filter_product_name
     assert response.status_code == 200
     assertTemplateUsed(response, "products/products.html")
+
+
+@pytest.mark.django_db()
+def test_view_products_view_by_subcategory(client, create_categories_and_subcategories, create_product_subcategory, get_slug):
+    category_name, description, subcategory_name, _, _ = create_categories_and_subcategories
+    _, slug_subcategories = get_slug
+    response = client.get(reverse('productslugcategory', kwargs={'slug': slug_subcategories}))
+    cat_name = [category.category_name for category in response.context['categories']]
+    cat_description = [category.category_description for category in response.context['categories']]
+
+    filter_product_by_subcategories = Product.objects.filter(subcategories__subcategory_name=subcategory_name)
+    filter_product_name = [product_name.product_title for product_name in filter_product_by_subcategories]
+
+    assert len(response.context['categories']) == 1
+    assert list(response.context['categories']) == list(Category.objects.all())
+    assert category_name in cat_name
+    assert description in cat_description
+    assert response.context['cart_count'] == None
+    assert filter_product_name == ['Mango', 'Apple']
+    assert response.status_code == 200
+    assertTemplateUsed(response, "products/products.html")
+    
