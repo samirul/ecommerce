@@ -47,7 +47,7 @@ def test_view_products_view_by_only_category(client, create_categories_and_subca
 def test_view_products_view_by_subcategory(client, create_categories_and_subcategories, create_product_subcategory, get_slug):
     category_name, description, subcategory_name, _, _ = create_categories_and_subcategories
     _, slug_subcategories = get_slug
-    response = client.get(reverse('productslugcategory', kwargs={'slug': slug_subcategories}))
+    response = client.get(reverse('productslugsubcategory', kwargs={'slug': slug_subcategories}))
     cat_name = [category.category_name for category in response.context['categories']]
     cat_description = [category.category_description for category in response.context['categories']]
 
