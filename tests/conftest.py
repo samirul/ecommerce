@@ -194,22 +194,37 @@ def login_user(client, register_user_for_login_test_pass_for_is_active_true):
 
 @pytest.fixture
 def create_categories_and_subcategories():
-    category_name, description, subcategory_name = "Books", "This is nice text book", "Books"
+    category_name, description, subcategory_name = "Vegi & Fruits", "This is nice Vegi & Fruits", "Fruits"
     category = Category.objects.create(category_name=category_name, category_description=description)
-    Subcategory.objects.create(subcategory_name=subcategory_name, categories=category)
-    return category_name, description, subcategory_name, category
+    subcategory = Subcategory.objects.create(subcategory_name=subcategory_name, categories=category)
+    return category_name, description, subcategory_name, category, subcategory
 
 
 @pytest.fixture
-def create_product(create_categories_and_subcategories):
-    _, _, _, category = create_categories_and_subcategories
+def create_product_category(create_categories_and_subcategories):
+    _, _, _, category, _ = create_categories_and_subcategories
     pro_type = ProductType.objects.create(product_type_name="Vegetables")
  
     Product.objects.create(product_title="noodless", product_type=pro_type, product_selling_price=50, product_discounted_price=20, product_rating=4, product_description="testy", product_image="1.jpg", brand="noodleeezz", categories=category)
-
     Product.objects.create(product_title="cat", product_type=pro_type, product_selling_price=50, product_discounted_price=20, product_rating=4, product_description="testy", product_image="1.jpg", brand="noodleeezz", categories=category)
 
 
+@pytest.fixture
+def create_product_subcategory(create_categories_and_subcategories):
+    _, _, _, category, subcategory = create_categories_and_subcategories
+    pro_type = ProductType.objects.create(product_type_name="Vegetables")
+ 
+    Product.objects.create(product_title="Mango", product_type=pro_type, product_selling_price=50, product_discounted_price=20, product_rating=4, product_description="testy", product_image="1.jpg", brand="noodleeezz", categories=category, subcategories=subcategory)
+    Product.objects.create(product_title="Apple", product_type=pro_type, product_selling_price=50, product_discounted_price=20, product_rating=4, product_description="testy", product_image="1.jpg", brand="noodleeezz", categories=category, subcategories=subcategory)
+
+@pytest.fixture
+def get_slug(create_categories_and_subcategories, create_product_category, create_product_subcategory):
+    _, _, _, category, subcategory = create_categories_and_subcategories
+    slug_items_category = Product.objects.filter(categories=category)
+    slug_items_subcategory = Product.objects.filter(subcategories=subcategory)
+    slug_categories = [slug.slug for slug in  slug_items_category]
+    slug_subcategories = [slug.slug for slug in  slug_items_subcategory]
+    return slug_categories, slug_subcategories
 #...............................................................
 # Ended Products
 #...............................................................
